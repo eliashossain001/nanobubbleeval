@@ -399,10 +399,13 @@ broader nanoparticle long tail.
 The 500-record \textbf{gold pool} is sampled from the high-precision
 core, balanced across the nanobubble-vs-nanoparticle label, document
 type, and field-coverage signals, and partitioned into two annotation
-tiers. The \textbf{gold-hard tier} ($n=40$) is dual-annotated under a
-blind, abstract-only protocol (Appendix~\ref{app:guideline}); it is
-stratified by \texttt{nb\_label} $\times$ \texttt{document\_type} and
-serves as the headline evaluation set for all reported numbers. The
+tiers. The \textbf{gold-hard tier} ($n=40$) is annotated under a
+blind, abstract-only \emph{dual-annotator protocol}
+(Appendix~\ref{app:guideline}); v1.0 uses single-annotator-validated
+labels under that protocol, and full inter-annotator agreement is
+planned for v1.1. It is stratified by
+\texttt{nb\_label} $\times$ \texttt{document\_type} and serves as the
+headline evaluation set for all reported numbers. The
 \textbf{gold-lite extension tier} ($n=460$) is single-annotator and
 released as a robustness check; it is split into a 50-record
 \textbf{dev} set for prompt and threshold tuning and a 410-record
@@ -413,8 +416,10 @@ tier is not used for any headline number.
 \begin{table}[t]
 \centering
 \caption{Layered counts of the v1.0 benchmark. The gold-hard tier is
-dual-annotated under a blind protocol; the gold-lite extension tier
-is single-annotator and reported only as a robustness check.}
+annotated under a dual-annotator protocol (v1.0 uses
+single-annotator-validated labels; inter-annotator agreement is
+planned for v1.1); the gold-lite extension tier is single-annotator
+and reported only as a robustness check.}
 \label{tab:warehouse_stats}
 \small
 \setlength{\tabcolsep}{6pt}
@@ -448,11 +453,12 @@ because per-slice F1 estimates become unstable below that floor.
 \begin{table}[t]
 \centering
 \caption{Slice membership in the gold pool ($n=500$). The gold-hard
-tier ($n=40$) is dual-annotated under a blind protocol; the
-gold-lite extension tier ($n=460$, dev=50, test=410) is
-single-annotator and reported only as a robustness check. Slices
-marked (\emph{apx}) carry fewer than five gold-hard records and are
-reported only in the appendix.}
+tier ($n=40$) is annotated under a dual-annotator protocol (v1.0
+uses single-annotator-validated labels; inter-annotator agreement is
+planned for v1.1); the gold-lite extension tier ($n=460$, dev=50,
+test=410) is single-annotator and reported only as a robustness
+check. Slices marked (\emph{apx}) carry fewer than five gold-hard
+records and are reported only in the appendix.}
 \label{tab:slice_summary}
 \small
 \setlength{\tabcolsep}{4pt}
@@ -520,20 +526,19 @@ canonical locations is provided in
 Appendix~\ref{app:release_card}.
 
 \begin{itemize}\itemsep0pt
-\item \textbf{Code (Python package and pipeline scripts):}
-\texttt{[anonymised release URL to be added]}; the verified
-GitHub release URL is provided for the camera-ready version.
-\item \textbf{Dataset (warehouse, core, gold pool, task views, and
-gold-hard IAA subset):}
-\texttt{[anonymised release URL to be added]}; the verified
-HuggingFace dataset URL is provided for the camera-ready version.
+\item \textbf{Code} (Python package and pipeline scripts): \\
+\url{https://github.com/eliashossain001/nanobubbleeval}
+\item \textbf{Dataset} (gold pool, gold-hard tier, baseline
+predictions, schema specification, and Croissant 1.1 metadata): \\
+\url{https://huggingface.co/datasets/EliasHossain/nanobubbleeval-anon}
 \end{itemize}
 
 The release is licensed for research use under terms detailed in
-\S\ref{sec:limitations}. The IAA per-annotator labels and the
-adjudicated gold-hard subset are released alongside the gold pool to
-allow downstream users to recompute agreement statistics and to apply
-their own match policies.
+\S\ref{sec:limitations}. The first-annotator gold-hard labels are
+released alongside the gold pool to allow downstream users to
+recompute agreement statistics against their own annotators and to
+apply their own match policies; full multi-annotator adjudication is
+planned for v1.1.
 
 % ============================================================================
 \section{Validity Safeguards}
@@ -569,13 +574,15 @@ schema. The first-annotator labels are released alongside the gold
 pool so that downstream users can recompute agreement statistics
 against their own annotators under their own match policies.
 
-\paragraph{Adjudication trail.}
-Disagreements on the IAA subset are adjudicated by the first author
-under a logged decision rule. The adjudicated subset is the
-\emph{gold-hard} reporting tier; the remaining gold-pool records are
-single-annotator and are reported as a \emph{gold-lite} robustness
-tier with that distinction surfaced explicitly in every results
-table. We do not claim multi-expert adjudication for v1.0.
+\paragraph{Adjudication protocol.}
+Adjudication is defined by protocol: disagreements between the two
+annotator passes are to be resolved by the first author under a
+logged decision rule once the second-annotator pass is complete.
+v1.0 uses single-annotator-validated labels on the gold-hard tier;
+full multi-annotator adjudication is planned for v1.1. The remaining
+gold-pool records form the \emph{gold-lite} tier and are
+single-annotator throughout; that distinction is surfaced
+explicitly in every results table.
 
 \paragraph{Abstract-only declaration.}
 v1.0 evaluates exclusively on abstracts. We declare this as a scope
@@ -1159,10 +1166,10 @@ what the abstract states.
 \section{Datasheet for the dataset}
 \label{app:datasheet}
 
-We follow the datasheet schema of~\citet{wadden2020scifact}-class
-benchmarks; the Croissant-1.1 metadata file released with the
-dataset (\texttt{metadata/croissant.json}) carries the same fields
-in machine-readable form.
+We follow Datasheets for Datasets-style documentation (Gebru et al.);
+the Croissant-1.1 metadata file released with the dataset
+(\texttt{metadata/croissant.json}) carries the same fields in
+machine-readable form.
 
 \paragraph{Motivation.}
 NanoBubbleEval was created to evaluate scientific information
