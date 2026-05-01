@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Paper
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+paper/*.pdf
+!paper/main.pdf
+
+# Local annotation
+annotation/received/*.csv
+!annotation/received/.gitkeep
+
+# Large warehouse data (regenerable from scripts/legacy_harvest/)
+data/raw/master_inventory.csv
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Environment
+.env
+.env.local
+*.local
+
+# Internal / local-only docs (not for public repo)
+RECOVERY_STATUS.md
+*.local.md

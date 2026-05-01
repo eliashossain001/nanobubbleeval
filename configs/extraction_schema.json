@@ -1,0 +1,138 @@
+{
+  "fields": {
+    "bubble_type": {
+      "description": "Canonical type of the entity being described.",
+      "type": "string",
+      "example": "nanobubble",
+      "normalization_rule": "Map surface forms such as nanobubble, micro-nanobubble, ultrafine bubble, microbubble, or nanoparticle to a controlled vocabulary.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "material_identity": {
+      "description": "Gas, coating, core material, or cargo identity.",
+      "type": "string",
+      "example": "oxygen",
+      "normalization_rule": "Normalize chemical names and abbreviations where possible; otherwise preserve the reported term.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "application_category": {
+      "description": "High-level domain or use case.",
+      "type": "string",
+      "example": "water treatment",
+      "normalization_rule": "Use a controlled set such as biomedical, environmental, industrial, agriculture, clinical translation, or fundamentals.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "size_value": {
+      "description": "Numeric size value reported in text or table.",
+      "type": "number",
+      "example": 200,
+      "normalization_rule": "Store the numeric portion only and preserve ranges as separate records if needed.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "size_unit": {
+      "description": "Unit associated with the size value.",
+      "type": "string",
+      "example": "nm",
+      "normalization_rule": "Normalize to standard SI-style units where possible.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "zeta_potential_value": {
+      "description": "Numeric zeta potential value.",
+      "type": "number",
+      "example": -12.5,
+      "normalization_rule": "Store the measured numeric value only.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "zeta_potential_unit": {
+      "description": "Unit associated with zeta potential.",
+      "type": "string",
+      "example": "mV",
+      "normalization_rule": "Standardize to millivolts when reported.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "stability_value": {
+      "description": "Measured or reported stability duration, persistence, or stability score.",
+      "type": "string",
+      "example": "7 days",
+      "normalization_rule": "Preserve the reported stability measure and normalize the unit if possible.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "stability_unit": {
+      "description": "Unit for the stability measure.",
+      "type": "string",
+      "example": "days",
+      "normalization_rule": "Normalize duration units when possible.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "payload_text": {
+      "description": "Loaded cargo, drug, dye, or functional payload.",
+      "type": "string",
+      "example": "doxorubicin",
+      "normalization_rule": "Preserve the reported payload or cargo term.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "loading_efficiency_value": {
+      "description": "Numeric loading or encapsulation efficiency.",
+      "type": "number",
+      "example": 72.4,
+      "normalization_rule": "Store the numeric percentage or fraction as reported.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "loading_efficiency_unit": {
+      "description": "Unit for loading efficiency.",
+      "type": "string",
+      "example": "%",
+      "normalization_rule": "Normalize to percent when possible.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "release_profile_text": {
+      "description": "Text describing release behavior or kinetics.",
+      "type": "string",
+      "example": "sustained release over 48 h",
+      "normalization_rule": "Keep the reported description and avoid paraphrasing away kinetics.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "generation_method": {
+      "description": "Method used to generate the bubble or particle system.",
+      "type": "string",
+      "example": "sonication",
+      "normalization_rule": "Normalize method names and preserve any special processing steps.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "characterization_method": {
+      "description": "Method used to characterize the system.",
+      "type": "string",
+      "example": "DLS",
+      "normalization_rule": "Use standard method names such as DLS, NTA, TEM, SEM, zeta analyzer, or microscopy.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "medium_environment": {
+      "description": "Medium, solvent, biological fluid, or environmental context.",
+      "type": "string",
+      "example": "water",
+      "normalization_rule": "Preserve the study environment and normalize common media names.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "outcome_claim": {
+      "description": "Main scientific claim or outcome statement.",
+      "type": "string",
+      "example": "nanobubbles improved oxygen transfer",
+      "normalization_rule": "Use concise evidence-grounded wording.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "evidence_span": {
+      "description": "Text span, table cell, or caption supporting the extracted field.",
+      "type": "string",
+      "example": "Table 2, row 3",
+      "normalization_rule": "Store the exact citation location or text span reference rather than invented evidence.",
+      "missing_value": "NOT_REPORTED"
+    },
+    "ambiguity_flag": {
+      "description": "Whether the record is direct, inferred, incomplete, or uncertain.",
+      "type": "string",
+      "example": "direct",
+      "normalization_rule": "Use one of direct, inferred, incomplete, or uncertain.",
+      "missing_value": "NOT_REPORTED"
+    }
+  },
+  "missing_value_convention": "NOT_REPORTED"
+}

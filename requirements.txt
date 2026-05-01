@@ -1,0 +1,7 @@
+# Runtime dependencies for nanobubbleval (mirrors pyproject.toml [project.dependencies])
+# For development install, use: pip install -e .[dev]
+# For baseline runs, use:       pip install -e .[baselines]
+
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3

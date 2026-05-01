@@ -1,0 +1,161 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{longtable}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{\textbf{NanoBubbleEval: Data Collection, Curation, and Benchmark Design}\\
+\large Supervisor-Facing Project Summary}
+\author{Elias Hossain}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Project Overview}
+NanoBubbleEval is a literature-derived benchmark project for evidence-grounded scientific information extraction. The project was developed in three stages. First, we built a large scholarly warehouse from public metadata and abstract sources. Second, we filtered that warehouse into a high-precision nanobubble core. Third, we curated benchmark-ready subsets for structured extraction, numerical grounding, and evidence attribution.
+
+\section*{Data Collection Workflow}
+The collection process was intentionally API-first and reproducible.
+\begin{enumerate}[leftmargin=1.7em]
+    \item We began with curated seed records from scientific literature and ClinicalTrials.gov.
+    \item We expanded the corpus using structured APIs: PubMed / NCBI Entrez, Europe PMC, OpenAlex, CrossRef, Semantic Scholar, and ClinicalTrials.gov.
+    \item We used query families spanning nanobubble-core terms, adjacent ultrasound and delivery terms, and broader nanoparticle fields needed for extraction coverage.
+    \item We aggregated metadata such as title, authors, year, venue, DOI, PMID/PMCID when available, abstract, citation counts, and source provenance.
+    \item We deduplicated records in a strict order: DOI, PMID/PMCID, normalized title, then URL.
+    \item We assigned tier labels A, B, and C, then split Tier A into A1 and A2 for precision tightening.
+    \item We formed benchmark candidate sets and gold-annotation pools from the curated subset.
+\end{enumerate}
+
+\section*{APIs and Sources}
+\begin{itemize}[leftmargin=1.7em]
+    \item \textbf{PubMed / NCBI Entrez}: high-volume biomedical abstracts and metadata.
+    \item \textbf{Europe PMC}: abstract records, open-access signals, and citation counts.
+    \item \textbf{OpenAlex}: graph expansion, references, citations, and broad scholarly metadata.
+    \item \textbf{CrossRef}: DOI-centric metadata and venue discovery.
+    \item \textbf{Semantic Scholar}: citation-graph expansion around high-priority works.
+    \item \textbf{ClinicalTrials.gov}: translational and clinical records.
+    \item \textbf{Curated seeds}: a small bootstrap set to anchor expansion.
+\end{itemize}
+
+\section*{What Each Record Contains}
+Records may contain:
+\begin{itemize}[leftmargin=1.7em]
+    \item title, authors, year, venue, DOI, URL
+    \item PMID and PMCID when available
+    \item abstract or short summary
+    \item source API and source platform
+    \item document type and access level
+    \item tier label and nanobubble-vs-nanoparticle label
+    \item application category
+    \item likely extraction-field flags for size, zeta potential, stability, payload, loading efficiency, and release profile
+    \item relevance and extraction-priority scores
+    \item notes and placeholders for evidence spans
+\end{itemize}
+
+\section*{Dataset Structure}
+\begin{tabularx}{\textwidth}{>{\bfseries}p{3.5cm}X}
+\toprule
+Warehouse & 49,182 deduplicated records. \\
+High-precision core & 7,785 records, split into A1 and A2. \\
+Benchmark candidates & 500-record and 1,000-record curated subsets. \\
+Gold annotation pools & 200-record and 500-record ranked candidate pools. \\
+Task packages & Structured extraction, numerical grounding, and evidence attribution files. \\
+\bottomrule
+\end{tabularx}
+
+\section*{Quantitative Summary}
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Metric & Count & Comment \\
+\midrule
+Warehouse size & 49,182 & deduplicated \\
+High-precision core & 7,785 & A1 + A2 \\
+A1 & 3,573 & explicit nanobubble core \\
+A2 & 4,212 & adjacent ultrasound/gas-carrier \\
+Benchmark candidate 500 & 500 & balanced \\
+Benchmark candidate 1000 & 1,000 & balanced \\
+Gold annotation v2 & 200 & manual review pool \\
+Gold annotation v3 & 500 & ranked candidates \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Field & Count & Note \\
+\midrule
+Size & 12,838 & strong coverage \\
+Zeta potential & 3,350 & weakest field \\
+Stability & 9,964 & strong \\
+Payload & 27,369 & strongest field \\
+Loading efficiency & 9,657 & improved but still limited \\
+Release profile & 12,462 & strong in delivery papers \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Strengths}
+\begin{itemize}[leftmargin=1.7em]
+    \item Large and reproducible literature warehouse.
+    \item Clear distinction between warehouse, core subset, and benchmark subsets.
+    \item Explicit evidence-oriented fields and scores.
+    \item Broad coverage across nanobubble, delivery, imaging, and nanoparticle-adjacent literature.
+\end{itemize}
+
+\section*{Current Limitations}
+\begin{itemize}[leftmargin=1.7em]
+    \item Tier C is intentionally broad and includes many nanoparticle-adjacent papers.
+    \item ClinicalTrials.gov coverage is still small.
+    \item Zeta potential remains underrepresented.
+    \item Some records are metadata-rich but not full-text rich.
+    \item The A1 precision proxy is heuristic and should not be treated as gold annotation.
+\end{itemize}
+
+\section*{Why This Matters for NeurIPS}
+The project supports scientific NLP evaluation on:
+\begin{itemize}[leftmargin=1.7em]
+    \item structured extraction,
+    \item numerical grounding,
+    \item evidence attribution,
+    \item cross-document comparison,
+    \item and domain-specific literature reasoning.
+\end{itemize}
+That combination makes the dataset useful both as a benchmark resource and as a case study in large-scale scientific information extraction.
+
+\section*{Questions My Supervisor May Ask}
+\begin{itemize}[leftmargin=1.7em]
+    \item \textbf{Why 49K records but only 7.7K in the core?} Because the warehouse is broad, while the core is deliberately filtered for nanobubble precision.
+    \item \textbf{What is the difference between warehouse and benchmark?} The warehouse is the full corpus; the benchmark is a curated evaluation subset.
+    \item \textbf{Why is A1 more trustworthy?} It requires explicit nanobubble lexical evidence and excludes most broad nanoparticle-only records.
+    \item \textbf{What is inside one record?} Metadata, provenance, tiering, extraction flags, and benchmark-ready placeholders.
+    \item \textbf{What comes next?} Manual annotation, baseline systems, and final evaluation reporting.
+\end{itemize}
+
+\section*{Next Steps}
+\begin{enumerate}[leftmargin=1.7em]
+    \item Finalize annotation guidelines.
+    \item Manually verify the gold pools.
+    \item Run baseline extractors on the benchmark files.
+    \item Report extraction, numerical grounding, and evidence attribution metrics.
+\end{enumerate}
+
+\end{document}

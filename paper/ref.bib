@@ -1,0 +1,134 @@
+% ============================================================================
+% NanoBubbleEval references
+%
+% All entries below are real, well-known papers. Author lists and venue
+% details are written to the level of confidence supported by training-time
+% knowledge; please re-verify against the canonical source (publisher page,
+% Google Scholar, or DBLP) before camera-ready submission. arXiv IDs are
+% included where applicable so each entry can be re-checked from a single
+% stable identifier.
+% ============================================================================
+
+
+% --- Span / entity QA benchmarks --------------------------------------------
+
+@inproceedings{jain2020scirex,
+  title     = {{SciREX}: A Challenge Dataset for Document-Level Information Extraction},
+  author    = {Jain, Sarthak and van Zuylen, Madeleine and Hajishirzi, Hannaneh and Beltagy, Iz},
+  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2020},
+  pages     = {7506--7516},
+  eprint    = {2005.00512},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@article{islamaj2021nlmchem,
+  title     = {{NLM-Chem}, a new resource for chemical entity recognition in {PubMed} full text literature},
+  author    = {Islamaj, Rezarta and Leaman, Robert and Kim, Sun and Kwon, Dongseop and Wei, Chih-Hsuan and Comeau, Donald C. and Peng, Yifan and Cissel, David and Coss, Cathleen and Fisher, Carol and Anzaldua, Rob and Chester, Justin and Hong, Hyojin and Hua, Lin and Jeon, Jaehyun and Lu, Zhiyong},
+  journal   = {Scientific Data},
+  volume    = {8},
+  number    = {1},
+  pages     = {91},
+  year      = {2021},
+  publisher = {Nature Publishing Group},
+  doi       = {10.1038/s41597-021-00875-1}
+}
+
+@article{li2016bc5cdr,
+  title   = {{BioCreative V CDR} task corpus: a resource for chemical disease relation extraction},
+  author  = {Li, Jiao and Sun, Yueping and Johnson, Robin J. and Sciaky, Daniela and Wei, Chih-Hsuan and Leaman, Robert and Davis, Allan Peter and Mattingly, Carolyn J. and Wiegers, Thomas C. and Lu, Zhiyong},
+  journal = {Database},
+  volume  = {2016},
+  pages   = {baw068},
+  year    = {2016},
+  doi     = {10.1093/database/baw068}
+}
+
+@inproceedings{jin2019pubmedqa,
+  title         = {{PubMedQA}: A Dataset for Biomedical Research Question Answering},
+  author        = {Jin, Qiao and Dhingra, Bhuwan and Liu, Zhengping and Cohen, William W. and Lu, Xinghua},
+  booktitle     = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)},
+  year          = {2019},
+  pages         = {2567--2577},
+  eprint        = {1909.06146},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+
+% --- Schema-constrained property extraction --------------------------------
+
+@misc{dunn2022matscholar,
+  title         = {Structured information extraction from complex scientific text with fine-tuned large language models},
+  author        = {Dunn, Alexander and Dagdelen, John and Walker, Nicholas and Lee, Sanghoon and Rosen, Andrew S. and Ceder, Gerbrand and Persson, Kristin A. and Jain, Anubhav},
+  year          = {2022},
+  eprint        = {2212.05238},
+  archivePrefix = {arXiv},
+  primaryClass  = {cond-mat.mtrl-sci},
+  note          = {arXiv preprint}
+}
+
+@inproceedings{song2023matscinlp,
+  title         = {{MatSci-NLP}: Evaluating Scientific Language Models on Materials Science Language Tasks Using Text-to-Schema Modeling},
+  author        = {Song, Yu and Miret, Santiago and Liu, Bang},
+  booktitle     = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year          = {2023},
+  eprint        = {2305.08264},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@misc{zaki2023mascqa,
+  title         = {{MaScQA}: Investigating Materials Science Knowledge of Large Language Models},
+  author        = {Zaki, Mohd and {Jayadeva} and Krishnan, N. M. Anoop},
+  year          = {2023},
+  eprint        = {2308.09115},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  note          = {arXiv preprint}
+}
+
+@misc{polak2023extracting,
+  title         = {Extracting accurate materials data from research papers with conversational language models and prompt engineering},
+  author        = {Polak, Maciej P. and Morgan, Dane},
+  year          = {2023},
+  eprint        = {2303.05352},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  note          = {arXiv preprint; later published in Nature Communications}
+}
+
+
+% --- Evidence-grounded factuality / claim verification ---------------------
+
+@inproceedings{wadden2020scifact,
+  title         = {Fact or Fiction: Verifying Scientific Claims},
+  author        = {Wadden, David and Lin, Shanchuan and Lo, Kyle and Wang, Lucy Lu and van Zuylen, Madeleine and Cohan, Arman and Hajishirzi, Hannaneh},
+  booktitle     = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year          = {2020},
+  pages         = {7534--7550},
+  eprint        = {2004.14974},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@inproceedings{lu2023scitab,
+  title         = {{SciTab}: A Challenging Benchmark for Compositional Reasoning and Claim Verification on Scientific Tables},
+  author        = {Lu, Xinyuan and Pan, Liangming and Liu, Qian and Nakov, Preslav and Kan, Min-Yen},
+  booktitle     = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year          = {2023},
+  eprint        = {2305.13186},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@misc{ru2024ragchecker,
+  title         = {{RAGChecker}: A Fine-grained Framework for Diagnosing Retrieval-Augmented Generation},
+  author        = {Ru, Dongyu and Qiu, Lin and Hu, Xiangkun and Zhang, Tianhang and Shi, Peng and Chang, Shuaichen and Wang, Cunxiang and Cheng, Jiayang and Liu, Yong and others},
+  year          = {2024},
+  eprint        = {2408.08067},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  note          = {arXiv preprint; presented at NeurIPS 2024}
+}
