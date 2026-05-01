@@ -60,17 +60,20 @@ and leakage-audit report ship with the release.
 sufficient instructions to faithfully reproduce the main experimental
 results?}\\
 \textbf{Answer:} [Yes] \\
-\textbf{Justification:} The release at the URLs in
-\S\ref{sec:release} includes the Python package
-(\texttt{nanobubbleval}), four numbered pipeline scripts that
-reproduce every artifact end-to-end, the gold-hard tier, the three
-v1.0 baseline prediction files, a Croissant-1.1 metadata file, and
-the schema specification; the full dataset artifacts (warehouse
-manifest, high-precision core, gold-lite extension tier, task views,
-and deterministic split files) will be released before the
-camera-ready version. The package ships with a unit-test suite
-(\texttt{tests/}) covering the schema, normaliser, evaluator,
-reconciler, splits builder, baselines, and harvest framework.
+\textbf{Justification:} The release at the public URLs in
+\S\ref{sec:release} (GitHub for code, HuggingFace for data) currently
+ships the Python package (\texttt{nanobubbleval}), four numbered
+pipeline scripts that reproduce every artifact end-to-end, the
+40-record gold-hard tier with first-annotator labels, the three v1.0
+baseline prediction files, a Croissant-1.1 metadata file, the schema
+specification, and the slice and leakage reports. The remaining
+dataset artifacts (52{,}519-record warehouse manifest, 8{,}006-record
+high-precision core, 460-record gold-lite extension tier, three task
+views, and the deterministic \texttt{splits.json}) are scheduled for
+the full release before the camera-ready version. The package ships
+with a unit-test suite (\texttt{tests/}) covering the schema,
+normaliser, evaluator, reconciler, splits builder, baselines, and
+harvest framework.
 
 \item \textbf{Experimental setting / details.}
 \emph{Does the paper specify all the training and test details

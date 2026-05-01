@@ -513,8 +513,8 @@ abstract class plug into the same evaluation harness without
 modification. The data release is structured by lifecycle stage: a
 deduplicated warehouse manifest, the high-precision nanobubble core,
 the gold pool with its five-slice annotations, the three task views
-described above, the 40-record IAA subset with per-annotator labels,
-and a Croissant 1.1 metadata file populated with the
+described above, the 40-record gold-hard subset with first-annotator
+labels, and a Croissant 1.1 metadata file populated with the
 NeurIPS-required responsible-AI fields.
 
 We additionally release the annotation guideline used for the IAA
@@ -1227,11 +1227,11 @@ biomedical extractive-QA architectures fail without task-specific
 fine-tuning.
 
 \paragraph{Distribution.}
-The dataset is released on HuggingFace at the anonymised URL in
-\S\ref{sec:release}; the codebase is released on GitHub. The
-codebase is licensed under MIT; the dataset is released for
-non-commercial research use under terms documented in the dataset
-card.
+The dataset is released on HuggingFace at the public URL given in
+\S\ref{sec:release}; the codebase is released on GitHub at the public
+URL also given in \S\ref{sec:release}. The codebase is licensed under
+MIT; the dataset is released for non-commercial research use under
+terms documented in the dataset card.
 
 \paragraph{Maintenance.}
 The benchmark is versioned semantically. v1.0 is the abstract-only
@@ -1253,38 +1253,44 @@ describes the artifact organisation at a higher level.
 
 \begin{table}[h]
 \centering
-\caption{Release artifact listing (v1.0). All paths are relative to
-the release root. Verified release URLs are listed in
-\S\ref{sec:release}.}
+\caption{Release artifact listing. The \emph{Status} column
+distinguishes what is shipped in the v1.0 release at the public URLs
+in \S\ref{sec:release} from artifacts \emph{scheduled} for the full
+release before the camera-ready version.}
 \label{tab:release_files}
 \small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}lp{0.55\columnwidth}@{}}
+\begin{tabular}{@{}lp{0.42\columnwidth}l@{}}
 \toprule
-\textbf{Path} & \textbf{Purpose} \\
+\textbf{Path} & \textbf{Purpose} & \textbf{Status} \\
 \midrule
-\multicolumn{2}{@{}l}{\emph{Code}} \\
-\quad \texttt{src/nanobubbleval/} & Python package: schema, evaluator, reconciler, splits, baselines \\
-\quad \texttt{scripts/01--04\_*.py} & Numbered pipeline orchestration \\
-\quad \texttt{tests/} & Unit-test suite covering normaliser, evaluator, reconciler, splits, baselines \\
+\multicolumn{3}{@{}l}{\emph{Code (GitHub)}} \\
+\quad \texttt{src/nanobubbleval/} & Python package: schema, evaluator, reconciler, splits, baselines, harvest framework & v1.0 \\
+\quad \texttt{scripts/01--05\_*.py} & Numbered pipeline orchestration & v1.0 \\
+\quad \texttt{tests/} & Unit-test suite (102 tests) & v1.0 \\
 \midrule
-\multicolumn{2}{@{}l}{\emph{Data}} \\
-\quad \texttt{data/raw/master\_inventory.csv} & 52{,}519-record deduplicated warehouse \\
-\quad \texttt{data/curated/nanobubble\_core\_high\_precision.csv} & 8{,}006-record A1+A2 core \\
-\quad \texttt{data/gold/gold\_annotation\_set\_v3.csv} & 500-record gold pool \\
-\quad \texttt{data/tasks/structured\_extraction\_benchmark.csv} & Task 1 view (schema fill) \\
-\quad \texttt{data/tasks/numerical\_grounding\_benchmark.csv} & Task 2 view (value $+$ unit) \\
-\quad \texttt{data/tasks/evidence\_attribution\_benchmark.csv} & Task 3 view (verbatim span) \\
-\quad \texttt{data/splits/splits.json} & Deterministic dev/test split with five-slice tags \\
-\quad \texttt{data/splits/leakage\_report.md} & Disjointness and IAA-pinning audit \\
+\multicolumn{3}{@{}l}{\emph{Data (HuggingFace)}} \\
+\quad \texttt{gold\_hard/iaa\_subset.csv} & 40-record gold-hard tier (first-annotator labels) & v1.0 \\
+\quad \texttt{predictions/regex-v1.csv} & B1 baseline predictions on gold-hard tier & v1.0 \\
+\quad \texttt{predictions/biobert-squadv2.csv} & B2 baseline predictions on gold-hard tier & v1.0 \\
+\quad \texttt{predictions/qwen25-7b-instruct.csv} & B3 baseline predictions on gold-hard tier & v1.0 \\
+\quad \texttt{splits/slice\_summary.md} & Per-slice membership counts & v1.0 \\
+\quad \texttt{splits/leakage\_report.md} & Disjointness audit across splits & v1.0 \\
+\quad \texttt{data/raw/master\_inventory.csv} & 52{,}519-record deduplicated warehouse & scheduled \\
+\quad \texttt{data/curated/nanobubble\_core\_high\_precision.csv} & 8{,}006-record A1+A2 core & scheduled \\
+\quad \texttt{data/gold/gold\_annotation\_set\_v3.csv} & 500-record gold pool (incl.\ 460-record gold-lite extension tier) & scheduled \\
+\quad \texttt{data/tasks/structured\_extraction\_benchmark.csv} & Task 1 view (schema fill) & scheduled \\
+\quad \texttt{data/tasks/numerical\_grounding\_benchmark.csv} & Task 2 view (value $+$ unit) & scheduled \\
+\quad \texttt{data/tasks/evidence\_attribution\_benchmark.csv} & Task 3 view (verbatim span) & scheduled \\
+\quad \texttt{data/splits/splits.json} & Deterministic dev/test split with five-slice tags & scheduled \\
 \midrule
-\multicolumn{2}{@{}l}{\emph{Annotation}} \\
-\quad \texttt{annotation/packet/} & Files distributed to the second annotator \\
-\quad \texttt{annotation/gold\_hard/} & Gold-hard subset (dual-annotator protocol) \\
+\multicolumn{3}{@{}l}{\emph{Configs and metadata (HuggingFace + GitHub)}} \\
+\quad \texttt{configs/extraction\_schema.json} & 18-field schema specification & v1.0 \\
+\quad \texttt{metadata/croissant.json} & Croissant 1.1 dataset metadata & v1.0 \\
 \midrule
-\multicolumn{2}{@{}l}{\emph{Configs and metadata}} \\
-\quad \texttt{configs/extraction\_schema.json} & 18-field schema specification \\
-\quad \texttt{metadata/croissant.json} & Croissant 1.1 dataset metadata \\
+\multicolumn{3}{@{}l}{\emph{Annotation (GitHub)}} \\
+\quad \texttt{annotation/packet/} & Annotation guideline distributed to annotators & v1.0 \\
+\quad \texttt{annotation/gold\_hard/} & Adjudicated dual-annotator gold-hard tier & scheduled (v1.1) \\
 \bottomrule
 \end{tabular}
 \end{table}
