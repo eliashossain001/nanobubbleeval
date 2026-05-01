@@ -39,13 +39,6 @@ configs:
 **An evidence-grounded benchmark for schema extraction, numerical grounding,
 and evidence attribution in the nanobubble and nanocarrier literature.**
 
-NeurIPS 2026 Datasets & Benchmarks track submission.
-
-> **Anonymisation note (review version).** The repository is currently shared
-> as a private/anonymised release for double-blind review. The accompanying
-> paper carries placeholder URLs. The repository will be made public and the
-> URLs updated for the camera-ready version.
-
 ## Summary
 
 NanoBubbleEval operationalises three failure modes of scientific information
@@ -82,8 +75,8 @@ Six **headline** fields (numerical: `size`, `zeta_potential`, `stability`,
 plus three additional unit slots).
 
 Numerical headline fields carry a canonical unit (size: nm; zeta potential:
-mV; stability: h; loading efficiency: %) and a unit-synonym table. Out-of-vocabulary
-unit strings are flagged but never silently coerced.
+mV; stability: h; loading efficiency: %) and a unit-synonym table.
+Out-of-vocabulary unit strings are flagged but never silently coerced.
 
 ## Files in this release
 
@@ -93,14 +86,13 @@ unit strings are flagged but never silently coerced.
 | `predictions/regex-v1.csv` | B1 regex baseline predictions on gold-hard |
 | `predictions/biobert-squadv2.csv` | B2 BioBERT-SQuADv2 predictions on gold-hard |
 | `predictions/qwen25-7b-instruct.csv` | B3 Qwen2.5-7B-Instruct predictions on gold-hard |
-| `metadata/croissant.json` | Croissant 1.1 dataset metadata with NeurIPS-required RAI fields |
+| `metadata/croissant.json` | Croissant 1.1 dataset metadata |
 | `metadata/extraction_schema.json` | 18-field schema specification |
 | `metadata/data_quality_report.md` | Warehouse-level QC (deduplication, missing fields) |
 | `splits/slice_summary.md` | Slice membership counts |
 | `splits/leakage_report.md` | Disjointness audit across splits |
-| `release_card.md` | Canonical file listing |
 
-## Baselines reported in the paper
+## Baselines
 
 | Baseline | Macro Naive-F1 | Macro Acal-F1 [95% CI] | Num. match | A–E consistency |
 |---|---:|---:|---:|---:|
@@ -111,40 +103,38 @@ unit strings are flagged but never silently coerced.
 Bootstrap 95% CIs computed by record-level resampling with replacement
 (`n_boot=1000`, seed=42).
 
-## Headline finding (paper §9.1)
+## Headline finding
 
 On the gold-hard tier, B3 dominates B2 by 21.3 points and B1 by 26.5 points
 of macro Acal-F1, with non-overlapping CIs across all three baselines. Unit
 accuracy is 1.000 across all three baselines, indicating that the bottleneck
 is *which* property to extract rather than how to canonicalise its unit.
 B3's macro Acal-F1 falls from 0.786 on original-research abstracts to 0.449
-on review-paper abstracts — a 33.7-point drop, roughly twice the
+on review-paper abstracts — a 33.7-point drop, more than twice the
 corresponding drop for B1 (12.6 points) or B2 (15.6 points), suggesting the
 LLM is more sensitive to review-paper paraphrase than the simpler baselines.
 
-## Citation
+## Versioning
 
-```bibtex
-@misc{nanobubbleeval2026,
-  title  = {NanoBubbleEval: An Evidence-Grounded Benchmark for Schema Extraction,
-            Numerical Grounding, and Evidence Attribution in the Nanobubble
-            and Nanocarrier Literature},
-  author = {Anonymous Authors},
-  year   = {2026},
-  note   = {NeurIPS 2026 Datasets and Benchmarks Track (under review)}
-}
-```
+The benchmark is versioned semantically. v1.0 ships the small-artifact
+release (gold-hard tier, baseline predictions, Croissant metadata, schema
+specification, slice and leakage reports). The 52,519-record warehouse
+manifest, the 8,006-record high-precision core, the 460-record gold-lite
+extension tier, the three task views (`structured`, `numerical`,
+`evidence`), and the deterministic `splits.json` will be added in a
+subsequent release. v1.1 will additionally finalise dual annotation on the
+gold-hard tier, extend the gold-lite tier with open-access full-text records,
+and add a same-family-larger ceiling baseline plus a retrieval-augmented
+variant.
 
-## Status notice
+## Code
 
-The 52,519-record warehouse manifest, the 8,006-record high-precision core,
-the 460-record gold-lite extension tier, the three task views (`structured`,
-`numerical`, `evidence`), and the determined `splits.json` will be added to
-this release before the full-paper deadline. v1.0 currently ships the
-gold-hard headline tier and the three baseline prediction files used in the
-paper.
+The accompanying Python package, pipeline scripts, and unit-test suite are
+released at:
+
+`https://github.com/eliashossain001/nanobubbleeval`
 
 ## License
 
-The dataset is released under CC BY-NC 4.0 (research use only). The codebase
-is released under MIT.
+The dataset is released under **CC BY-NC 4.0** (research use only). The
+codebase is released under **MIT**.
