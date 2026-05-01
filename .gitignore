@@ -38,9 +38,13 @@ env/
 paper/*.pdf
 !paper/main.pdf
 
-# Local annotation
-annotation/received/*.csv
+# Local annotation (never publish collaborator gold labels)
+annotation/received/*
 !annotation/received/.gitkeep
+*.bak
+
+# Internal Overleaf upload zips (regenerable, not source of truth)
+paper_for_overleaf.zip
 
 # Large warehouse data (regenerable from scripts/legacy_harvest/)
 data/raw/master_inventory.csv

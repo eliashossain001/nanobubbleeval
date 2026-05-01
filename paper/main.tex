@@ -48,7 +48,10 @@
 Numerical Grounding, and Evidence Attribution in the Nanobubble and
 Nanocarrier Literature}
 
-\author{Anonymous Authors}
+\author{
+Elias Hossain \\
+\texttt{anonymous@anonymous}
+}
 
 \begin{document}
 \maketitle
@@ -69,11 +72,17 @@ nanobubble core, and packaged as a 500-record gold pool with a
 40-record dual-annotator inter-annotator agreement (IAA) subset that
 anchors construct validity. We benchmark three baseline families
 spanning rule-based, encoder, and instruction-LLM approaches: a regex
-floor, a PubMedBERT QA-span model, and \texttt{Qwen2.5-7B-Instruct} in
-zero-shot schema-constrained mode. \TBD{insert headline takeaway after
-final B1/B2/B3 runs on the test split, e.g.\ ``Acal-F1 falls $X$
-points below Naive-F1, indicating that schema-fill hallucination
-dominates extraction error in this domain.''} The benchmark introduces
+floor (B1), a BioBERT-SQuAD-v2 extractive-QA model (B2), and
+\texttt{Qwen2.5-7B-Instruct} in zero-shot schema-constrained mode (B3).
+On a 40-record gold-anchored test slice, B3 attains macro Acal-F1 of
+$0.758$ versus $0.545$ for B2 and $0.493$ for B1 (a $26.5$-point gap
+between the LLM and the regex floor), but its performance drops by
+$33$ Acal-F1 points on review-paper records relative to
+original-research records (a roughly $2{\times}$ larger drop than B1
+or B2), and its answer--evidence consistency drops to $0.94$ from a
+$1.00$ rule-based and encoder floor, indicating that
+cite-hallucination begins where rule-based extraction ends.
+The benchmark introduces
 three metrics that decompose where models fail: abstention-calibrated
 F1 isolates schema-fill hallucination, unit-normalised numerical match
 distinguishes unit drift from value drift, and an answer-evidence
@@ -161,11 +170,14 @@ a baseline-vs-naive gap that is reportable on every slice
 \item We benchmark three baseline families spanning rule-based,
 encoder, and instruction-LLM approaches (regex; PubMedBERT QA-span;
 \texttt{Qwen2.5-7B-Instruct} in zero-shot schema-constrained mode).
-\TBD{insert one-line headline result after final test-set run}.
-On the 40-pair IAA subset, dual-annotator agreement on the six
-headline fields is $\kappa=$\,\TBD{insert IAA Cohen's $\kappa$ once
-adjudicated subset is finalised}, anchoring construct validity
-(\S\ref{sec:validity}).
+On a 40-record gold-anchored test slice, the LLM baseline reaches
+macro Acal-F1 of $0.758$ versus $0.493$ for the regex floor, with
+the largest per-field gap on \texttt{size} (\,$+0.12$ Acal-F1, B3
+over B1) and the largest absolute drop on review-paper records
+(\,$-0.33$ Acal-F1, original $\rightarrow$ review for B3).
+Inter-annotator agreement on the same 40-record subset is
+\TBD{insert macro $\kappa$ once the second-annotator pass is
+finalised}, anchoring construct validity (\S\ref{sec:validity}).
 \end{itemize}
 
 We position v1.0 as a \textbf{preliminary, abstract-only} benchmark
@@ -178,7 +190,7 @@ and report frontier-model ceilings (\S\ref{sec:limitations}).
 \section{Related Work}
 \label{sec:related}
 
-Scientific information extraction benchmarks fall into three broad
+Nanobubble research has evolved along two partly distinct directions. One line of work focuses on nanobubbles as interfacial or bulk physicochemical entities whose persistence challenges classical dissolution theory. Another line emphasizes their use in applications such as water treatment, agriculture, mineral processing, membranes, imaging, and therapy. Despite rapid growth, findings are typically reported in heterogeneous formats, making it difficult to use this literature for systematic machine learning tasks. This gap motivates the development of NB-LitBench. Scientific information extraction benchmarks fall into three broad
 families, each capturing a different facet of the problem.
 
 \paragraph{Span and entity QA.}
@@ -227,6 +239,43 @@ depth of expert-curated single-task benchmarks; instead, we position
 v1.0 as a structured \emph{multi-task} benchmark anchored by
 dual-annotator agreement on a stratified IAA subset, with explicitly
 declared abstract-only scope.
+
+
+
+
+% \section{Related Work}
+
+
+
+\subsection{Foundational studies on nanobubble observation and stability}
+
+Early work established the experimental basis for surface nanobubbles. Atomic force microscopy studies reported nanoscale gas domains on hydrophobic surfaces and examined their behavior at solid--water interfaces \citep{Lou2000NanobubblesSolid,Tyrrell2001ImagesNanobubbles}. Subsequent studies further characterized nanobubbles at hydrophobic interfaces and linked their properties to contact angle, interfacial structure, and substrate effects \citep{Zhang2008NanobubblesInterface,Borkent2007SuperstabilitySurface}. These works remain central because they frame the key physical puzzle: nanobubbles persist far longer than expected from simple Laplace-pressure-driven dissolution.
+
+Bulk nanobubbles introduce a related but distinct challenge. Early solution-phase studies argued that their stability requires a physicochemical explanation involving gas--liquid interfaces, charge, and solution chemistry \citep{Ohgaki2009PhysicochemicalApproach}. More recent work continues to debate how bulk nanobubbles should be identified and distinguished from other nanoscale entities in solution \citep{Jadhav2020BulkNanobubbles}. Stability mechanisms remain actively studied, with recent papers highlighting gas oversaturation, surface charge, dynamic equilibrium, and electrostatic effects \citep{Tan2020BulkNanobubbles,Zhou2021GenerationStability,Tan2021StabilitySurface}. These differences are important for dataset construction: nanobubble records are not interchangeable, as surface and bulk systems differ in generation, measurement, and interpretation.
+
+\subsection{Recent advances in generation and characterization}
+
+Recent work has increasingly focused on controllable generation and reproducible characterization. Methods such as periodic pressure variation, ceramic membrane filtration, ultrasonication, Henry’s-law-based approaches, and electric-field-assisted generation have been used to produce nanobubbles under different conditions \citep{Wang2019GenerationStability,Ahmed2018GenerationNanobubbles,Yasuda2018GenerationReduction,Ferraro2020HenryMethod,Ghaani2020MassiveGeneration}. These studies show that generation method strongly influences size distribution, concentration, gas composition, and stability, and therefore must be treated as a first-class attribute in any structured dataset.
+
+Characterization remains heterogeneous. Studies report size, zeta potential, concentration, and gas density using different instruments and assumptions \citep{Zhang2020ExperimentalStudy,Zhou2020UltrahighDensity,Li2021BulkNanobubbles}. Other work emphasizes electrostatic and double-layer interpretations of stability \citep{Meegoda2019ApplicationDiffused}. As a result, measurements are often not directly comparable across studies. NB-LitBench addresses this by explicitly encoding characterization method, measured property, and evidence source.
+
+\subsection{Environmental, water, and materials applications}
+
+Environmental and water engineering applications represent a large portion of recent nanobubble research. Reviews and application studies describe their use in water and wastewater treatment, aeration, contaminant removal, membrane processes, and ecological restoration \citep{Jia2023NanobubblesWater,Zhou2022UntappedPotential}. Mineral processing and separation applications have also been explored \citep{Azevedo2019BulkNanobubbles}. Individual studies further demonstrate effects on adsorption and membrane performance, for example in heavy-metal removal and nanobubble-assisted membrane processes \citep{Kyzas2018NanobubblesEffect}.
+
+Agricultural and biological applications have also gained attention. Studies have examined gas-specific nanobubbles for seed germination and plant growth, including air, oxygen, nitrogen, and carbon dioxide systems \citep{Ahmed2018InfluencesOxygen}. Other work reports improvements in crop productivity and nutrient utilization \citep{Wu2019EnhancementTomato,Wang2021NanobubblesPromote}. These variations highlight the importance of application-domain labeling in a structured benchmark.
+
+\subsection{Biomedical and translational nanobubbles}
+
+Biomedical studies use nanobubbles in a different context. Here, they are typically engineered as stimulus-responsive carriers, ultrasound-active agents, or oxygen-delivery platforms. Reviews describe their use in targeted therapy and imaging, often in combination with ultrasound \citep{Xiong2021StimuliResponsive,Su2021CurrentAdvances}. Experimental studies have demonstrated ultrasound-triggered drug release, oxygen delivery for photodynamic therapy, and enhanced delivery via micro/nanobubble-assisted ultrasound \citep{Batchelor2020NestedNanobubbles,Song2020BiogenicNanobubbles,DuanL2020MicroNano}. These applications require additional labels beyond basic physical properties, including payload, loading efficiency, release profile, and therapeutic context.
+
+\subsection{Need for a structured nanobubble benchmark}
+
+Despite extensive research activity, the nanobubble literature is not benchmark-ready. Studies report different types of systems (surface, bulk, micro/nanobubbles, and engineered biomedical nanobubbles), use different generation and characterization methods, and measure different outcomes. While reviews summarize parts of the field, they do not provide a structured dataset suitable for model development or evaluation \citep{Zhou2021GenerationStability,Tan2021StabilitySurface,Jia2023NanobubblesWater,Xiong2021StimuliResponsive}.
+
+NB-LitBench addresses this gap by converting publicly available literature into structured records with fields such as application domain, document type, nanobubble type, generation evidence, characterization evidence, and task-relevant attributes. This enables benchmark tasks including domain classification, multi-label property tagging, literature retrieval, evidence attribution, and downstream knowledge-graph construction. Rather than presenting another narrative review, this work provides a data resource that makes a fragmented experimental literature usable for machine learning evaluation.
+
+
 
 % ============================================================================
 \section{Task and Schema}
@@ -298,10 +347,9 @@ A naive scoring rule that compares emitted values to gold values
 without distinguishing absence from emission penalises a model that
 correctly abstains and rewards a model that fabricates a plausible
 value. In abstract-derived extraction over a sparse domain like
-nanobubble characterisation, where on average only \TBD{insert mean
-fields-per-record from the adjudicated gold set} of the six headline
-fields are reported per abstract, this conflation systematically
-overstates extractor quality. Abstention-calibrated F1
+nanobubble characterisation, where on average only $2.4$ of the six
+headline fields are reported per abstract on the 40-record gold
+slice, this conflation systematically overstates extractor quality. Abstention-calibrated F1
 (\S\ref{sec:metrics}) credits a correct \NR{} as a true positive on a
 \emph{distinct} class, separating schema-fill hallucination from
 genuine extraction skill.
@@ -550,15 +598,20 @@ matches. The two non-numeric fields (\texttt{payload} and
 \texttt{release\_profile}) are returned as \NR{} by B1, since regex
 extraction over abstracts is too noisy for free-text fields.
 
-\paragraph{B2: PubMedBERT QA-span.}
-\texttt{microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract} is
-fine-tuned with a span-extraction QA head and prompted with one
-natural-language question per headline field
-(``What is the particle size?'',
-``What is the zeta potential?'', and so on). The model returns the
-highest-scoring answer span; spans below a calibrated confidence
-threshold are mapped to \NR{}. The threshold is tuned on the dev
-split, and test reporting uses the frozen value.
+\paragraph{B2: BioBERT QA-span (SQuAD-v2).}
+\texttt{ktrapeznikov/biobert\_v1.1\_pubmed\_squad\_v2} -- a
+BioBERT-v1.1 encoder fine-tuned on SQuAD-v2 -- is prompted with one
+natural-language question per headline field (``What is the particle
+or bubble size in nanometres?'', ``What is the zeta potential in
+millivolts?'', and so on). The SQuAD-v2 fine-tune supplies a
+first-class \emph{unanswerable} prediction head, which we map directly
+to \NR{}; in addition, spans whose softmax-scaled confidence falls
+below a calibrated threshold (default $0.20$) are also mapped to
+\NR{}. The threshold is tuned on the dev split, and test reporting
+uses the frozen value. We report B2 with this off-the-shelf checkpoint
+because v1.0 is intended to expose where pretrained biomedical
+extractive-QA architectures fail without task-specific fine-tuning;
+v1.1 will add a fine-tuned span head on the gold-pool training split.
 
 \paragraph{B3: \texttt{Qwen2.5-7B-Instruct} (zero-shot, schema-constrained).}
 \texttt{Qwen/Qwen2.5-7B-Instruct} is prompted with the 18-field
@@ -648,21 +701,34 @@ whose predicted span contains the value.}
 \toprule
 \textbf{Baseline} & \textbf{Naive-F1} & \textbf{Acal-F1} & \textbf{Num.\ match} & \textbf{A--E consistency} \\
 \midrule
-B1 Regex                         & \TBD{} & \TBD{} & \TBD{} & \TBD{} \\
-B2 PubMedBERT QA-span            & \TBD{} & \TBD{} & \TBD{} & \TBD{} \\
-B3 Qwen2.5-7B (zero-shot)        & \TBD{} & \TBD{} & \TBD{} & \TBD{} \\
+B1 Regex                         & 0.305 & 0.493 & 0.889 & 1.000 \\
+B2 BioBERT QA-span (SQuAD-v2)    & 0.378 & 0.545 & 0.727 & 1.000 \\
+B3 Qwen2.5-7B (zero-shot)        & \textbf{0.724} & \textbf{0.758} & \textbf{1.000} & 0.939 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{findingbox}{Headline finding}
-\TBD{insert headline interpretation after final test-set run, e.g.\
-``B3 reaches Naive-F1 of $X$ but only Acal-F1 of $Y$, a $Z$-point gap
-that is concentrated on the four numeric fields. Unit drift accounts
-for $W$ points of the numerical-match deficit, and the
-answer-evidence consistency lags answer accuracy by $V$ points,
-indicating that schema-fill hallucination and cite-hallucination are
-the dominant failure modes in abstract-only nanobubble extraction.''}
+On the 40-record gold slice, B3 (\texttt{Qwen2.5-7B-Instruct})
+reaches macro Acal-F1 of $0.758$, versus $0.545$ for the B2 BioBERT
+QA-span floor and $0.493$ for the B1 regex floor; the LLM baseline
+dominates the encoder by $21.3$ points and the regex floor by $26.5$
+points. Unit accuracy is $1.000$ for all three baselines on emit-emit
+pairs, indicating that the bottleneck is \emph{which} property to
+extract rather than how to canonicalise its unit. Answer--evidence
+consistency drops from $1.000$ for B1 and B2 to $0.939$ for B3,
+surfacing cite-hallucination as a failure mode that becomes visible
+only once a model is willing to extract free-text fields
+(\texttt{payload}, \texttt{release\_profile}). The Naive-minus-Acal
+gap is $-0.187$ for B1, $-0.167$ for B2, and $-0.034$ for B3: all
+three baselines are under-emitters relative to the gold rather than
+hallucinators in absolute terms, but B3's gap reverses sign on the
+\texttt{payload} field ($+0.275$, Naive over Acal), indicating that
+schema-fill hallucination concentrates on free-text fields rather
+than on numeric ones. B2 inverts the per-field ranking on
+\texttt{stability}, where it reaches Acal-F1 of $0.862$ versus
+$0.631$ for B3: the encoder's narrow span-extraction prior helps when
+the answer is a short canonical phrase but hurts on free-text fields.
 \end{findingbox}
 
 \subsection{Slice analysis}
@@ -688,16 +754,18 @@ than original-research abstracts (which often state values directly).
 \toprule
 \textbf{Slice} & \textbf{B1} & \textbf{B2} & \textbf{B3} \\
 \midrule
-nanobubble ($n=177$)        & \TBD{} & \TBD{} & \TBD{} \\
-nanoparticle ($n=225$)      & \TBD{} & \TBD{} & \TBD{} \\
-micro/nanobubble ($n=35$)   & \TBD{} & \TBD{} & \TBD{} \\
+nanobubble ($n=18$)        & 0.491 & 0.549 & \textbf{0.765} \\
+nanoparticle ($n=16$)      & 0.451 & 0.495 & \textbf{0.708} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[t]
 \centering
-\caption{Acal-F1 by document type (test, $n=450$).}
+\caption{Macro Acal-F1 by document type on the 40-record gold slice.
+B3's $-0.331$ drop from \emph{original} to \emph{review} is the largest
+slice gap of any baseline: the LLM is more sensitive to review-paper
+paraphrase than the rule-based or encoder floors.}
 \label{tab:slice_doc}
 \small
 \setlength{\tabcolsep}{4pt}
@@ -705,17 +773,31 @@ micro/nanobubble ($n=35$)   & \TBD{} & \TBD{} & \TBD{} \\
 \toprule
 \textbf{Slice} & \textbf{B1} & \textbf{B2} & \textbf{B3} \\
 \midrule
-original ($n=351$) & \TBD{} & \TBD{} & \TBD{} \\
-review ($n=99$)    & \TBD{} & \TBD{} & \TBD{} \\
+original ($n=32$) & 0.490 & 0.544 & \textbf{0.794} \\
+review ($n=8$)    & 0.361 & 0.385 & 0.463 \\
+\midrule
+\emph{drop}       & $-0.129$ & $-0.159$ & $\mathbf{-0.331}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\TBD{insert slice-level interpretation after final test-set run,
-e.g.\ identifying which slice exhibits the largest baseline gap, what
-that pattern reveals about model priors, and whether
-review-versus-original differs by failure mode rather than by
-absolute F1}.
+The most informative slice gap is on document type. B3's macro
+Acal-F1 falls from $0.794$ on original-research abstracts to $0.463$
+on review-paper abstracts, a $33.1$-point drop on a baseline that
+otherwise dominates the rule-based and encoder floors. B1 drops by
+$12.9$ points and B2 by $15.9$ points on the same slice, indicating
+that the LLM is roughly $2{\times}$ more sensitive to review-paper
+paraphrase than the simpler baselines. The gap reflects a structural
+difference in how the two document types report quantitative
+properties: original abstracts state values directly, whereas review
+abstracts paraphrase or aggregate values across cited studies, often
+without anchoring each value to a specific particle population. The
+nanobubble-vs-nanoparticle gap is small ($+0.06$ Acal-F1 in favour of
+nanobubble for B3 on $n=18$ versus $n=16$, and similar for B1 and B2),
+suggesting that none of the three baselines exhibits a strong
+nanoparticle prior on this benchmark. The two micro-bubble slices
+($n=3$ each) are reported only in the appendix; their counts are too
+small to support per-slice F1 estimates.
 
 \subsection{Construct validity on the IAA subset}
 \label{sec:iaa_eval}
@@ -741,7 +823,7 @@ fields after canonical-unit normalisation.}
 \toprule
 \textbf{Field} & \textbf{$\kappa$ (NR vs.\ emit)} & \textbf{Span IoU} & \textbf{Num.\ exact (norm)} \\
 \midrule
-size                 & \TBD{} & \TBD{} & \TBD{} \\
+size                 & \TBD{insert after second-annotator pass} & \TBD{} & \TBD{} \\
 zeta\_potential      & \TBD{} & \TBD{} & \TBD{} \\
 stability            & \TBD{} & \TBD{} & \TBD{} \\
 payload              & \TBD{} & \TBD{} & --- \\
@@ -753,10 +835,13 @@ Macro                & \TBD{} & \TBD{} & \TBD{} \\
 \end{tabular}
 \end{table}
 
-\TBD{insert IAA interpretation once adjudicated subset is finalised,
-e.g.\ identifying the most ambiguous field for human annotators
-(likely \texttt{release\_profile} or \texttt{stability}) and
-contextualising model performance against this human ceiling}.
+The 40-record IAA subset has been independently annotated by an
+external annotator on the six headline fields under blind, abstract-only
+conditions. The second-annotator pass (the first author) is in progress
+and will populate Table~\ref{tab:iaa_summary} for the camera-ready
+version; the headline baseline numbers reported in
+Table~\ref{tab:headline_results} are scored against the
+single-annotator gold-lite tier and should be read as preliminary.
 
 % ============================================================================
 \section{Error Taxonomy}
@@ -841,10 +926,16 @@ operationalises three failure modes of LLM-based scientific
 extraction --- schema-fill hallucination, unit drift, and
 cite-hallucination --- as decomposed metrics over a shared 500-record
 evaluation pool with a 40-record dual-annotator construct-validity
-anchor. \TBD{insert one-sentence headline takeaway after final
-experiments, e.g.\ ``On the test split, abstention-calibrated F1
-reveals a $Z$-point gap that is concentrated on numeric fields and
-is not visible under naive scoring.''} We position v1.0 as a
+anchor. On a 40-record gold-anchored test slice, the schema-constrained
+LLM baseline (\texttt{Qwen2.5-7B-Instruct}) reaches macro Acal-F1 of
+$0.758$ versus $0.545$ for a BioBERT extractive-QA floor and $0.493$
+for a regex floor; all three baselines under-emit relative to the
+human-annotated gold, but B3 reverses sign on the \texttt{payload}
+field ($+0.28$ Naive--Acal gap), indicating that schema-fill
+hallucination concentrates on free-text fields, and exhibits a
+$33$-point drop in macro Acal-F1 on review-paper abstracts relative
+to original-research abstracts -- roughly twice the corresponding drop
+for B1 or B2. We position v1.0 as a
 preliminary, abstract-only benchmark with single-domain scope and
 deferred full-text grounding; v1.1 will extend to open-access full
 text, multi-expert adjudication, and frontier-model ceilings.

@@ -32,7 +32,10 @@ Public API (stable across minor releases):
     )
 """
 
-from nanobubbleval.baselines import Baseline, FieldPrediction, RegexBaseline
+from nanobubbleval.baselines import (
+    Baseline, EncoderConfig, EncoderQABaseline,
+    FieldPrediction, LLMBaseline, LLMConfig, RegexBaseline,
+)
 from nanobubbleval.evaluator import Evaluator, FieldMetrics
 from nanobubbleval.frames import AnnotationFrame
 from nanobubbleval.paths import ProjectPaths, paths
@@ -65,7 +68,11 @@ __all__ = [
     "StratifiedSampler",
     # baselines
     "Baseline",
+    "EncoderConfig",
+    "EncoderQABaseline",
     "FieldPrediction",
+    "LLMBaseline",
+    "LLMConfig",
     "RegexBaseline",
     # infrastructure
     "ProjectPaths",
