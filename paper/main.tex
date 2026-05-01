@@ -1,6 +1,6 @@
 % ============================================================================
 % NanoBubbleEval: NeurIPS 2026 Evaluations & Datasets Track
-% Draft v0.5 — multi-task benchmark for schema extraction, numerical
+% Draft v0.5: multi-task benchmark for schema extraction, numerical
 % grounding, and evidence attribution in scientific information extraction,
 % instantiated on the nanobubble / nanocarrier literature.
 % ============================================================================
@@ -119,65 +119,49 @@ benchmarking.
 
 \begin{itemize}\itemsep0pt
 \item \textbf{A multi-task evaluation methodology over a shared
-record set.} We define three structured prediction tasks -- schema
-extraction, numerical grounding under unit normalisation, and
-verbatim evidence attribution -- projected from a single annotation
-pass. The shared record set enables decomposition of failure modes
-within an individual example rather than across heterogeneous
-benchmarks, and reveals that baselines exhibit task-specific
-strengths (e.g., the encoder QA baseline outperforms the instruction
-LLM by $23.1$ points of abstention-calibrated F1 on the
-\texttt{stability} field but is dominated on \texttt{payload} by
-$53.3$ points). The schema, metric suite, and pipeline transfer to
-any sparse, unit-bearing, evidence-sensitive scientific extraction
-domain (\S\ref{sec:task}).
+record set.} Three structured prediction tasks (schema extraction,
+unit-normalised numerical grounding, and verbatim evidence
+attribution) are projected from a single annotation pass, enabling
+decomposition of failure modes within an example rather than across
+heterogeneous benchmarks. The schema, metric suite, and pipeline
+transfer to any sparse, unit-bearing, evidence-sensitive scientific
+extraction domain (\S\ref{sec:task}).
 \item \textbf{Three metrics that operationalise the three failure
 modes.} \emph{Abstention-calibrated F1} treats \NR{} as a first-class
-label and produces a Naive--Acal gap that quantifies schema-fill
-hallucination; \emph{tolerance-bounded numerical match after
-canonical-unit conversion} disentangles unit drift from value drift
-on numeric fields; and an \emph{answer--evidence consistency rate}
-detects cite-hallucination -- predictions that emit a correct value
-paired with an unsupported span. None of these metrics is reducible
-to a single F1 score over the union of all fields
+label and quantifies schema-fill hallucination via the Naive--Acal
+gap; \emph{tolerance-bounded numerical match} on canonical units
+disentangles unit drift from value drift; and an
+\emph{answer--evidence consistency rate} detects cite-hallucination,
+where a correct value is paired with an unsupported span
 (\S\ref{sec:metrics}).
-\item \textbf{A reproducible release: code, data, and metadata.} We
-release \textbf{NanoBubbleEval-v1.0}: a 52{,}519-record deduplicated
-warehouse, an 8{,}006-record high-precision domain core, a
-500-record gold pool with a stratified 40-record \emph{gold-hard}
-headline tier produced under a pre-specified blind dual-annotator
-protocol (v1.0 ships single-annotator-validated labels; full dual
-annotation and IAA statistics are planned for v1.1), a 460-record
-single-annotator \emph{gold-lite}
-extension tier reported only as a robustness check, three task
-views, five orthogonal evaluation slices, deterministic split files
-with a leakage audit, a Croissant-1.1 metadata file, and a Python
-package implementing the full evaluation pipeline
+\item \textbf{A reproducible release: code, data, and metadata.}
+\textbf{NanoBubbleEval-v1.0} ships a 52{,}519-record deduplicated
+warehouse, an 8{,}006-record high-precision core, a 500-record gold
+pool partitioned into a 40-record \emph{gold-hard} headline tier
+(blind dual-annotator protocol; v1.0 uses single-annotator-validated
+labels, with full IAA in v1.1) and a 460-record \emph{gold-lite}
+extension tier, three task views, five evaluation slices, and a
+Python package implementing the full evaluation pipeline
 (\S\ref{sec:construction}, \S\ref{sec:release}).
-\item \textbf{Empirical baselines anchored on the gold-hard tier.}
+\item \textbf{Empirical baselines on the gold-hard tier.}
 We benchmark a regex floor (B1), a BioBERT-SQuAD-v2 extractive-QA
 model (B2), and \texttt{Qwen2.5-7B-Instruct} in zero-shot
-schema-constrained mode (B3). The LLM baseline reaches macro
-Acal-F1 of $0.758$ on the gold-hard tier (versus $0.545$ for B2 and
-$0.493$ for B1), is roughly twice as sensitive to review-paper
-paraphrase as either floor, and exhibits cite-hallucination once it
-begins to extract free-text fields. These results establish a
-reproducible evaluation context against which future systems can be
-measured (\S\ref{sec:experiments}).
+schema-constrained mode (B3). B3 reaches macro Acal-F1 of $0.758$
+(versus $0.545$ for B2 and $0.493$ for B1) but is more than twice as
+sensitive to review-paper paraphrase as either floor, and exhibits
+cite-hallucination once it begins to extract free-text fields
+(\S\ref{sec:experiments}).
 \end{itemize}
 
 \paragraph{Positioning.}
-NanoBubbleEval is, to our knowledge, the first benchmark to evaluate
+To our knowledge, NanoBubbleEval is the first benchmark to evaluate
 schema-fill hallucination, unit-normalised numerical grounding, and
 verbatim evidence attribution as three failure modes over a single
-record set, scored by metrics that detect each failure mode in
-isolation. We extend the SQuAD-v2~\citep{wadden2020scifact}
-unanswerable convention from a binary per-question signal to a
-per-field calibration signal under multi-task scoring
-(abstention-calibrated F1), and operationalise cite-hallucination as
-a first-class metric rather than folding it into span F1. The
-methodology is domain-portable; the nanobubble instantiation is the
-case study, not the contribution.
+record set with metrics that detect each failure mode in isolation.
+We extend the SQuAD-v2~\citep{wadden2020scifact} unanswerable
+convention to a per-field calibration signal (Acal-F1) and
+operationalise cite-hallucination as a first-class metric rather
+than folding it into span F1.
 
 % ============================================================================
 \section{Related Work}
@@ -187,7 +171,7 @@ Scientific information-extraction benchmarks fall into three broad
 families, each capturing a different facet of the problem. We
 position NanoBubbleEval against each family below; domain-specific
 nanobubble physics literature, which motivates the schema design but
-not the NLP framing, is summarised in \S\ref{sec:domain_background}.
+not the NLP framing, is summarised in Appendix~\ref{app:domain_background}.
 
 \paragraph{Span and entity QA.}
 SciREX~\citep{jain2020scirex}, BC5CDR~\citep{li2016bc5cdr},
@@ -242,45 +226,7 @@ declared abstract-only scope.
 
 
 % ============================================================================
-\section{Domain Background}
-\label{sec:domain_background}
-
-The schema design in \S\ref{sec:task} is informed by the structure
-of the nanobubble literature. Two partly distinct lines of work
-shape the field: nanobubbles as interfacial or bulk physicochemical
-entities whose persistence challenges classical dissolution theory,
-and nanobubbles as engineered carriers in water treatment,
-agriculture, ultrasound imaging, and drug delivery.
-
-\subsection{Foundational studies on nanobubble observation and stability}
-
-Early work established the experimental basis for surface nanobubbles. Atomic force microscopy studies reported nanoscale gas domains on hydrophobic surfaces and examined their behavior at solid--water interfaces \citep{Lou2000NanobubblesSolid,Tyrrell2001ImagesNanobubbles}. Subsequent studies further characterized nanobubbles at hydrophobic interfaces and linked their properties to contact angle, interfacial structure, and substrate effects \citep{Zhang2008NanobubblesInterface,Borkent2007SuperstabilitySurface}. These works remain central because they frame the key physical puzzle: nanobubbles persist far longer than expected from simple Laplace-pressure-driven dissolution.
-
-Bulk nanobubbles introduce a related but distinct challenge. Early solution-phase studies argued that their stability requires a physicochemical explanation involving gas--liquid interfaces, charge, and solution chemistry \citep{Ohgaki2009PhysicochemicalApproach}. More recent work continues to debate how bulk nanobubbles should be identified and distinguished from other nanoscale entities in solution \citep{Jadhav2020BulkNanobubbles}. Stability mechanisms remain actively studied, with recent papers highlighting gas oversaturation, surface charge, dynamic equilibrium, and electrostatic effects \citep{Tan2020BulkNanobubbles,Zhou2021GenerationStability,Tan2021StabilitySurface}. These differences are important for dataset construction: nanobubble records are not interchangeable, as surface and bulk systems differ in generation, measurement, and interpretation.
-
-\subsection{Recent advances in generation and characterization}
-
-Recent work has increasingly focused on controllable generation and reproducible characterization. Methods such as periodic pressure variation, ceramic membrane filtration, ultrasonication, Henry’s-law-based approaches, and electric-field-assisted generation have been used to produce nanobubbles under different conditions \citep{Wang2019GenerationStability,Ahmed2018GenerationNanobubbles,Yasuda2018GenerationReduction,Ferraro2020HenryMethod,Ghaani2020MassiveGeneration}. These studies show that generation method strongly influences size distribution, concentration, gas composition, and stability, and therefore must be treated as a first-class attribute in any structured dataset.
-
-Characterization remains heterogeneous. Studies report size, zeta potential, concentration, and gas density using different instruments and assumptions \citep{Zhang2020ExperimentalStudy,Zhou2020UltrahighDensity,Li2021BulkNanobubbles}. Other work emphasizes electrostatic and double-layer interpretations of stability \citep{Meegoda2019ApplicationDiffused}. As a result, measurements are often not directly comparable across studies. NanoBubbleEval addresses this by explicitly encoding characterization method, measured property, and evidence source.
-
-\subsection{Environmental, water, and materials applications}
-
-Environmental and water engineering applications represent a large portion of recent nanobubble research. Reviews and application studies describe their use in water and wastewater treatment, aeration, contaminant removal, membrane processes, and ecological restoration \citep{Jia2023NanobubblesWater,Zhou2022UntappedPotential}. Mineral processing and separation applications have also been explored \citep{Azevedo2019BulkNanobubbles}. Individual studies further demonstrate effects on adsorption and membrane performance, for example in heavy-metal removal and nanobubble-assisted membrane processes \citep{Kyzas2018NanobubblesEffect}.
-
-Agricultural and biological applications have also gained attention. Studies have examined gas-specific nanobubbles for seed germination and plant growth, including air, oxygen, nitrogen, and carbon dioxide systems \citep{Ahmed2018InfluencesOxygen}. Other work reports improvements in crop productivity and nutrient utilization \citep{Wu2019EnhancementTomato,Wang2021NanobubblesPromote}. These variations highlight the importance of application-domain labeling in a structured benchmark.
-
-\subsection{Biomedical and translational nanobubbles}
-
-Biomedical studies use nanobubbles in a different context. Here, they are typically engineered as stimulus-responsive carriers, ultrasound-active agents, or oxygen-delivery platforms. Reviews describe their use in targeted therapy and imaging, often in combination with ultrasound \citep{Xiong2021StimuliResponsive,Su2021CurrentAdvances}. Experimental studies have demonstrated ultrasound-triggered drug release, oxygen delivery for photodynamic therapy, and enhanced delivery via micro/nanobubble-assisted ultrasound \citep{Batchelor2020NestedNanobubbles,Song2020BiogenicNanobubbles,DuanL2020MicroNano}. These applications require additional labels beyond basic physical properties, including payload, loading efficiency, release profile, and therapeutic context.
-
-\subsection{Need for a structured nanobubble benchmark}
-
-Despite extensive research activity, the nanobubble literature is not benchmark-ready. Studies report different types of systems (surface, bulk, micro/nanobubbles, and engineered biomedical nanobubbles), use different generation and characterization methods, and measure different outcomes. While reviews summarize parts of the field, they do not provide a structured dataset suitable for model development or evaluation \citep{Zhou2021GenerationStability,Tan2021StabilitySurface,Jia2023NanobubblesWater,Xiong2021StimuliResponsive}.
-
-NanoBubbleEval addresses this gap by converting publicly available literature into structured records with fields such as application domain, document type, nanobubble type, generation evidence, characterization evidence, and task-relevant attributes. This enables benchmark tasks including domain classification, multi-label property tagging, literature retrieval, evidence attribution, and downstream knowledge-graph construction. Rather than presenting another narrative review, this work provides a data resource that makes a fragmented experimental literature usable for machine learning evaluation.
-
-
+% Domain Background relocated to Appendix~\ref{app:domain_background}.
 
 % ============================================================================
 \section{Task and Schema}
@@ -574,30 +520,17 @@ schema. The first-annotator labels are released alongside the gold
 pool so that downstream users can recompute agreement statistics
 against their own annotators under their own match policies.
 
-\paragraph{Adjudication protocol.}
-Adjudication is defined by protocol: disagreements between the two
-annotator passes are to be resolved by the first author under a
-logged decision rule once the second-annotator pass is complete.
-v1.0 uses single-annotator-validated labels on the gold-hard tier;
-full multi-annotator adjudication is planned for v1.1. The remaining
-gold-pool records form the \emph{gold-lite} tier and are
-single-annotator throughout; that distinction is surfaced
-explicitly in every results table.
-
-\paragraph{Abstract-only declaration.}
-v1.0 evaluates exclusively on abstracts. We declare this as a scope
-constraint rather than a goal: a property stated only in tables,
-methods, or supplementary material is out of scope for v1.0, and
-\NR{} is the correct answer under our scoring rule even when the
-underlying paper reports the value. The numerical grounding task in
-particular is bounded by abstract-level coverage; v1.1 will lift this
-ceiling by adding an open-access full-text gold subset.
-
-\paragraph{Reproducible split.}
-The dev/test split is constructed deterministically with a fixed
-seed. We ship the split file, the slice-membership map, and a
-leakage-audit report that verifies disjointness across splits and
-confirms that the IAA subset is contained within the test split.
+\paragraph{Adjudication, scope, and reproducibility.}
+Adjudication is defined by protocol (disagreements resolved by the
+first author under a logged decision rule once the second-annotator
+pass completes; v1.0 uses single-annotator-validated labels on the
+gold-hard tier). v1.0 evaluates exclusively on abstracts: properties
+stated only in tables, methods, or supplementary material are out of
+scope, and \NR{} is the correct answer even when the underlying
+paper reports the value. The dev/test split is constructed
+deterministically with a fixed seed; the split file, slice-membership
+map, and a leakage-audit report are released. Full details for all
+three safeguards are in Appendix~\ref{app:pipeline}.
 
 % ============================================================================
 \section{Method and Baselines}
@@ -622,36 +555,22 @@ matches. The two non-numeric fields (\texttt{payload} and
 extraction over abstracts is too noisy for free-text fields.
 
 \paragraph{B2: BioBERT QA-span (SQuAD-v2).}
-\texttt{ktrapeznikov/biobert\_v1.1\_pubmed\_squad\_v2} -- a
-BioBERT-v1.1 encoder fine-tuned on SQuAD-v2 -- is prompted with one
-natural-language question per headline field (``What is the particle
-or bubble size in nanometres?'', ``What is the zeta potential in
-millivolts?'', and so on). The SQuAD-v2 fine-tune supplies a
-first-class \emph{unanswerable} prediction head, which we map directly
-to \NR{}; in addition, spans whose softmax-scaled confidence falls
-below a calibrated threshold (default $0.20$) are also mapped to
-\NR{}. The threshold is tuned on the dev split, and test reporting
-uses the frozen value. We report B2 with this off-the-shelf checkpoint
-because v1.0 is intended to expose where pretrained biomedical
-extractive-QA architectures fail without task-specific fine-tuning;
-v1.1 will add a fine-tuned span head on the gold-pool training split.
+\texttt{ktrapeznikov/biobert\_v1.1\_pubmed\_squad\_v2}, a BioBERT-v1.1
+encoder fine-tuned on SQuAD-v2, is prompted with one natural-language
+question per headline field. The SQuAD-v2 unanswerable head is mapped
+directly to \NR{}; spans whose softmax-scaled confidence falls below
+$0.20$ (tuned on dev, frozen at test) are also mapped to \NR{}. We
+ship the off-the-shelf checkpoint to expose where pretrained
+biomedical extractive-QA fails without task-specific fine-tuning.
 
 \paragraph{B3: \texttt{Qwen2.5-7B-Instruct} (zero-shot, schema-constrained).}
 \texttt{Qwen/Qwen2.5-7B-Instruct} is prompted with the 18-field
-schema, the \NR{} convention, and a single in-context worked
-example, and is asked to return a JSON object for each abstract.
-Out-of-schema fields are repaired or nulled before scoring, and
-the same prompt produces all three task views in one pass.
-Inference uses the HuggingFace Transformers runtime on a single GPU
-with greedy decoding. We choose Qwen2.5-7B-Instruct as the v1.0 LLM
-baseline because it is open-weights, runs on a single 16~GB GPU at
-greedy decoding, and is widely studied, which makes the result
-reproducible by reviewers.
-
-A retrieval-augmented baseline (RAG over open-access full-text
-records) and a same-family-larger ceiling
-(\texttt{Qwen2.5-72B-Instruct}) are scoped out of v1.0 because v1.0
-is abstract-only; both are scheduled for v1.1.
+schema, the \NR{} convention, and one in-context worked example,
+and returns a JSON object per abstract; out-of-schema fields are
+repaired or nulled before scoring. Inference uses HuggingFace
+Transformers on a single 16\,GB GPU with greedy decoding. A
+retrieval-augmented baseline and a same-family-larger ceiling
+(\texttt{Qwen2.5-72B-Instruct}) are scheduled for v1.1.
 
 % ============================================================================
 \section{Metrics}
@@ -874,49 +793,22 @@ for the v1.1 release.}
 \toprule
 \textbf{Field} & \textbf{$\kappa$ (NR vs.\ emit)} & \textbf{Span IoU} & \textbf{Num.\ exact (norm)} \\
 \midrule
-size                 & --- & --- & --- \\
-zeta\_potential      & --- & --- & --- \\
-stability            & --- & --- & --- \\
-payload              & --- & --- & --- \\
-loading\_efficiency  & --- & --- & --- \\
-release\_profile     & --- & --- & --- \\
+size                 & --   & --   & --   \\
+zeta\_potential      & --   & --   & --   \\
+stability            & --   & --   & --   \\
+payload              & --   & --   & --   \\
+loading\_efficiency  & --   & --   & --   \\
+release\_profile     & --   & --   & --   \\
 \midrule
-Macro                & --- & --- & --- \\
+Macro                & --   & --   & --   \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-% ============================================================================
-\section{Error Taxonomy}
-\label{sec:errors}
-
-To make headline numbers actionable, we hand-inspect a sample of B3
-errors and classify each into one of five recurring categories. The
-taxonomy is intentionally small: each category corresponds to a
-metric that can detect it programmatically, so future systems can be
-diagnosed against the same axes without additional human labour.
-Counts and worked examples are provided in
-Appendix~\ref{app:errors}; the taxonomy itself is summarised below.
-
-\begin{itemize}\itemsep0pt
-\item \textbf{Schema-fill hallucination.} The model emits a value
-when the abstract states nothing. Detected by the
-Acal-F1-minus-Naive-F1 gap.
-\item \textbf{Unit drift.} The numeric value is correct but the unit
-is wrong (for example, \texttt{200}\,\textmu{}m for a record that
-reports \texttt{200}\,nm). Detected by the unit-accuracy column.
-\item \textbf{Entity--value mis-binding.} The value is correct for
-some property in the abstract but is assigned to the wrong field
-(for example, binding a loading-efficiency value to release
-profile).
-\item \textbf{Cite-hallucination.} The value is correct but the
-predicted span does not contain it. Detected by the answer-evidence
-consistency rate.
-\item \textbf{Topic confusion (nanobubble vs.\ nanoparticle).} The
-model applies nanoparticle-typical priors (for example, assuming a
-polymer matrix) on a record that describes a gas-filled nanobubble.
-Cross-checked against the nanobubble-vs-nanoparticle slice gap.
-\end{itemize}
+% Error Taxonomy relocated to Appendix~\ref{app:errors}; the five
+% categories (schema-fill hallucination, unit drift, entity--value
+% mis-binding, cite-hallucination, topic confusion) are referenced
+% directly from each metric's introduction in \S\ref{sec:metrics}.
 
 % ============================================================================
 \section{Limitations and Ethics}
@@ -972,8 +864,8 @@ non-commercial research use under terms documented in the release.
 \label{sec:conclusion}
 
 We introduced NanoBubbleEval, a benchmark that operationalises three
-failure modes of scientific information extraction --- schema-fill
-hallucination, unit drift, and cite-hallucination --- as decomposed
+failure modes of scientific information extraction (schema-fill
+hallucination, unit drift, and cite-hallucination) as decomposed
 metrics over three structured tasks evaluated on a shared record set.
 The release comprises a 40-record gold-hard tier produced under a
 pre-specified blind dual-annotator protocol (v1.0 ships
@@ -1013,6 +905,94 @@ retrieval-augmented variant.
 \tableofcontents
 
 \newpage
+
+\section{Domain background}
+\label{app:domain_background}
+
+The schema design is informed by the structure of the nanobubble
+literature. Two partly distinct lines of work shape the field:
+nanobubbles as interfacial or bulk physicochemical entities whose
+persistence challenges classical dissolution theory, and nanobubbles
+as engineered carriers in water treatment, agriculture, ultrasound
+imaging, and drug delivery.
+
+\subsection{Foundational studies on observation and stability.}
+Atomic force microscopy studies reported nanoscale gas domains on
+hydrophobic surfaces and characterised their behaviour at solid--water
+interfaces \citep{Lou2000NanobubblesSolid,Tyrrell2001ImagesNanobubbles,Zhang2008NanobubblesInterface,Borkent2007SuperstabilitySurface}.
+Bulk nanobubbles introduce a related challenge: their stability
+requires a physicochemical explanation involving gas--liquid
+interfaces, charge, and solution chemistry
+\citep{Ohgaki2009PhysicochemicalApproach,Jadhav2020BulkNanobubbles,Tan2020BulkNanobubbles,Zhou2021GenerationStability,Tan2021StabilitySurface}.
+Surface and bulk systems differ in generation, measurement, and
+interpretation, motivating the schema separation of
+\texttt{generation\_method}, \texttt{characterization\_method}, and
+\texttt{bubble\_type}.
+
+\subsection{Generation and characterisation.}
+Generation methods (periodic pressure variation, ceramic membrane
+filtration, ultrasonication, Henry's-law approaches, electric-field
+generation) strongly influence size distribution, concentration, gas
+composition, and stability
+\citep{Wang2019GenerationStability,Ahmed2018GenerationNanobubbles,Yasuda2018GenerationReduction,Ferraro2020HenryMethod,Ghaani2020MassiveGeneration},
+and characterisation across instruments and assumptions yields
+non-comparable measurements
+\citep{Zhang2020ExperimentalStudy,Zhou2020UltrahighDensity,Li2021BulkNanobubbles,Meegoda2019ApplicationDiffused}.
+NanoBubbleEval encodes both as first-class schema fields.
+
+\subsection{Application domains.}
+Environmental and water engineering applications include water and
+wastewater treatment, aeration, contaminant removal, membrane
+processes, ecological restoration, mineral processing, and adsorption
+\citep{Jia2023NanobubblesWater,Zhou2022UntappedPotential,Azevedo2019BulkNanobubbles,Kyzas2018NanobubblesEffect}.
+Agricultural applications cover gas-specific nanobubbles for seed
+germination, plant growth, and crop productivity
+\citep{Ahmed2018InfluencesOxygen,Wu2019EnhancementTomato,Wang2021NanobubblesPromote}.
+Biomedical applications use nanobubbles as stimulus-responsive
+carriers, ultrasound-active agents, or oxygen-delivery platforms,
+requiring schema attributes such as \texttt{payload},
+\texttt{loading\_efficiency}, and \texttt{release\_profile}
+\citep{Xiong2021StimuliResponsive,Su2021CurrentAdvances,Batchelor2020NestedNanobubbles,Song2020BiogenicNanobubbles,DuanL2020MicroNano}.
+
+\subsection{Why a structured benchmark is needed.}
+Existing reviews summarise parts of the field
+\citep{Zhou2021GenerationStability,Tan2021StabilitySurface,Jia2023NanobubblesWater,Xiong2021StimuliResponsive}
+but do not provide a structured dataset suitable for model
+evaluation. NanoBubbleEval converts publicly available abstracts into
+structured records under a uniform schema, enabling the three-task
+benchmarking methodology presented in the main paper.
+
+\section{Error taxonomy}
+\label{app:error_taxonomy}
+
+To make headline numbers actionable, we hand-inspect a sample of B3
+errors and classify each into one of five recurring categories. The
+taxonomy is intentionally small: each category corresponds to a
+metric that can detect it programmatically, so future systems can be
+diagnosed against the same axes without additional human labour.
+
+\begin{itemize}\itemsep0pt
+\item \textbf{Schema-fill hallucination.} The model emits a value
+when the abstract states nothing. Detected by the
+Acal-F1-minus-Naive-F1 gap.
+\item \textbf{Unit drift.} The numeric value is correct but the unit
+is wrong (for example, \texttt{200}\,\textmu{}m for a record that
+reports \texttt{200}\,nm). Detected by the unit-accuracy column.
+\item \textbf{Entity--value mis-binding.} The value is correct for
+some property in the abstract but is assigned to the wrong field
+(for example, binding a loading-efficiency value to release
+profile).
+\item \textbf{Cite-hallucination.} The value is correct but the
+predicted span does not contain it. Detected by the answer-evidence
+consistency rate.
+\item \textbf{Topic confusion (nanobubble vs.\ nanoparticle).} The
+model applies nanoparticle-typical priors (for example, assuming a
+polymer matrix) on a record that describes a gas-filled nanobubble.
+Cross-checked against the nanobubble-vs-nanoparticle slice gap.
+\end{itemize}
+
+Counts and worked examples per category are released alongside the
+gold pool (see Appendix~\ref{app:errors}).
 
 \section{Pipeline details}
 \label{app:pipeline}
@@ -1325,7 +1305,7 @@ provided as supplementary CSVs in the release
 for slices that fall below our $n=5$ reporting floor.
 
 \paragraph{Error taxonomy with examples.}
-A worked example per error category from \S\ref{sec:errors} is
+A worked example per error category from Appendix~\ref{app:error_taxonomy} is
 provided in the release (\texttt{results/error\_taxonomy/}); each
 example consists of the record id, abstract, gold annotation, and
 B3 prediction, annotated with the error category. The categories
