@@ -64,7 +64,7 @@ Replace the same placeholder in `metadata/croissant.json` and
   deadline.** The current repository is at `eliashossain001/...` —
   for double-blind review, the *anonymous mirror* is what reviewers see;
   the GitHub URL is not in the paper.
-- The HuggingFace dataset at `EliasHossain/nanobubbleeval-anon` is
+- The HuggingFace dataset at `EliasHossain/nanobubbleeval` is
   **private** and is the second-tier release path. Reviewers do not
   need it; they can use anonymous.4open.science for everything.
 
