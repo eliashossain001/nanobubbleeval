@@ -1,0 +1,265 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform"
+  },
+  "@type": "sc:Dataset",
+  "name": "NanoBubbleEval-v1.0",
+  "description": "An evidence-grounded benchmark for schema extraction, numerical grounding, and evidence attribution in the nanobubble and nanocarrier literature. The benchmark operationalises three failure modes of scientific information extraction (schema-fill hallucination, unit drift, cite-hallucination) as decomposed metrics over three task views projected from a single annotation pass.",
+  "conformsTo": "http://mlcommons.org/croissant/1.1",
+  "version": "1.0.0",
+  "datePublished": "2026-05-06",
+  "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+  "url": "[anonymised release URL to be added]",
+  "keywords": [
+    "scientific information extraction",
+    "schema-constrained extraction",
+    "numerical grounding",
+    "evidence attribution",
+    "abstention-calibrated F1",
+    "cite-hallucination",
+    "nanobubble",
+    "nanocarrier",
+    "benchmark"
+  ],
+  "creator": {
+    "@type": "Organization",
+    "name": "Anonymous Authors (NeurIPS 2026 Datasets and Benchmarks submission)"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Anonymous Authors (NeurIPS 2026 Datasets and Benchmarks submission)"
+  },
+  "rai:dataCollection": "Records were harvested from public scholarly APIs (PubMed/NCBI Entrez, Europe PMC, OpenAlex, CrossRef, Semantic Scholar, ClinicalTrials.gov v2) under five query families covering nanobubble core terminology, ultrasound and contrast imaging, delivery and release, biomedical nanocarriers, and environmental/agricultural applications. Deduplication is strictly ordered: DOI, then PMID/PMCID, then normalised title, then URL.",
+  "rai:dataCollectionType": "Public scholarly metadata APIs",
+  "rai:dataCollectionMissingData": "Some records lack abstracts (29.2% of the warehouse). The high-precision core and the gold pool are filtered to require an abstract; this constraint is documented in Appendix A of the paper.",
+  "rai:dataCollectionRawData": "The raw API responses are not redistributed; the release ships the deduplicated warehouse manifest containing only fields permitted under the source-API terms of use.",
+  "rai:dataPreprocessingProtocol": "Records are normalised to UTF-8, deduplicated in the order specified above, assigned tier labels A/B/C by lexical proximity to nanobubble-core vocabulary (Tier A is split A1/A2), and sampled into a 1,000-record balanced candidate pool. The 500-record gold pool is the top-ranked half of the candidate pool by an extraction-priority score; the gold-hard tier (n=40) is sampled with stratification on (nb_label, document_type) and pinned to the test split.",
+  "rai:dataAnnotationProtocol": "Annotations on the gold-hard tier are produced by a professional biomedical annotator under a blind, abstract-only protocol (Appendix C of the paper). Each annotation records the value, the canonical unit (for numeric fields), and a verbatim evidence quote substring of the abstract. The NOT_REPORTED sentinel is used when the abstract does not state a property. The second-annotator pass is finalised in the camera-ready version.",
+  "rai:dataAnnotationAnalysis": "Inter-annotator agreement (Cohen's kappa on NOT_REPORTED-versus-emit, character-set span IoU on emit-emit pairs, unit-normalised numerical match on numeric fields) is reported in Table 7 of the paper once the second-annotator pass completes.",
+  "rai:dataAnnotationPlatform": "Internal annotation tooling; no third-party crowdsourcing platform was used.",
+  "rai:dataReleaseMaintenancePlan": "The benchmark is versioned semantically. v1.0 is the abstract-only release with two-tier annotation. v1.1 is scheduled to add an open-access full-text gold subset, finalise multi-rater adjudication on the gold-hard tier, and add a same-family-larger ceiling baseline.",
+  "rai:dataLimitation": "v1.0 evaluates abstract-derived extraction only; properties stated in tables, methods, or supplementary material are out of scope. The schema and metric design generalise but the lexical patterns and unit-normalisation tables are calibrated to the nanobubble domain. The gold-hard tier is currently single-annotator-validated under a dual-annotator protocol; full dual-annotator IAA is reported in the camera-ready version.",
+  "rai:dataSocialImpact": "The benchmark exposes schema-fill hallucination, unit drift, and cite-hallucination as distinct failure modes in scientific information extraction, thereby guiding the development of more honest extraction systems. A foreseeable misuse is over-reliance on extracted property values for downstream scientific decisions; the abstention and evidence-provenance signals in the metric suite are designed to mitigate this.",
+  "rai:dataBiases": "The warehouse is dominated by English-language abstracts indexed by the source APIs; this skews the benchmark towards English-language scientific literature. The cross-disciplinary balance reflects the relative volume of nanobubble research in biomedical, environmental, and fundamental physics venues.",
+  "rai:dataUseCases": "Benchmarking schema-constrained extraction systems; benchmarking biomedical extractive-QA models; benchmarking instruction-tuned LLMs on numerical grounding under unit normalisation; evaluating evidence-attribution faithfulness in scientific NLP.",
+  "rai:personalSensitiveInformation": "None. The benchmark contains structured metadata and abstract-derived annotations only; it does not contain identifiable medical records, patient-level information, or any personally identifiable data.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "github-repository",
+      "name": "github-repository",
+      "description": "Source code repository (Python package, pipeline scripts, and unit tests).",
+      "contentUrl": "[anonymised release URL to be added]",
+      "encodingFormat": "git+https",
+      "sha256": "main"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "schema-spec",
+      "name": "extraction_schema.json",
+      "description": "18-field schema specification with normalisation rules and missing-value sentinel (NOT_REPORTED).",
+      "contentUrl": "configs/extraction_schema.json",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "warehouse-manifest",
+      "name": "master_inventory.csv",
+      "description": "52,519-record deduplicated warehouse manifest.",
+      "contentUrl": "data/raw/master_inventory.csv",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "high-precision-core",
+      "name": "nanobubble_core_high_precision.csv",
+      "description": "8,006-record high-precision nanobubble core (A1+A2).",
+      "contentUrl": "data/curated/nanobubble_core_high_precision.csv",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "gold-pool",
+      "name": "gold_annotation_set_v3.csv",
+      "description": "500-record gold pool (40 gold-hard + 460 gold-lite).",
+      "contentUrl": "data/gold/gold_annotation_set_v3.csv",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "task-structured",
+      "name": "structured_extraction_benchmark.csv",
+      "description": "Task 1 view: full schema fill.",
+      "contentUrl": "data/tasks/structured_extraction_benchmark.csv",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "task-numerical",
+      "name": "numerical_grounding_benchmark.csv",
+      "description": "Task 2 view: numeric value + canonical unit + tolerance.",
+      "contentUrl": "data/tasks/numerical_grounding_benchmark.csv",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "task-evidence",
+      "name": "evidence_attribution_benchmark.csv",
+      "description": "Task 3 view: verbatim evidence span per emitted field.",
+      "contentUrl": "data/tasks/evidence_attribution_benchmark.csv",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "splits-json",
+      "name": "splits.json",
+      "description": "Deterministic dev/test split with five-slice tags.",
+      "contentUrl": "data/splits/splits.json",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "leakage-report",
+      "name": "leakage_report.md",
+      "description": "Disjointness audit confirming no record_id overlap across splits.",
+      "contentUrl": "data/splits/leakage_report.md",
+      "encodingFormat": "text/markdown"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "gold-pool-records",
+      "name": "GoldPoolRecord",
+      "description": "One record per entry in the 500-record gold pool. Each record carries metadata (title, year, source, document type) and the 18-field schema annotation (six headline fields, twelve provisional fields).",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/record_id",
+          "name": "record_id",
+          "description": "Unique record identifier.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/title",
+          "name": "title",
+          "description": "Paper or trial title.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/year",
+          "name": "year",
+          "description": "Publication year.",
+          "dataType": "sc:Integer"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/abstract_or_summary",
+          "name": "abstract_or_summary",
+          "description": "Abstract text used as the model input.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/document_type",
+          "name": "document_type",
+          "description": "One of {original, review, clinical_trial}.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/nanobubble_vs_nanoparticle",
+          "name": "nanobubble_vs_nanoparticle",
+          "description": "Slice label: nanobubble, nanoparticle, micro/nanobubble, or microbubble-adjacent.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/size_value",
+          "name": "size_value",
+          "description": "Particle / bubble diameter (numeric headline field). Canonical unit: nm. NOT_REPORTED when absent in abstract.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/zeta_potential_value",
+          "name": "zeta_potential_value",
+          "description": "Surface charge (numeric headline field). Canonical unit: mV.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/stability_value",
+          "name": "stability_value",
+          "description": "Persistence / lifetime (numeric headline field). Canonical unit: h.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/payload_value",
+          "name": "payload_value",
+          "description": "Drug, dye, gene, gas, or cargo loaded (text headline field). Free text.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/loading_efficiency_value",
+          "name": "loading_efficiency_value",
+          "description": "Encapsulation / loading percentage (numeric headline field). Canonical unit: %.",
+          "dataType": "sc:Text"
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "gold-pool-records/release_profile_value",
+          "name": "release_profile_value",
+          "description": "Release behaviour (text headline field). Free text.",
+          "dataType": "sc:Text"
+        }
+      ]
+    }
+  ]
+}

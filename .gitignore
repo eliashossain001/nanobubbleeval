@@ -46,6 +46,12 @@ annotation/received/*
 # Internal Overleaf upload zips (regenerable, not source of truth)
 paper_for_overleaf.zip
 
+# HF dataset staging directory — contains collaborator's annotations
+dataset_release/
+
+# HF token cache (never commit credentials)
+.cache/huggingface/
+
 # Large warehouse data (regenerable from scripts/legacy_harvest/)
 data/raw/master_inventory.csv
 

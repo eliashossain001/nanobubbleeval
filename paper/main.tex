@@ -73,8 +73,10 @@ metric over canonicalised units that disentangles unit drift from
 value drift, and (iii) an answer--evidence consistency rate that
 detects \emph{cite-hallucination} -- predictions that emit a correct
 value paired with an unsupported span. The release comprises a
-500-record gold pool with a 40-record dual-annotator
-\emph{gold-hard} tier, a 460-record single-annotator
+500-record gold pool with a 40-record \emph{gold-hard} headline
+tier produced under a blind, dual-annotator protocol (one annotator
+pass complete in v1.0; the second-annotator pass is finalised in the
+camera-ready version), a 460-record single-annotator
 \emph{gold-lite} extension tier (dev=50, test=410) used as a
 robustness check, five orthogonal evaluation slices, three task
 views projected from a single annotation pass, a Croissant-1.1
@@ -181,8 +183,10 @@ to a single F1 score over the union of all fields
 \item \textbf{A reproducible release: code, data, and metadata.} We
 release \textbf{NanoBubbleEval-v1.0}: a 52{,}519-record deduplicated
 warehouse, an 8{,}006-record high-precision domain core, a
-500-record gold pool with a stratified 40-record dual-annotator
-\emph{gold-hard} tier, a 460-record single-annotator \emph{gold-lite}
+500-record gold pool with a stratified 40-record \emph{gold-hard}
+headline tier under a dual-annotator blind protocol (first-annotator
+pass complete in v1.0; second-annotator pass finalised in the
+camera-ready version), a 460-record single-annotator \emph{gold-lite}
 extension tier reported only as a robustness check, three task
 views, five orthogonal evaluation slices, deterministic split files
 with a leakage audit, a Croissant-1.1 metadata file, and a Python
@@ -267,8 +271,9 @@ does not contain it, as a first-class failure rather than folding it
 into a span F1. We make no claim that v1.0 matches the annotation
 depth of expert-curated single-task benchmarks; instead, we position
 v1.0 as a structured \emph{multi-task} benchmark anchored by
-dual-annotator agreement on a stratified IAA subset, with explicitly
-declared abstract-only scope.
+a stratified gold-hard tier produced under a blind dual-annotator
+protocol (the second-annotator pass is finalised in the
+camera-ready version), with explicitly declared abstract-only scope.
 
 
 
@@ -323,8 +328,8 @@ prediction problem over a shared schema. Given a record $r$ with
 title $t_r$ and abstract $a_r$, NanoBubbleEval defines three
 evaluation views over an 18-field normalised schema $\mathcal{S}$.
 Six fields are designated \emph{headline} because abstract-level
-coverage and dual-annotator agreement support reliable per-field
-reporting; the remaining twelve are \emph{provisional} and retained
+coverage supports reliable per-field reporting on the gold-hard
+tier; the remaining twelve are \emph{provisional} and retained
 for schema stability and forward compatibility
 (Table~\ref{tab:schema_scope}). Three task views are projected from
 the same gold-pool annotation pass, which lets us attribute errors
@@ -353,8 +358,8 @@ span that contains the value.
 \begin{table}[t]
 \centering
 \caption{v1.0 schema scope. Headline fields carry sufficient
-abstract-level coverage and dual-annotator agreement to support
-reliable reporting; provisional fields are retained for schema
+abstract-level coverage to support reliable reporting on the
+gold-hard tier; provisional fields are retained for schema
 stability and future releases. Coverage values are the proportion of
 records in the 52{,}519-record warehouse with a positive heuristic
 flag for the field.}
@@ -460,7 +465,7 @@ Warehouse (deduplicated)        & 52{,}519 & 70.8\% with abstracts \\
 High-precision core (A1+A2)     &  8{,}006 & 3{,}577 A1, 4{,}429 A2 \\
 Benchmark candidate pool        &  1{,}000 & balanced sample \\
 Gold pool                       &    500 & gold-hard + gold-lite \\
-\quad Gold-hard tier            &     40 & dual-annotator (headline) \\
+\quad Gold-hard tier            &     40 & dual-annotator protocol (headline) \\
 \quad Gold-lite extension tier  &    460 & dev=50, test=410 (robustness) \\
 \bottomrule
 \end{tabular}
@@ -479,35 +484,38 @@ because per-slice F1 estimates become unstable below that floor.
 
 \begin{table}[t]
 \centering
-\caption{Slice membership in the gold pool ($n=500$, dev=50,
-test=450, IAA=40 pinned to test). Slices marked (\emph{apx}) carry
-fewer than 30 test records and are reported only in the appendix.}
+\caption{Slice membership in the gold pool ($n=500$). The gold-hard
+tier ($n=40$) is dual-annotated under a blind protocol; the
+gold-lite extension tier ($n=460$, dev=50, test=410) is
+single-annotator and reported only as a robustness check. Slices
+marked (\emph{apx}) carry fewer than five gold-hard records and are
+reported only in the appendix.}
 \label{tab:slice_summary}
 \small
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
-\textbf{Slice value} & \textbf{Total} & \textbf{Dev} & \textbf{Test} & \textbf{IAA} \\
+\textbf{Slice value} & \textbf{Total} & \textbf{Gold-Hard} & \textbf{Gold-Lite Dev} & \textbf{Gold-Lite Test} \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Nanobubble vs.\ nanoparticle}} \\
-\quad nanobubble                & 197 & 20 & 177 & 18 \\
-\quad nanoparticle              & 251 & 26 & 225 & 16 \\
-\quad micro/nanobubble          &  39 &  4 &  35 &  3 \\
-\quad microbubble-adjacent (\emph{apx}) &  13 &  0 &  13 &  3 \\
+\quad nanobubble                & 197 & 18 & 20 & 159 \\
+\quad nanoparticle              & 251 & 16 & 26 & 209 \\
+\quad micro/nanobubble          &  39 &  3 &  4 &  32 \\
+\quad microbubble-adjacent (\emph{apx}) &  13 &  3 &  0 &  10 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Document type}} \\
-\quad original                  & 390 & 39 & 351 & 32 \\
-\quad review                    & 110 & 11 &  99 &  8 \\
+\quad original                  & 390 & 32 & 39 & 319 \\
+\quad review                    & 110 &  8 & 11 &  91 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Year bucket}} \\
-\quad post-2020                 & 296 & 31 & 265 & 19 \\
-\quad 2015--2020                & 150 & 16 & 134 & 17 \\
-\quad pre-2015                  &  54 &  3 &  51 &  4 \\
+\quad post-2020                 & 296 & 19 & 31 & 246 \\
+\quad 2015--2020                & 150 & 17 & 16 & 117 \\
+\quad pre-2015                  &  54 &  4 &  3 &  47 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Application bucket}} \\
-\quad biomedical                & 365 & 35 & 330 & 28 \\
-\quad environmental             & 117 & 12 & 105 & 12 \\
-\quad fundamental (\emph{apx})  &  11 &  2 &   9 &  0 \\
+\quad biomedical                & 365 & 28 & 35 & 302 \\
+\quad environmental             & 117 & 12 & 12 &  93 \\
+\quad fundamental (\emph{apx})  &  11 &  0 &  2 &   9 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -581,17 +589,21 @@ flagged but never silently coerced, so unit drift surfaces explicitly
 in the metric tables rather than being absorbed into a single
 correctness score.
 
-\paragraph{Dual-annotator gold-hard tier ($n=40$).}
+\paragraph{Gold-hard tier ($n=40$, dual-annotator protocol).}
 A 40-record subset, stratified by
-\texttt{nb\_label} $\times$ \texttt{document\_type}, is independently
-annotated by two annotators on the six headline fields under blind,
-abstract-only conditions. We report Cohen's $\kappa$ on the
-\NR{}-versus-emit decision per field, character-set span IoU on
-emit-emit pairs, and unit-normalised exact-match agreement on
-numeric fields (Table~\ref{tab:iaa_summary}, \S\ref{sec:iaa_eval}).
-Per-annotator labels are released alongside the gold pool so that
-downstream users can recompute agreement statistics under their own
-match policies.
+\texttt{nb\_label} $\times$ \texttt{document\_type}, is annotated
+under a blind, abstract-only protocol by two annotators on the six
+headline fields. v1.0 reports headline numbers scored against the
+first-annotator labels (an external biomedical annotator); the
+second-annotator pass is in progress and finalised in the
+camera-ready version, at which point per-field Cohen's $\kappa$,
+character-set span IoU on emit-emit pairs, and unit-normalised
+exact-match agreement on numeric fields are reported in
+Table~\ref{tab:iaa_summary}. We therefore label the v1.0 evaluation
+as \emph{single-annotator-validated under a dual-annotator protocol},
+not as dual-annotator-adjudicated. Per-annotator labels are released
+alongside the gold pool so that downstream users can recompute
+agreement statistics under their own match policies.
 
 \paragraph{Adjudication trail.}
 Disagreements on the IAA subset are adjudicated by the first author
@@ -710,10 +722,14 @@ cite-hallucination, which the IoU metric alone does not isolate.
 \section{Experiments}
 \label{sec:experiments}
 
-Headline reporting in v1.0 uses the 40-record dual-annotator
-\emph{gold-hard} tier, the six headline fields, two paper-supported
-slices (nanobubble-vs-nanoparticle and document type), and the three
-baselines (B1, B2, B3). The 460-record single-annotator
+Headline reporting in v1.0 uses the 40-record \emph{gold-hard}
+tier, the six headline fields, two paper-supported slices
+(nanobubble-vs-nanoparticle and document type), and the three
+baselines (B1, B2, B3). Gold-hard records are produced under a
+blind dual-annotator protocol; the v1.0 evaluation scores model
+predictions against the first-annotator labels, with the
+second-annotator pass and the resulting inter-annotator agreement
+statistics finalised in the camera-ready version of the paper. The 460-record single-annotator
 \emph{gold-lite} extension tier (dev=50, test=410) is reported in
 Appendix~\ref{app:errors} as a robustness check and is not used for
 any headline claim. Slices with fewer than five records on the
@@ -731,8 +747,9 @@ correct values are accompanied by spans that contain them.
 
 \begin{table}[t]
 \centering
-\caption{Headline results on the gold-hard tier ($n=40$, dual-annotator,
-abstract-only).
+\caption{Headline results on the gold-hard tier
+($n=40$, blind, abstract-only protocol; predictions scored against
+the first-annotator labels in v1.0).
 Acal-F1 is abstention-calibrated F1; the Naive--Acal gap is the
 schema-fill-hallucination signature. Numerical match is
 tolerance-bounded ($\tau=0.05$, relative) after unit normalisation.
@@ -743,13 +760,17 @@ whose predicted span contains the value.}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Baseline} & \textbf{Naive-F1} & \textbf{Acal-F1} & \textbf{Num.\ match} & \textbf{A--E consistency} \\
+\textbf{Baseline} & \textbf{Naive-F1} & \textbf{Acal-F1 [95\% CI]} & \textbf{Num.\ match} & \textbf{A--E consistency} \\
 \midrule
-B1 Regex                         & 0.305 & 0.493 & 0.889 & 1.000 \\
-B2 BioBERT QA-span (SQuAD-v2)    & 0.378 & 0.545 & 0.727 & 1.000 \\
-B3 Qwen2.5-7B (zero-shot)        & \textbf{0.724} & \textbf{0.758} & \textbf{1.000} & 0.939 \\
+B1 Regex                         & 0.305 & 0.493 [0.434, 0.538] & 0.889 & 1.000 \\
+B2 BioBERT QA-span (SQuAD-v2)    & 0.378 & 0.545 [0.487, 0.588] & 0.727 & 1.000 \\
+B3 Qwen2.5-7B (zero-shot)        & \textbf{0.724} & \textbf{0.758 [0.700, 0.810]} & \textbf{1.000} & 0.939 \\
 \bottomrule
 \end{tabular}
+\\[2pt]
+{\footnotesize Acal-F1 95\% bootstrap CIs computed by record-level
+resampling with replacement ($n_\mathrm{boot}=1000$, seed=42). The
+three baselines have non-overlapping CIs at the macro level.}
 \end{table}
 
 \begin{findingbox}{Headline finding}
@@ -797,31 +818,33 @@ reported only in Appendix~\ref{app:errors}.}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lccc@{}}
 \toprule
-\textbf{Slice} & \textbf{B1} & \textbf{B2} & \textbf{B3} \\
+\textbf{Slice} & \textbf{B1 [95\% CI]} & \textbf{B2 [95\% CI]} & \textbf{B3 [95\% CI]} \\
 \midrule
-nanobubble ($n=18$)        & 0.491 & 0.549 & \textbf{0.765} \\
-nanoparticle ($n=16$)      & 0.451 & 0.495 & \textbf{0.708} \\
+nanobubble ($n=18$)        & 0.491 [0.392, 0.560] & 0.549 [0.451, 0.617] & \textbf{0.765 [0.649, 0.847]} \\
+nanoparticle ($n=16$)      & 0.451 [0.370, 0.513] & 0.495 [0.391, 0.574] & \textbf{0.708 [0.650, 0.757]} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[t]
 \centering
-\caption{Macro Acal-F1 by document type on the gold-hard tier.
-B3's $-0.331$ drop from \emph{original} to \emph{review} is the largest
-slice gap of any baseline: the LLM is roughly twice as sensitive to
-review-paper paraphrase as the rule-based or encoder floors.}
+\caption{Macro Acal-F1 by document type on the gold-hard tier
+(95\% bootstrap CIs in brackets; $n_\mathrm{boot}=1000$, seed=42).
+B3's $-0.337$ drop from \emph{original} ($0.786$) to \emph{review}
+($0.449$) is the largest slice gap of any baseline; the original-
+and review-slice CIs for B3 are non-overlapping, indicating that
+the gap is robust under record-level resampling.}
 \label{tab:slice_doc}
 \small
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lccc@{}}
 \toprule
-\textbf{Slice} & \textbf{B1} & \textbf{B2} & \textbf{B3} \\
+\textbf{Slice} & \textbf{B1 [95\% CI]} & \textbf{B2 [95\% CI]} & \textbf{B3 [95\% CI]} \\
 \midrule
-original ($n=32$) & 0.490 & 0.544 & \textbf{0.794} \\
-review ($n=8$)    & 0.361 & 0.385 & 0.463 \\
+original ($n=32$) & 0.485 [0.428, 0.539] & 0.538 [0.484, 0.593] & \textbf{0.786 [0.727, 0.853]} \\
+review ($n=8$)    & 0.359 [0.333, 0.383] & 0.382 [0.333, 0.417] & 0.449 [0.388, 0.517] \\
 \midrule
-\emph{drop}       & $-0.129$ & $-0.159$ & $\mathbf{-0.331}$ \\
+\emph{drop (point)} & $-0.126$ & $-0.156$ & $\mathbf{-0.337}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -963,7 +986,7 @@ not evaluate proprietary frontier models. We make no comparative
 claim about closed-API model behaviour on this benchmark; v1.1 will
 add a same-family-larger ceiling (\texttt{Qwen2.5-72B-Instruct})
 following the protocol of \citet{lu2023scitab}, plus a
-retrieval-augmented baseline over open-access full text.
+retrieval-augmented baseline over open-access full terxt.
 
 \paragraph{Ethics and licensing.}
 All warehouse records are sourced from public scholarly APIs under
@@ -983,8 +1006,8 @@ We introduced NanoBubbleEval, a benchmark that operationalises three
 failure modes of scientific information extraction --- schema-fill
 hallucination, unit drift, and cite-hallucination --- as decomposed
 metrics over three structured tasks evaluated on a shared record set.
-The release comprises a dual-annotator 40-record gold-hard tier, a
-460-record gold-lite extension tier, three task views projected from
+The release comprises a 40-record gold-hard tier under a blind
+dual-annotator protocol, a 460-record gold-lite extension tier, three task views projected from
 a single annotation pass, five orthogonal evaluation slices, and an
 open-source Python package implementing the full evaluation pipeline.
 On the gold-hard tier, a schema-constrained LLM baseline
@@ -1060,7 +1083,7 @@ PMID/PMCID, then normalised title, then URL. Title normalisation
 lowercases, removes punctuation and stop-tokens, and collapses
 whitespace; the leakage-audit report
 (\texttt{data/splits/leakage\_report.md} in the release) confirms
-that no record_id appears in more than one split.
+that no \texttt{record\_id} appears in more than one split.
 
 \paragraph{Tier rules.}
 Records are assigned to Tier A, B, or C based on lexical proximity
@@ -1167,6 +1190,85 @@ with no quantitative content), and one record that requires the
 annotator's job is not to maximise emission but to faithfully record
 what the abstract states.
 
+\section{Datasheet for the dataset}
+\label{app:datasheet}
+
+We follow the datasheet schema of~\citet{wadden2020scifact}-class
+benchmarks; the Croissant-1.1 metadata file released with the
+dataset (\texttt{metadata/croissant.json}) carries the same fields
+in machine-readable form.
+
+\paragraph{Motivation.}
+NanoBubbleEval was created to evaluate scientific information
+extraction systems on three jointly stressed failure modes that
+contemporary benchmarks evaluate only in isolation: schema-fill
+hallucination, unit-normalised numerical grounding, and verbatim
+evidence attribution. The benchmark methodology is domain-portable;
+the nanobubble and nanocarrier instantiation provides a concrete
+test bed that is unusually demanding because the literature is
+sparse, unit-heavy, and cross-disciplinary.
+
+\paragraph{Composition.}
+The release comprises (i) a 52,519-record deduplicated warehouse
+manifest harvested from public scholarly APIs (PubMed, Europe PMC,
+OpenAlex, CrossRef, Semantic Scholar, ClinicalTrials.gov);
+(ii) an 8,006-record high-precision domain core; (iii) a 500-record
+gold pool partitioned into a 40-record gold-hard tier (under a
+dual-annotator blind protocol) and a 460-record gold-lite extension
+tier (single-annotator); (iv) three task views projected from a
+single annotation pass; (v) deterministic split files with a
+leakage audit; and (vi) per-baseline prediction files for the three
+v1.0 baselines. Each record carries metadata
+(title, year, journal, DOI, source API, document type) and the
+schema annotations described in Appendix~\ref{app:schema}.
+The release does not include full-text papers, model weights, or any
+content beyond what is permitted by the source-API terms of use.
+
+\paragraph{Collection process.}
+Records were harvested via public scholarly APIs under the query
+families documented in Appendix~\ref{app:pipeline}. Deduplication is
+strictly ordered (DOI, then PMID/PMCID, then normalised title, then
+URL); the leakage-audit report verifies disjointness across splits.
+Annotations on the gold-hard tier were produced by a professional
+biomedical annotator under the blind protocol in
+Appendix~\ref{app:guideline}; the second-annotator pass is finalised
+in the camera-ready version.
+
+\paragraph{Preprocessing, cleaning, and labelling.}
+All metadata is normalised to UTF-8 and standardised on the field set
+in Appendix~\ref{app:schema}. Numeric fields are normalised to a
+canonical unit (size: nm; zeta potential: mV; stability: h; loading
+efficiency: \%) before scoring; out-of-vocabulary unit strings are
+flagged but never silently coerced. The benchmark candidate pool is
+sampled deterministically (seed=42) and the split file is included
+in the release.
+
+\paragraph{Uses.}
+The release is intended for benchmarking scientific information
+extraction systems on the three task views (schema extraction,
+numerical grounding, evidence attribution). It can also be used as
+a corpus for fine-tuning extractive-QA or schema-constrained
+generation models, with the caveat that v1.0 deliberately ships the
+B2 baseline as an off-the-shelf checkpoint to expose where pretrained
+biomedical extractive-QA architectures fail without task-specific
+fine-tuning.
+
+\paragraph{Distribution.}
+The dataset is released on HuggingFace at the anonymised URL in
+\S\ref{sec:release}; the codebase is released on GitHub. The
+codebase is licensed under MIT; the dataset is released for
+non-commercial research use under terms documented in the dataset
+card.
+
+\paragraph{Maintenance.}
+The benchmark is versioned semantically. v1.0 is the abstract-only
+release with the gold-hard / gold-lite two-tier annotation. v1.1 is
+scheduled to add an open-access full-text gold subset, finalise
+multi-rater adjudication on the gold-hard tier, and add a
+same-family-larger ceiling and a retrieval-augmented baseline.
+Issues, bug reports, and adjudication corrections are accepted via
+the GitHub issue tracker.
+
 \section{Release card}
 \label{app:release_card}
 
@@ -1205,7 +1307,7 @@ the release root. Verified release URLs are listed in
 \midrule
 \multicolumn{2}{@{}l}{\emph{Annotation}} \\
 \quad \texttt{annotation/packet/} & Files distributed to the second annotator \\
-\quad \texttt{annotation/gold\_hard/} & Adjudicated dual-annotator gold-hard subset \\
+\quad \texttt{annotation/gold\_hard/} & Gold-hard subset (dual-annotator protocol) \\
 \midrule
 \multicolumn{2}{@{}l}{\emph{Configs and metadata}} \\
 \quad \texttt{configs/extraction\_schema.json} & 18-field schema specification \\
