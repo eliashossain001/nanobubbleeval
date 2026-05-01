@@ -61,6 +61,14 @@ data/raw/master_inventory.csv
 # Notebooks
 .ipynb_checkpoints/
 
+# Scratch / IDE-opened working files
+debugging.py
+scratch.py
+sandbox/
+
+# Harvest cache (regenerable via scripts/legacy_harvest/)
+data/harvest_cache/
+
 # Environment
 .env
 .env.local
