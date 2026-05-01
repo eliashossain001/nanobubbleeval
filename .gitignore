@@ -46,8 +46,11 @@ annotation/received/*
 # Internal Overleaf upload zips (regenerable, not source of truth)
 paper_for_overleaf.zip
 
-# HF dataset staging directory — contains collaborator's annotations
-dataset_release/
+# dataset_release/ is tracked: it is the small-artifact bundle the
+# anonymous mirror serves to reviewers (gold-hard tier + baseline predictions
+# + Croissant metadata + schema spec; ~500 KB total, no annotator identity).
+# Larger-than-GitHub artifacts (warehouse, full-text corpus when added) go
+# to HuggingFace only and are NOT staged here.
 
 # HF token cache (never commit credentials)
 .cache/huggingface/
