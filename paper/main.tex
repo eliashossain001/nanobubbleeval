@@ -73,9 +73,10 @@ value drift, and (iii) an answer--evidence consistency rate that
 detects \emph{cite-hallucination} -- predictions that emit a correct
 value paired with an unsupported span. The release comprises a
 500-record gold pool with a 40-record \emph{gold-hard} headline
-tier produced under a blind, dual-annotator protocol (one annotator
-pass complete in v1.0; the second-annotator pass is finalised in the
-camera-ready version), a 460-record single-annotator
+tier produced under a pre-specified blind dual-annotator protocol
+(v1.0 ships single-annotator-validated labels under that protocol;
+full dual annotation and inter-annotator agreement statistics are
+planned for v1.1), a 460-record single-annotator
 \emph{gold-lite} extension tier (dev=50, test=410) used as a
 robustness check, five orthogonal evaluation slices, three task
 views projected from a single annotation pass, a Croissant-1.1
@@ -86,9 +87,9 @@ families: a regex floor (B1), BioBERT fine-tuned on SQuAD-v2 (B2),
 and \texttt{Qwen2.5-7B-Instruct} in zero-shot schema-constrained
 mode (B3). On the gold-hard tier, B3 attains macro abstention-calibrated
 F1 of $0.758$ versus $0.545$ for B2 and $0.493$ for B1, but its
-performance drops by $33.1$ points on review-paper records relative
-to original-research records -- twice the corresponding drop for the
-rule-based and encoder baselines -- and its answer--evidence
+performance drops by $33.7$ points on review-paper records relative
+to original-research records -- more than twice the corresponding
+drop for the rule-based and encoder baselines -- and its answer--evidence
 consistency falls to $0.939$ from a $1.000$ floor, indicating that
 cite-hallucination emerges precisely where rule-based extraction
 ends. The schema, metric suite, and pipeline are domain-portable;
@@ -183,9 +184,10 @@ to a single F1 score over the union of all fields
 release \textbf{NanoBubbleEval-v1.0}: a 52{,}519-record deduplicated
 warehouse, an 8{,}006-record high-precision domain core, a
 500-record gold pool with a stratified 40-record \emph{gold-hard}
-headline tier under a dual-annotator blind protocol (first-annotator
-pass complete in v1.0; second-annotator pass finalised in the
-camera-ready version), a 460-record single-annotator \emph{gold-lite}
+headline tier produced under a pre-specified blind dual-annotator
+protocol (v1.0 ships single-annotator-validated labels; full dual
+annotation and IAA statistics are planned for v1.1), a 460-record
+single-annotator \emph{gold-lite}
 extension tier reported only as a robustness check, three task
 views, five orthogonal evaluation slices, deterministic split files
 with a leakage audit, a Croissant-1.1 metadata file, and a Python
@@ -270,9 +272,10 @@ does not contain it, as a first-class failure rather than folding it
 into a span F1. We make no claim that v1.0 matches the annotation
 depth of expert-curated single-task benchmarks; instead, we position
 v1.0 as a structured \emph{multi-task} benchmark anchored by
-a stratified gold-hard tier produced under a blind dual-annotator
-protocol (the second-annotator pass is finalised in the
-camera-ready version), with explicitly declared abstract-only scope.
+a stratified gold-hard tier produced under a pre-specified blind
+dual-annotator protocol (v1.0 ships single-annotator-validated
+labels; full dual annotation is planned for v1.1), with explicitly
+declared abstract-only scope.
 
 
 
@@ -591,18 +594,19 @@ correctness score.
 \paragraph{Gold-hard tier ($n=40$, dual-annotator protocol).}
 A 40-record subset, stratified by
 \texttt{nb\_label} $\times$ \texttt{document\_type}, is annotated
-under a blind, abstract-only protocol by two annotators on the six
-headline fields. v1.0 reports headline numbers scored against the
-first-annotator labels (an external biomedical annotator); the
-second-annotator pass is in progress and finalised in the
-camera-ready version, at which point per-field Cohen's $\kappa$,
-character-set span IoU on emit-emit pairs, and unit-normalised
-exact-match agreement on numeric fields are reported in
-Table~\ref{tab:iaa_summary}. We therefore label the v1.0 evaluation
-as \emph{single-annotator-validated under a dual-annotator protocol},
-not as dual-annotator-adjudicated. Per-annotator labels are released
-alongside the gold pool so that downstream users can recompute
-agreement statistics under their own match policies.
+under a pre-specified blind, abstract-only protocol on the six
+headline fields. v1.0 ships
+\emph{single-annotator-validated labels under the dual-annotator
+protocol}: the first-annotator pass (an external biomedical
+annotator) is complete and is what headline numbers are scored
+against; full dual annotation and inter-annotator agreement
+statistics (Cohen's $\kappa$ on \NR{}-versus-emit, character-set
+span IoU on emit-emit pairs, and unit-normalised exact-match on
+numeric fields) are planned for the v1.1 release.
+Table~\ref{tab:iaa_summary} documents the planned IAA-reporting
+schema. The first-annotator labels are released alongside the gold
+pool so that downstream users can recompute agreement statistics
+against their own annotators under their own match policies.
 
 \paragraph{Adjudication trail.}
 Disagreements on the IAA subset are adjudicated by the first author
@@ -725,10 +729,10 @@ Headline reporting in v1.0 uses the 40-record \emph{gold-hard}
 tier, the six headline fields, two paper-supported slices
 (nanobubble-vs-nanoparticle and document type), and the three
 baselines (B1, B2, B3). Gold-hard records are produced under a
-blind dual-annotator protocol; the v1.0 evaluation scores model
-predictions against the first-annotator labels, with the
-second-annotator pass and the resulting inter-annotator agreement
-statistics finalised in the camera-ready version of the paper. The 460-record single-annotator
+pre-specified blind dual-annotator protocol; v1.0 ships
+single-annotator-validated labels under that protocol (full dual
+annotation and inter-annotator agreement statistics are planned
+for v1.1). The 460-record single-annotator
 \emph{gold-lite} extension tier (dev=50, test=410) is reported in
 Appendix~\ref{app:errors} as a robustness check and is not used for
 any headline claim. Slices with fewer than five records on the
@@ -849,12 +853,12 @@ review ($n=8$)    & 0.359 [0.333, 0.383] & 0.382 [0.333, 0.417] & 0.449 [0.388, 
 \end{table}
 
 The most informative slice gap is on document type. B3's macro
-Acal-F1 falls from $0.794$ on original-research abstracts to $0.463$
-on review-paper abstracts, a $33.1$-point drop on a baseline that
+Acal-F1 falls from $0.786$ on original-research abstracts to $0.449$
+on review-paper abstracts, a $33.7$-point drop on a baseline that
 otherwise dominates the rule-based and encoder floors. B1 drops by
-$12.9$ points and B2 by $15.9$ points on the same slice, indicating
-that the LLM is roughly $2{\times}$ more sensitive to review-paper
-paraphrase than the simpler baselines. The gap reflects a structural
+$12.6$ points and B2 by $15.6$ points on the same slice, indicating
+that the LLM is more than twice as sensitive to review-paper
+paraphrase as the simpler baselines. The gap reflects a structural
 difference in how the two document types report quantitative
 properties: original abstracts state values directly, whereas review
 abstracts paraphrase or aggregate values across cited studies, often
@@ -869,34 +873,32 @@ small to support per-slice F1 estimates.
 \subsection{Construct validity on the gold-hard tier}
 \label{sec:iaa_eval}
 
-The gold-hard tier supports two construct-validity claims. First,
-its 40 records are dual-annotated under a fixed blind, abstract-only
-protocol (Appendix~\ref{app:guideline}), so headline metrics are
-scored against labels that have been independently produced by two
-annotators under identical instructions. Second, inter-annotator
-agreement on the same 40 records bounds the achievable upper-end
-performance for any model on the same task: a model cannot reasonably
-be expected to exceed the agreement of two careful human annotators
-working from the same abstract under blind conditions.
-
-We report Cohen's $\kappa$ on the \NR{}-versus-emit decision per
-field, character-set span IoU on emit-emit pairs, and unit-normalised
-exact-match agreement on numeric fields. Per-field IAA numbers will
-be reported in the camera-ready version of
-Table~\ref{tab:iaa_summary}, which we leave as a structural placeholder
-in v0.5; the dual-annotated labels and the per-annotator submissions
-are released alongside the gold pool so that downstream users can
-recompute agreement statistics under their own match policies.
+v1.0 reports headline numbers against single-annotator labels on
+the gold-hard tier, produced under a pre-specified blind,
+abstract-only protocol (Appendix~\ref{app:guideline}). The protocol
+is designed for dual annotation, with three reportable agreement
+statistics: Cohen's $\kappa$ on the \NR{}-versus-emit decision per
+field, character-set span IoU on emit-emit pairs, and
+unit-normalised exact-match agreement on numeric fields. Full dual
+annotation and the resulting agreement statistics are planned for
+the v1.1 release; once available, IAA on the same 40 records will
+bound the achievable upper-end performance for any model on the
+same task. The first-annotator labels are released alongside the
+gold pool so that downstream users can recompute agreement
+statistics against their own annotators under their own match
+policies. Table~\ref{tab:iaa_summary} documents the
+planned-validation reporting schema.
 
 \begin{table}[t]
 \centering
-\caption{Inter-annotator agreement on the gold-hard tier
-($n=40$, blind, abstract-only). $\kappa$ is computed on the
-\NR{}-versus-emit decision per field; span IoU is computed on
-emit-emit pairs; numerical exact match is computed on numeric
-fields after canonical-unit normalisation. Field-level numbers are
-reported in the camera-ready version once the second-annotator pass
-is finalised under the protocol in Appendix~\ref{app:guideline}.}
+\caption{\textbf{Planned validation protocol.} Inter-annotator
+agreement reporting schema for the gold-hard tier ($n=40$, blind,
+abstract-only). $\kappa$ is computed on the \NR{}-versus-emit
+decision per field; span IoU is computed on emit-emit pairs;
+numerical exact match is computed on numeric fields after
+canonical-unit normalisation. v1.0 ships single-annotator-validated
+labels under this protocol; the populated IAA numbers are planned
+for the v1.1 release.}
 \label{tab:iaa_summary}
 \small
 \setlength{\tabcolsep}{4pt}
@@ -971,13 +973,13 @@ bounded by abstract-level coverage; the v1.1 release will extend to
 an open-access full-text gold subset under an unchanged schema.
 
 \paragraph{Two-tier annotation.}
-The gold-hard tier ($n=40$) is dual-annotated under a blind protocol;
-the gold-lite extension tier ($n=460$, dev=50, test=410) is
-single-annotator and reported only as a robustness check.
-Headline claims are scored on the gold-hard tier exclusively. We do
-not claim multi-expert adjudication for v1.0; v1.1 will extend the
-gold-hard tier with a third annotator and report multi-rater
-agreement statistics.
+The v1.0 gold-hard tier ($n=40$) is single-annotator-validated
+under a pre-specified blind dual-annotator protocol; full dual
+annotation and inter-annotator agreement statistics are planned for
+v1.1. The gold-lite extension tier ($n=460$, dev=50, test=410) is
+single-annotator and reported only as a robustness check. Headline
+claims are scored on the gold-hard tier exclusively. We do not claim
+multi-expert adjudication for v1.0.
 
 \paragraph{Baseline scope.}
 v1.0 benchmarks three rule-based and open-weights baselines and does
@@ -985,7 +987,7 @@ not evaluate proprietary frontier models. We make no comparative
 claim about closed-API model behaviour on this benchmark; v1.1 will
 add a same-family-larger ceiling (\texttt{Qwen2.5-72B-Instruct})
 following the protocol of \citet{lu2023scitab}, plus a
-retrieval-augmented baseline over open-access full terxt.
+retrieval-augmented baseline over open-access full text.
 
 \paragraph{Ethics and licensing.}
 All warehouse records are sourced from public scholarly APIs under
@@ -1005,24 +1007,28 @@ We introduced NanoBubbleEval, a benchmark that operationalises three
 failure modes of scientific information extraction --- schema-fill
 hallucination, unit drift, and cite-hallucination --- as decomposed
 metrics over three structured tasks evaluated on a shared record set.
-The release comprises a 40-record gold-hard tier under a blind
-dual-annotator protocol, a 460-record gold-lite extension tier, three task views projected from
-a single annotation pass, five orthogonal evaluation slices, and an
-open-source Python package implementing the full evaluation pipeline.
-On the gold-hard tier, a schema-constrained LLM baseline
+The release comprises a 40-record gold-hard tier produced under a
+pre-specified blind dual-annotator protocol (v1.0 ships
+single-annotator-validated labels; full dual annotation and IAA
+statistics are planned for v1.1), a 460-record gold-lite extension
+tier, three task views projected from a single annotation pass,
+five orthogonal evaluation slices, and an open-source Python
+package implementing the full evaluation pipeline. On the gold-hard
+tier, a schema-constrained LLM baseline
 (\texttt{Qwen2.5-7B-Instruct}) reaches macro Acal-F1 of $0.758$ versus
 $0.545$ for a BioBERT extractive-QA baseline and $0.493$ for a regex
-floor; all three baselines under-emit relative to the human-annotated
-gold, but the LLM reverses sign on the \texttt{payload} field
-($+0.28$ Naive--Acal gap), indicating that schema-fill hallucination
-concentrates on free-text fields, and exhibits a $33.1$-point drop
-in macro Acal-F1 on review-paper abstracts relative to
-original-research abstracts -- roughly twice the corresponding drop
-for the rule-based and encoder baselines. The schema, metric suite,
-and harvest-to-evaluation pipeline are domain-portable; v1.1 will
-extend the gold-hard tier with a third annotator, the gold-lite tier
-with open-access full text, and the baseline panel with a
-same-family-larger ceiling and a retrieval-augmented variant.
+floor; all three baselines under-emit relative to the gold, but the
+LLM reverses sign on the \texttt{payload} field ($+0.28$ Naive--Acal
+gap), indicating that schema-fill hallucination concentrates on
+free-text fields, and exhibits a $33.7$-point drop in macro Acal-F1
+on review-paper abstracts relative to original-research abstracts --
+more than twice the corresponding drop for the rule-based and
+encoder baselines. The schema, metric suite, and
+harvest-to-evaluation pipeline are domain-portable; v1.1 will
+finalise dual annotation and report IAA statistics on the gold-hard
+tier, extend the gold-lite tier with open-access full text, and
+extend the baseline panel with a same-family-larger ceiling and a
+retrieval-augmented variant.
 
 % ============================================================================
 \bibliographystyle{plainnat}
@@ -1228,10 +1234,10 @@ Records were harvested via public scholarly APIs under the query
 families documented in Appendix~\ref{app:pipeline}. Deduplication is
 strictly ordered (DOI, then PMID/PMCID, then normalised title, then
 URL); the leakage-audit report verifies disjointness across splits.
-Annotations on the gold-hard tier were produced by a professional
+Annotations on the gold-hard tier are produced by a professional
 biomedical annotator under the blind protocol in
-Appendix~\ref{app:guideline}; the second-annotator pass is finalised
-in the camera-ready version.
+Appendix~\ref{app:guideline}; v1.0 ships the first-annotator labels
+under that protocol, and full dual annotation is planned for v1.1.
 
 \paragraph{Preprocessing, cleaning, and labelling.}
 All metadata is normalised to UTF-8 and standardised on the field set

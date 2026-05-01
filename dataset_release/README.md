@@ -69,7 +69,7 @@ The benchmark contributes:
 
 | Tier | Records | Annotators | Use |
 |---|---:|---|---|
-| **Gold-hard** (headline) | 40 | dual-annotator blind protocol; first-annotator pass complete in v1.0; second-annotator pass finalised in the camera-ready version | All headline metrics |
+| **Gold-hard** (headline) | 40 | pre-specified blind dual-annotator protocol; v1.0 ships single-annotator-validated labels under that protocol; full dual annotation and IAA statistics planned for v1.1 | All headline metrics |
 | **Gold-lite extension** | 460 (dev=50, test=410) | single-annotator | Robustness check only — not used for headline claims |
 
 ## Schema
