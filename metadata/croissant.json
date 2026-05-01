@@ -51,7 +51,7 @@
   "version": "1.0.0",
   "datePublished": "2026-05-06",
   "license": "https://creativecommons.org/licenses/by-nc/4.0/",
-  "url": "[anonymised release URL to be added]",
+  "url": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval-anon",
   "keywords": [
     "scientific information extraction",
     "schema-constrained extraction",
@@ -91,7 +91,7 @@
       "@id": "github-repository",
       "name": "github-repository",
       "description": "Source code repository (Python package, pipeline scripts, and unit tests).",
-      "contentUrl": "[anonymised release URL to be added]",
+      "contentUrl": "https://github.com/eliashossain001/nanobubbleeval",
       "encodingFormat": "git+https",
       "sha256": "main"
     },

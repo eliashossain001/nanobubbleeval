@@ -57,46 +57,7 @@ Elias Hossain \\
 
 % ============================================================================
 \begin{abstract}
-Scientific information extraction from primary literature is bounded
-by three failure modes that contemporary benchmarks evaluate only in
-isolation: schema-fill hallucination when a property is not stated in
-the source, numerical grounding drift after unit normalisation, and
-unfaithful evidence attribution. We introduce \textbf{NanoBubbleEval},
-a benchmark that operationalises these failure modes as three
-structured tasks evaluated on a single record set, instantiated on a
-52{,}519-abstract literature warehouse spanning the nanobubble and
-nanocarrier domain. The benchmark contributes (i) an 18-field
-normalised schema with an explicit \NR{} convention scored under
-abstention-calibrated F1, (ii) a tolerance-bounded numerical match
-metric over canonicalised units that disentangles unit drift from
-value drift, and (iii) an answer--evidence consistency rate that
-detects \emph{cite-hallucination} -- predictions that emit a correct
-value paired with an unsupported span. The release comprises a
-500-record gold pool with a 40-record \emph{gold-hard} headline
-tier produced under a pre-specified blind dual-annotator protocol
-(v1.0 ships single-annotator-validated labels under that protocol;
-full dual annotation and inter-annotator agreement statistics are
-planned for v1.1), a 460-record single-annotator
-\emph{gold-lite} extension tier (dev=50, test=410) used as a
-robustness check, five orthogonal evaluation slices, three task
-views projected from a single annotation pass, a Croissant-1.1
-metadata file with the NeurIPS-required responsible-AI fields, and an
-open-source Python package implementing the schema, the unit
-normaliser, and the metric suite. We benchmark three baseline
-families: a regex floor (B1), BioBERT fine-tuned on SQuAD-v2 (B2),
-and \texttt{Qwen2.5-7B-Instruct} in zero-shot schema-constrained
-mode (B3). On the gold-hard tier, B3 attains macro abstention-calibrated
-F1 of $0.758$ versus $0.545$ for B2 and $0.493$ for B1, but its
-performance drops by $33.7$ points on review-paper records relative
-to original-research records -- more than twice the corresponding
-drop for the rule-based and encoder baselines -- and its answer--evidence
-consistency falls to $0.939$ from a $1.000$ floor, indicating that
-cite-hallucination emerges precisely where rule-based extraction
-ends. The schema, metric suite, and pipeline are domain-portable;
-the nanobubble instantiation provides a concrete test bed in which
-sparsity (mean $2.4$ of $6$ headline fields stated per abstract),
-unit heterogeneity, and cross-disciplinary terminology jointly
-stress-test the three failure modes.
+Scientific information extraction from primary literature requires models to abstain when evidence is absent, ground numerical values under unit normalisation, and cite faithful supporting spans. We introduce \textbf{NanoBubbleEval}\footnote{Dataset: \url{https://huggingface.co/datasets/EliasHossain/nanobubbleeval-anon}. Code: \url{https://github.com/eliashossain001/nanobubbleeval}.}, an evidence-grounded benchmark for schema extraction, numerical grounding, and evidence attribution in the nanobubble and nanocarrier literature. The benchmark is built from a 52{,}519-abstract warehouse and releases a 500-record gold pool with a 40-record \emph{gold-hard} headline tier and a 460-record \emph{gold-lite} extension tier. NanoBubbleEval provides an 18-field normalised schema, an explicit \NR{} convention scored with abstention-calibrated F1, tolerance-bounded numerical matching over canonical units, and answer--evidence consistency for detecting cite-hallucination. We evaluate three baselines: a regex floor (B1), BioBERT-SQuAD-v2 (B2), and \texttt{Qwen2.5-7B-Instruct} in zero-shot schema-constrained mode (B3). On the gold-hard tier, B3 reaches macro abstention-calibrated F1 of $0.758$, compared with $0.545$ for B2 and $0.493$ for B1. However, B3 drops by $33.7$ points on review-paper records relative to original-research records, and its answer--evidence consistency falls to $0.939$ from a $1.000$ rule-based and encoder floor. These results show that stronger schema extraction can introduce new evidence-attribution failures. NanoBubbleEval offers a domain-portable evaluation framework for sparse, unit-bearing, evidence-sensitive scientific extraction.
 \end{abstract}
 
 % ============================================================================
