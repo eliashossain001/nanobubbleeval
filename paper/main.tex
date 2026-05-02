@@ -24,6 +24,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{textcomp}
 \usepackage{lmodern}
+\usepackage{xurl}
 
 \definecolor{nbblue}{RGB}{36,99,167}
 \definecolor{nbred}{RGB}{198,80,80}
@@ -983,17 +984,18 @@ apply alternative match policies.
 
 \textit{NanoBubbleEval} v1.0 is limited to nanobubble and nanocarrier abstracts. Although the schema, metrics, and pipeline are domain-portable, the lexical filters and unit-normalization rules are calibrated to this literature and should be re-validated before use in other domains. The benchmark is abstract-only: values appearing only in full text, tables, methods, or supplementary materials are out of scope, and \NR{} is correct when the abstract does not state the property. The gold-hard tier ($n=40$) uses single-annotator-validated labels under a pre-specified dual-annotator protocol; full dual annotation and IAA reporting are planned for v1.1. The gold-lite tier is single-annotator and used only for robustness analysis. The baseline set covers regex extraction, biomedical extractive QA, and one open-weights instruction model, but excludes proprietary and retrieval-augmented full-text systems. All records come from public scholarly APIs; the release redistributes derived structured annotations only, contains no human-subject or patient-level data, and is released for non-commercial research use.
 
-% ============================================================================
-\section{Impact Statement}
-\label{sec:impact}
-
-\textit{NanoBubbleEval} is intended to support more reliable scientific information extraction by exposing three failure modes (schema-fill hallucination, unit drift, and cite-hallucination) that current single-task benchmarks evaluate in isolation. By treating \NR{} as a first-class output and by requiring verbatim evidence spans, the benchmark discourages downstream pipelines from acting on unsupported emissions in tasks such as literature review, database construction, and meta-analysis. We anticipate two principal risks. First, headline numbers reported on the 40-record gold-hard tier should not be extrapolated to other materials-science or biomedical extraction domains without re-validation; pipelines that consume extracted property values should preserve the abstention and evidence-provenance signals that the metric suite measures. Second, the warehouse is dominated by English-language abstracts indexed by a small set of scholarly APIs, which biases the benchmark toward the existing distribution of English biomedical and environmental publications. We mitigate these risks by releasing the schema, the unit-normalisation tables, and the full evaluation harness as a Python package that downstream users can adapt to new domains, by documenting the tier-curation and slice-tagging procedures end-to-end, and by versioning the release so that v1.1 can extend the gold-hard tier with multi-rater adjudication and full-text grounding without invalidating v1.0 results.
 
 % ============================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 
 We introduced \textit{NanoBubbleEval}, a benchmark that evaluates three failure modes in scientific information extraction: schema-fill hallucination, unit drift, and cite-hallucination. These failure modes are measured through decomposed metrics over three structured tasks on a shared record set. The v1.0 release includes a 40-record gold-hard tier produced under a pre-specified blind dual-annotator protocol, a 460-record gold-lite extension tier, three task views, five evaluation slices, and an open-source Python evaluation pipeline. v1.0 reports single-annotator-validated gold-hard labels, with full dual annotation and IAA statistics planned for v1.1. On the gold-hard tier, the schema-constrained LLM baseline \textit{Qwen2.5-7B-Instruct} reaches macro Acal-F1 of $0.758$, compared with $0.545$ for BioBERT extractive QA and $0.493$ for Regex. All three baselines under-emit relative to the gold, but \textit{Qwen2.5-7B-Instruct} shows schema-fill hallucination on the \texttt{payload} field and a $33.7$-point drop on review abstracts relative to original-research abstracts. These results show that stronger extraction can improve schema coverage while introducing new grounding and evidence-attribution errors. The schema, metrics, and harvest-to-evaluation pipeline are domain-portable, and v1.1 will extend the benchmark with full annotation agreement, open-access full-text evaluation, and stronger retrieval-augmented and larger-model baselines.
+
+% ============================================================================
+\section*{Impact Statement}
+\label{sec:impact}
+
+\textit{NanoBubbleEval} supports reliable scientific information extraction by exposing three failure modes: schema-fill hallucination, unit drift, and cite-hallucination. By treating \NR{} as a first-class output and requiring verbatim evidence spans, the benchmark discourages downstream systems from using unsupported values in literature review, database construction, and meta-analysis. Two risks remain. First, results on the 40-record gold-hard tier should not be extrapolated to other materials-science or biomedical domains without re-validation. Downstream pipelines should preserve the abstention and evidence-provenance signals measured by the benchmark. Second, the warehouse is dominated by English-language abstracts from a limited set of scholarly APIs, which may bias coverage toward English biomedical and environmental publications. We mitigate these risks by releasing the schema, unit-normalisation tables, and evaluation harness, documenting the curation and slice-tagging procedures, and versioning the benchmark so that v1.1 can add multi-rater adjudication and full-text grounding without invalidating v1.0 results.
 
 
 % ============================================================================
@@ -1140,8 +1142,7 @@ nanobubble wastewater treatment; nanobubble agriculture.
 Records are merged across APIs in strict order: DOI first, then
 PMID/PMCID, then normalised title, then URL. Title normalisation
 lowercases, removes punctuation and stop-tokens, and collapses
-whitespace; the leakage-audit report
-(\texttt{data/splits/leakage\_report.md} in the release) confirms
+whitespace; the leakage-audit report confirms
 that no \texttt{record\_id} appears in more than one split.
 
 \paragraph{Tier rules.}
@@ -1170,84 +1171,95 @@ deterministically with seed=42 and stratified by
 gold-hard tier is sampled from the gold pool with matching
 stratification and pinned to the test split.
 
-\section{Schema specification}
+\section{Schema Specification}
 \label{app:schema}
 
-The 18-field schema is released as a JSON specification at
-\texttt{configs/extraction\_schema.json} in the release. Every field
-declares a description, a type (text or number), a normalisation
-rule, and a missing-value sentinel (\NR{}). Numeric fields
-additionally declare a canonical unit (size: nm; zeta potential: mV;
-stability: h; loading efficiency: \%) and a unit-synonym table that
-maps inputs (\texttt{um}, \texttt{$\mu$m}, \texttt{micron},
-\texttt{millimeter}) to a multiplicative conversion factor.
+The 18-field schema is released as a JSON file at
+\texttt{configs/extraction\_schema.json}. Each field specifies its
+description, data type, normalization rule, and missing-value sentinel
+(\NR{}). Numeric fields also define a canonical unit: nm for
+\texttt{size}, mV for \texttt{zeta\_potential}, h for
+\texttt{stability}, and \% for \texttt{loading\_efficiency}. Unit
+synonyms such as \texttt{um}, \texttt{$\mu$m}, \texttt{micron}, and
+\texttt{millimeter} are mapped to multiplicative conversion factors.
 
-\paragraph{Headline fields (6).}
-\texttt{size}, \texttt{zeta\_potential}, \texttt{stability},
-\texttt{payload}, \texttt{loading\_efficiency},
-\texttt{release\_profile}.
+\begin{table}[h]
+\centering
+\caption{Schema fields in \textit{NanoBubbleEval}.}
+\label{tab:app_schema_fields}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}p{0.45\linewidth}p{0.45\linewidth}@{}}
+\toprule
+\textbf{Headline fields} & \textbf{Provisional fields} \\
+\midrule
+\texttt{size} & \texttt{bubble\_type} \\
+\texttt{zeta\_potential} & \texttt{material\_identity} \\
+\texttt{stability} & \texttt{application\_category} \\
+\texttt{payload} & \texttt{generation\_method} \\
+\texttt{loading\_efficiency} & \texttt{characterization\_method} \\
+\texttt{release\_profile} & \texttt{medium\_environment} \\
+ & \texttt{outcome\_claim} \\
+ & \texttt{evidence\_span} \\
+ & \texttt{ambiguity\_flag} \\
+ & \texttt{size\_unit} \\
+ & \texttt{zeta\_potential\_unit} \\
+ & \texttt{stability\_unit} \\
+ & \texttt{loading\_efficiency\_unit} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\paragraph{Provisional fields (12).}
-\texttt{bubble\_type}, \texttt{material\_identity},
-\texttt{application\_category}, \texttt{generation\_method},
-\texttt{characterization\_method}, \texttt{medium\_environment},
-\texttt{outcome\_claim}, \texttt{evidence\_span},
-\texttt{ambiguity\_flag}, and three additional unit slots
-(\texttt{size\_unit}, \texttt{zeta\_potential\_unit},
-\texttt{stability\_unit}, \texttt{loading\_efficiency\_unit}).
+\paragraph{Annotation examples.}
+When a field is absent from the abstract, the annotation uses \NR{}.
+For example, if an abstract reports particle size and zeta potential
+but no payload, the gold annotation records \texttt{size = 200~nm},
+\texttt{zeta\_potential = $-12$~mV}, and \texttt{payload = \NR{}}.
+When a numeric value is present as a range, such as
+``approximately 200--300~nm'', the range is recorded as written in
+\texttt{size\_value}, with \texttt{ambiguity\_flag = inferred} and
+the range type noted in \texttt{annotator\_notes}. For free-text
+fields such as \texttt{payload} and \texttt{release\_profile}, the
+annotation records the abstract's verbatim phrasing and leaves the
+unit sub-field empty rather than assigning \NR{}.
 
-\paragraph{Worked \NR{} examples.}
-\textbf{Field absent in abstract.} For an abstract that reports
-particle size and zeta potential but no payload, the gold annotation
-sets \texttt{size = 200~nm}, \texttt{zeta\_potential = $-12$~mV}, and
-\texttt{payload = \NR{}}. \textbf{Field present but unparseable.}
-For a phrase ``approximately 200--300~nm'', the gold annotation
-records the range as written in \texttt{size\_value}, sets
-\texttt{ambiguity\_flag = inferred}, and notes the range type in the
-\texttt{annotator\_notes} field.
-\textbf{Free-text field.} For \texttt{payload} or
-\texttt{release\_profile}, the gold annotation records the abstract's
-verbatim phrasing and leaves the \texttt{\_unit} sub-field empty
-rather than \NR{}.
 
-\section{Annotation guideline}
+\section{Annotation Guideline}
 \label{app:guideline}
 
-The one-page annotation guideline distributed to the second annotator
-is reproduced here verbatim. The same guideline is included in the
-release at \texttt{annotation/packet/instructions.md}.
+The annotation guideline is included in the release at
+\texttt{annotation/packet/instructions.md}. It defines an
+abstract-only protocol for assigning values, units, and evidence
+quotes to each schema field.
 
 \paragraph{Decision rules.}
-\textbf{Rule 1: abstract-only.} Annotators read only the
-\texttt{abstract\_or\_summary} field; full-text access is forbidden.
-\textbf{Rule 2: \NR{} when absent.} If the abstract does not state a
-property, the annotator records \NR{} in all three sub-fields
-(\texttt{value}, \texttt{unit}, \texttt{evidence\_quote}).
-\textbf{Rule 3: verbatim evidence.} The \texttt{evidence\_quote} must
-be a substring copy-pasted from the abstract; if no quote can be
-copied, the annotation reverts to \NR{}. \textbf{Rule 4: ranges as
-ranges.} Numeric ranges are recorded as written
-(``150--250''); the primary characterisation value is selected when
-multiple distinct values are reported, with alternatives logged in
-\texttt{annotator\_notes}.
+Annotators read only the \texttt{abstract\_or\_summary} field and do
+not use full text. If a property is not stated in the abstract, the
+annotator records \NR{} for \texttt{value}, \texttt{unit}, and
+\texttt{evidence\_quote}. Every non-\NR{} annotation must include a
+verbatim evidence quote copied from the abstract; if no supporting
+quote can be copied, the field is marked as \NR{}. Numeric ranges are
+recorded as written, such as ``150--250''. When multiple values are
+reported, the primary characterization value is selected and
+alternatives are documented in \texttt{annotator\_notes}.
 
 \paragraph{Ambiguity flag.}
-Each record carries one of three flags. \texttt{direct} -- all
-recorded values are stated explicitly in the abstract.
-\texttt{inferred} -- one or more values required light inference
-(e.g., a unit inferred from context, or ``below 200 nm'' recorded as
-$<200$). \texttt{uncertain} -- the annotator is unsure of one or
-more decisions, with detail logged in \texttt{annotator\_notes}.
+Each record receives one ambiguity flag. \texttt{direct} indicates
+that all recorded values are explicitly stated in the abstract.
+\texttt{inferred} is used when light inference is required, such as
+inferring a unit from context or recording ``below 200 nm'' as
+$<200$. \texttt{uncertain} is used when the annotator is unsure about
+one or more decisions, with details recorded in
+\texttt{annotator\_notes}.
 
 \paragraph{Worked examples.}
-A three-record worked-example block accompanies the guideline,
-covering one record with five emit fields and a clear \NR{} on one
-field, one record with all-\NR{} fields (a generic review abstract
-with no quantitative content), and one record that requires the
-\texttt{inferred} flag. Annotators are instructed that
-\NR{}-dominated records are valid and important, and that the second
-annotator's job is not to maximise emission but to faithfully record
-what the abstract states.
+The guideline includes three worked examples: one record with several
+reported fields and one clear \NR{} field, one review abstract with
+all fields marked \NR{}, and one record requiring the
+\texttt{inferred} flag. Annotators are instructed to record only what
+the abstract supports, rather than maximizing the number of emitted
+fields.
+
 
 \section{Datasheet for the dataset}
 \label{app:datasheet}
@@ -1328,58 +1340,139 @@ same-family-larger ceiling and a retrieval-augmented baseline.
 Issues, bug reports, and adjudication corrections are accepted via
 the GitHub issue tracker.
 
-\section{Release card}
+% \section{Release card}
+% \label{app:release_card}
+
+% The v1.0 release is structured into a Python package, a layered data
+% release, and a paper-track materials directory.
+% Table~\ref{tab:release_files} lists the canonical file paths and
+% their release purposes; \S\ref{sec:release} of the main paper
+% describes the artifact organisation at a higher level.
+
+% \begin{table}[h]
+% \centering
+% \caption{Release artifact listing. The \emph{Status} column
+% distinguishes what is shipped in the v1.0 release at the public URLs
+% in \S\ref{sec:release} from artifacts \emph{scheduled} for the full
+% release before the camera-ready version.}
+% \label{tab:release_files}
+% \small
+% \setlength{\tabcolsep}{4pt}
+% \begin{tabular}{@{}lp{0.42\columnwidth}l@{}}
+% \toprule
+% \textbf{Path} & \textbf{Purpose} & \textbf{Status} \\
+% \midrule
+% \multicolumn{3}{@{}l}{\emph{Code (GitHub)}} \\
+% \quad \texttt{src/nanobubbleval/} & Python package: schema, evaluator, reconciler, splits, baselines, harvest framework & v1.0 \\
+% \quad \texttt{scripts/01--05\_*.py} & Numbered pipeline orchestration & v1.0 \\
+% \quad \texttt{tests/} & Unit-test suite (102 tests) & v1.0 \\
+% \midrule
+% \multicolumn{3}{@{}l}{\emph{Data (HuggingFace)}} \\
+% \quad \texttt{gold\_hard/iaa\_subset.csv} & 40-record gold-hard tier (first-annotator labels) & v1.0 \\
+% \quad \texttt{predictions/regex-v1.csv} & B1 baseline predictions on gold-hard tier & v1.0 \\
+% \quad \texttt{predictions/biobert-squadv2.csv} & B2 baseline predictions on gold-hard tier & v1.0 \\
+% \quad \texttt{predictions/qwen25-7b-instruct.csv} & B3 baseline predictions on gold-hard tier & v1.0 \\
+% \quad \texttt{splits/slice\_summary.md} & Per-slice membership counts & v1.0 \\
+% \quad \texttt{splits/leakage\_report.md} & Disjointness audit across splits & v1.0 \\
+% \quad \texttt{data/raw/master\_inventory.csv} & 52{,}519-record deduplicated warehouse & scheduled \\
+% \quad \texttt{data/curated/nanobubble\_core\_high\_precision.csv} & 8{,}006-record A1+A2 core & scheduled \\
+% \quad \texttt{data/gold/gold\_annotation\_set\_v3.csv} & 500-record gold pool (incl.\ 460-record gold-lite extension tier) & scheduled \\
+% \quad \texttt{data/tasks/structured\_extraction\_benchmark.csv} & Task 1 view (schema fill) & scheduled \\
+% \quad \texttt{data/tasks/numerical\_grounding\_benchmark.csv} & Task 2 view (value $+$ unit) & scheduled \\
+% \quad \texttt{data/tasks/evidence\_attribution\_benchmark.csv} & Task 3 view (verbatim span) & scheduled \\
+% \quad \texttt{data/splits/splits.json} & Deterministic dev/test split with five-slice tags & scheduled \\
+% \midrule
+% \multicolumn{3}{@{}l}{\emph{Configs and metadata (HuggingFace + GitHub)}} \\
+% \quad \texttt{configs/extraction\_schema.json} & 18-field schema specification & v1.0 \\
+% \quad \texttt{metadata/croissant.json} & Croissant 1.1 dataset metadata & v1.0 \\
+% \midrule
+% \multicolumn{3}{@{}l}{\emph{Annotation (GitHub)}} \\
+% \quad \texttt{annotation/packet/} & Annotation guideline distributed to annotators & v1.0 \\
+% \quad \texttt{annotation/gold\_hard/} & Adjudicated dual-annotator gold-hard tier & scheduled (v1.1) \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+\section{Release Card}
 \label{app:release_card}
 
-The v1.0 release is structured into a Python package, a layered data
-release, and a paper-track materials directory.
-Table~\ref{tab:release_files} lists the canonical file paths and
-their release purposes; \S\ref{sec:release} of the main paper
-describes the artifact organisation at a higher level.
+The v1.0 release contains the Python package, dataset artifacts,
+configuration files, and annotation materials. Table~\ref{tab:release_files}
+summarizes the main artifacts and release status.
 
 \begin{table}[h]
 \centering
-\caption{Release artifact listing. The \emph{Status} column
-distinguishes what is shipped in the v1.0 release at the public URLs
-in \S\ref{sec:release} from artifacts \emph{scheduled} for the full
-release before the camera-ready version.}
+\caption{Release artifacts for \textit{NanoBubbleEval} v1.0.}
 \label{tab:release_files}
 \small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}lp{0.42\columnwidth}l@{}}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}p{0.30\linewidth}X p{0.15\linewidth}@{}}
 \toprule
-\textbf{Path} & \textbf{Purpose} & \textbf{Status} \\
+\textbf{Artifact} & \textbf{Purpose} & \textbf{Status} \\
 \midrule
-\multicolumn{3}{@{}l}{\emph{Code (GitHub)}} \\
-\quad \texttt{src/nanobubbleval/} & Python package: schema, evaluator, reconciler, splits, baselines, harvest framework & v1.0 \\
-\quad \texttt{scripts/01--05\_*.py} & Numbered pipeline orchestration & v1.0 \\
-\quad \texttt{tests/} & Unit-test suite (102 tests) & v1.0 \\
+
+\multicolumn{3}{@{}l}{\emph{Code}} \\
+\path{src/nanobubbleval/} &
+Core package for schema handling, evaluation, splitting, baselines, and harvesting &
+v1.0 \\
+\path{scripts/} &
+Numbered pipeline scripts &
+v1.0 \\
+\path{tests/} &
+Unit-test suite &
+v1.0 \\
+
 \midrule
-\multicolumn{3}{@{}l}{\emph{Data (HuggingFace)}} \\
-\quad \texttt{gold\_hard/iaa\_subset.csv} & 40-record gold-hard tier (first-annotator labels) & v1.0 \\
-\quad \texttt{predictions/regex-v1.csv} & B1 baseline predictions on gold-hard tier & v1.0 \\
-\quad \texttt{predictions/biobert-squadv2.csv} & B2 baseline predictions on gold-hard tier & v1.0 \\
-\quad \texttt{predictions/qwen25-7b-instruct.csv} & B3 baseline predictions on gold-hard tier & v1.0 \\
-\quad \texttt{splits/slice\_summary.md} & Per-slice membership counts & v1.0 \\
-\quad \texttt{splits/leakage\_report.md} & Disjointness audit across splits & v1.0 \\
-\quad \texttt{data/raw/master\_inventory.csv} & 52{,}519-record deduplicated warehouse & scheduled \\
-\quad \texttt{data/curated/nanobubble\_core\_high\_precision.csv} & 8{,}006-record A1+A2 core & scheduled \\
-\quad \texttt{data/gold/gold\_annotation\_set\_v3.csv} & 500-record gold pool (incl.\ 460-record gold-lite extension tier) & scheduled \\
-\quad \texttt{data/tasks/structured\_extraction\_benchmark.csv} & Task 1 view (schema fill) & scheduled \\
-\quad \texttt{data/tasks/numerical\_grounding\_benchmark.csv} & Task 2 view (value $+$ unit) & scheduled \\
-\quad \texttt{data/tasks/evidence\_attribution\_benchmark.csv} & Task 3 view (verbatim span) & scheduled \\
-\quad \texttt{data/splits/splits.json} & Deterministic dev/test split with five-slice tags & scheduled \\
+\multicolumn{3}{@{}l}{\emph{Released data}} \\
+\path{gold_hard/iaa_subset.csv} &
+Gold-hard tier with first-annotator labels &
+v1.0 \\
+\path{predictions/} &
+Baseline predictions for Regex, BioBERT, and Qwen2.5-7B &
+v1.0 \\
+\path{splits/} &
+Slice summary and leakage report &
+v1.0 \\
+
 \midrule
-\multicolumn{3}{@{}l}{\emph{Configs and metadata (HuggingFace + GitHub)}} \\
-\quad \texttt{configs/extraction\_schema.json} & 18-field schema specification & v1.0 \\
-\quad \texttt{metadata/croissant.json} & Croissant 1.1 dataset metadata & v1.0 \\
+\multicolumn{3}{@{}l}{\emph{Scheduled data}} \\
+\path{data/raw/} &
+52{,}519-record deduplicated warehouse &
+scheduled \\
+\path{data/curated/} &
+8{,}006-record high-precision core &
+scheduled \\
+\path{data/gold/} &
+500-record gold pool &
+scheduled \\
+\path{data/tasks/} &
+Structured extraction, numerical grounding, and evidence attribution views &
+scheduled \\
+\path{data/splits/splits.json} &
+Deterministic dev/test split &
+scheduled \\
+
 \midrule
-\multicolumn{3}{@{}l}{\emph{Annotation (GitHub)}} \\
-\quad \texttt{annotation/packet/} & Annotation guideline distributed to annotators & v1.0 \\
-\quad \texttt{annotation/gold\_hard/} & Adjudicated dual-annotator gold-hard tier & scheduled (v1.1) \\
+\multicolumn{3}{@{}l}{\emph{Configuration, metadata, and annotation}} \\
+\path{configs/extraction_schema.json} &
+18-field schema specification &
+v1.0 \\
+\path{metadata/croissant.json} &
+Croissant 1.1 metadata &
+v1.0 \\
+\path{annotation/packet/} &
+Annotation guideline &
+v1.0 \\
+\path{annotation/gold_hard/} &
+Adjudicated gold-hard tier &
+v1.1 \\
+
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
+
+
 
 \section{Extended results}
 \label{app:errors}

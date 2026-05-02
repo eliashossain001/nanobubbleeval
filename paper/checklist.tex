@@ -40,14 +40,14 @@ that v1.0 ships single-annotator labels under the protocol.
 set of assumptions and a complete (and correct) proof?}\\
 \textbf{Answer:} [NA] \\
 \textbf{Justification:} The paper introduces no formal theoretical
-results; the metrics in \S\ref{sec:metrics} are operational
+results; the metrics in \S\ref{sec:experimental_setup} are operational
 definitions, not theorems.
 
 \item \textbf{Experimental result reproducibility.}
 \emph{Does the paper fully disclose all the information needed to
 reproduce the main experimental results?}\\
 \textbf{Answer:} [Yes] \\
-\textbf{Justification:} Section~\ref{sec:method} specifies the model
+\textbf{Justification:} Section~\ref{sec:experimental_setup} specifies the model
 checkpoints, decoding parameters, and confidence thresholds for B1,
 B2, and B3. Appendix~\ref{app:pipeline} documents the harvest query
 families, deduplication order, tier rules, and benchmark candidate
@@ -80,14 +80,14 @@ harvest framework.
 (e.g., data splits, hyperparameters, how they were chosen, type of
 optimizer, etc.) necessary to understand the results?}\\
 \textbf{Answer:} [Yes] \\
-\textbf{Justification:} Section~\ref{sec:method} specifies the model
+\textbf{Justification:} Section~\ref{sec:experimental_setup} specifies the model
 identifier, decoding strategy (greedy), and confidence threshold
 ($0.20$) for each baseline. Threshold tuning is performed on the
 gold-lite dev split; test reporting uses the frozen value.
-Section~\ref{sec:metrics} defines all metrics, including the
+Section~\ref{sec:experimental_setup} defines all metrics, including the
 relative tolerance ($\tau=0.05$) for tolerance-bounded numerical
 match. No baseline is fine-tuned in v1.0; this is a deliberate scope
-decision documented in \S\ref{sec:method}.
+decision documented in \S\ref{sec:experimental_setup}.
 
 \item \textbf{Experiment statistical significance.}
 \emph{Does the paper report error bars suitably and correctly defined
@@ -106,7 +106,7 @@ than a random sample from a larger population.
 information on the computer resources (type of compute workers,
 memory, time of execution) needed to reproduce the experiments?}\\
 \textbf{Answer:} [Yes] \\
-\textbf{Justification:} Section~\ref{sec:method} states that B3
+\textbf{Justification:} Section~\ref{sec:experimental_setup} states that B3
 inference runs on a single 16~GB GPU with greedy decoding (40-record
 inference completes in approximately 7~minutes wall-clock on an
 NVIDIA TITAN RTX). B2 inference completes in under 15~seconds on the
@@ -127,16 +127,15 @@ performed by adult professional annotators under informed agreement.
 \emph{Does the paper discuss both potential positive societal impacts
 and negative societal impacts of the work performed?}\\
 \textbf{Answer:} [Yes] \\
-\textbf{Justification:} The benchmark's intended impact is to expose
-schema-fill hallucination, unit drift, and cite-hallucination as
-distinct failure modes in scientific information extraction, thereby
-guiding the development of more honest extraction systems. A
-foreseeable misuse is over-reliance on extracted property values for
-downstream scientific decisions without the abstention and evidence
-provenance signals that v1.0 measures; this is mitigated by the
-\NR{} convention and the answer--evidence consistency rate, which
-together discourage decision systems from acting on unsupported
-emissions.
+\textbf{Justification:} \S\ref{sec:impact} discusses the intended
+positive impact (exposing three jointly stressed failure modes in
+scientific information extraction so that downstream pipelines such
+as literature review, database construction, and meta-analysis do
+not act on unsupported emissions) and two principal risks
+(extrapolation beyond the calibrated nanobubble domain;
+English-language source bias). The mitigations baked into the design
+(open-source schema and evaluator, documented tier-curation and
+slice-tagging, semantic versioning) are also described there.
 
 \item \textbf{Safeguards.}
 \emph{Does the paper describe safeguards that have been put in place
@@ -163,7 +162,7 @@ metadata and abstracts. The B2 model
 on HuggingFace under its model card terms; B3
 (\texttt{Qwen/Qwen2.5-7B-Instruct}) is released under the Qwen
 license. Model identifiers are reported verbatim in
-\S\ref{sec:method}.
+\S\ref{sec:experimental_setup}.
 
 \item \textbf{New assets.}
 \emph{Are new assets introduced in the paper well documented and is
@@ -205,10 +204,14 @@ important, original, or non-standard component of the core methods
 in this research?}\\
 \textbf{Answer:} [Yes] \\
 \textbf{Justification:} \texttt{Qwen2.5-7B-Instruct} is benchmarked
-as the B3 baseline (\S\ref{sec:method}). The paper makes no use of
-LLMs in the construction of the benchmark itself: tier-curation,
-deduplication, and gold-pool sampling are deterministic and
-rule-based. The schema and annotation guideline were authored by
-human contributors.
+as the B3 baseline (\S\ref{sec:experimental_setup}). The paper makes
+no use of LLMs in the construction of the benchmark itself:
+tier-curation, deduplication, and gold-pool sampling are
+deterministic and rule-based; the schema and annotation guideline
+were authored by human contributors. A separate
+\S\ref{sec:ai_use_statement} discloses the use of AI-assisted tools
+during code drafting, paper editing, and LaTeX formatting; no AI
+tool generated or modified the gold annotations, the experimental
+results, or the scientific claims in this paper.
 
 \end{enumerate}
