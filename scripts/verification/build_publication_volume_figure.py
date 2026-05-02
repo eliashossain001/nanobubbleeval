@@ -64,7 +64,7 @@ def main() -> int:
                 fontsize=9, color="0.30", ha="left")
 
     ax.set_xlabel("Publication year")
-    ax.set_ylabel("Records in NanoBubbleEval warehouse")
+    ax.set_ylabel("Records per year")
     ax.set_xlim(2000, 2025)
     ax.set_xticks([2000, 2005, 2010, 2015, 2020, 2025])
     ax.grid(axis="y", linestyle=":", color="0.85")
