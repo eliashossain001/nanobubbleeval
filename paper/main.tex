@@ -58,7 +58,7 @@ Elias Hossain \\
 
 % ============================================================================
 \begin{abstract}
-Nanobubble and nanocarrier research spans biomedical delivery, imaging, environmental remediation, agriculture, and colloidal physics, yet its quantitative findings remain scattered across paper text, tables, and figures. We introduce \textbf{NanoBubbleEval}\footnote{Dataset: \url{https://huggingface.co/datasets/EliasHossain/nanobubbleeval}. Code: \url{https://github.com/eliashossain001/nanobubbleeval}.}, the first structured dataset and evaluation framework for extracting nanobubble and nanocarrier properties from literature. Built from a 51{,}566-abstract deduplicated warehouse together with a methodology for distilling an 8{,}006-record domain core and a 500-record gold pool, the v1.0 release ships the deduplicated warehouse and a 40-record gold-hard seed evaluation tier annotated under an 18-field schema; the high-precision core, the full gold pool, and the gold-lite extension tier are scheduled for v1.1. The evaluation protocol defines three task views over the gold-hard tier -- schema extraction, unit-normalised numerical grounding, and verbatim evidence attribution -- with the standalone task-view CSV files scheduled for v1.1. We benchmark rule-based extraction, BioBERT-SQuAD-v2, and Qwen2.5-7B-Instruct using three domain-aligned metrics: abstention-calibrated F1, tolerance-bounded numerical match, and answer--evidence consistency. Qwen2.5-7B-Instruct achieves the best macro abstention-calibrated F1 (0.758), outperforming BioBERT-SQuAD-v2 (0.545) and rule-based extraction (0.493), but shows reduced robustness on review abstracts and lower evidence consistency than span-based extractors. NanoBubbleEval provides a deterministic harvest-to-evaluation pipeline, slice annotations, leakage auditing, Croissant 1.1 metadata, and an open-source Python evaluation harness, establishing foundational infrastructure for machine-readable nanobubble and nanocarrier literature.
+Nanobubble and nanocarrier research spans biomedical delivery, imaging, environmental remediation, agriculture, and colloidal physics, yet its quantitative findings remain scattered across paper text, tables, and figures. We introduce \textbf{NanoBubbleEval}\footnote{Dataset: \url{https://huggingface.co/datasets/EliasHossain/nanobubbleeval}. Code: \url{https://github.com/eliashossain001/nanobubbleeval}.}, to our knowledge the first abstract-level structured benchmark and reproducible evaluation scaffold for nanobubble and nanocarrier extraction. v1.0 is positioned as a \emph{seed} benchmark: it pairs a 51{,}566-abstract deduplicated warehouse with a 40-record gold-hard seed evaluation tier annotated under an 18-field schema, together with the harvest-to-evaluation pipeline that produced them. The high-precision core, the full 500-record gold pool, and the 460-record gold-lite extension tier are scheduled for v1.1 and are regenerable from the included pipeline scripts; no headline v1.0 claim depends on them. The evaluation protocol defines three task views over the gold-hard tier -- schema extraction, unit-normalised numerical grounding, and verbatim evidence attribution -- with the standalone task-view CSV files also scheduled for v1.1. We benchmark rule-based extraction, BioBERT-SQuAD-v2, and Qwen2.5-7B-Instruct using three domain-aligned metrics: abstention-calibrated F1, tolerance-bounded numerical match, and answer--evidence consistency. Qwen2.5-7B-Instruct achieves the best macro abstention-calibrated F1 (0.758), ahead of BioBERT-SQuAD-v2 (0.545) and rule-based extraction (0.493), but shows reduced robustness on review abstracts and lower evidence consistency than span-based extractors. We treat these numbers as seed-tier diagnostics rather than a definitive ranking. NanoBubbleEval contributes a deterministic harvest-to-evaluation pipeline, slice annotations, leakage auditing, a recovery audit trail (\texttt{verification/}), Croissant 1.1 metadata, and an open-source Python evaluation harness, establishing reproducible infrastructure on which the community can extend the seed.
 \end{abstract}
 
 
@@ -74,7 +74,7 @@ Nanobubble and nanocarrier research has grown into a flourishing, cross-discipli
 \label{fig:publication_volume}
 \end{figure}
 
-This paper introduces \textit{NanoBubbleEval}, the first structured resource for nanobubble and nanocarrier literature, together with the evaluation infrastructure needed to validate automated extraction into it. The resource is organised around an 18-field schema co-designed with the structure of the field, instantiated on a 51{,}566-abstract deduplicated warehouse harvested across six public scholarly APIs and distilled via the released pipeline into an 8{,}006-record high-precision domain core (the core CSV itself is regenerable from the included scripts and is scheduled for v1.1). The benchmark in this paper plays a specific role in this larger effort: it is the validation harness that demonstrates the resource is usable today for automated extraction, and it surfaces the three failure modes the metric suite is designed to detect. Schema-fill hallucination, unit drift, and cite-hallucination are not framed as the primary contribution; they are what makes automated population of the resource hard, and they motivate the three metrics that govern its scoring protocol.
+This paper introduces \textit{NanoBubbleEval}, to our knowledge the first abstract-level structured benchmark for nanobubble and nanocarrier extraction, together with a reproducible evaluation scaffold for it. The v1.0 release is intentionally seed-scale: a 51{,}566-abstract deduplicated warehouse paired with a 40-record gold-hard seed evaluation tier and three reference baselines, framed as a starting point on which the community can build, not as a fully mature benchmark. The 18-field schema, the harvest-to-evaluation pipeline, the unit-normalisation tables, the metric suite, and the recovery audit are released together so that downstream users can extend, re-annotate, and re-score the resource with any model. The benchmark in this paper plays a specific role in that scaffold: it establishes the scoring protocol on the seed tier and surfaces the three failure modes the metric suite is designed to detect. Schema-fill hallucination, unit drift, and cite-hallucination are not framed as the primary contribution; they motivate the three metrics that govern v1.0's scoring protocol.
 
 Existing scientific information-extraction benchmarks evaluate parts of this problem. Span- and entity-level QA benchmarks such as SciREX~\citep{jain2020scirex}, NLM-Chem~\citep{islamaj2021nlmchem}, BC5CDR~\citep{li2016bc5cdr}, and PubMedQA~\citep{jin2019pubmedqa} focus on mention recognition or single-answer QA. Schema-based scientific extraction benchmarks such as Matscholar~\citep{dunn2022matscholar}, MatSci-NLP~\citep{song2023matscinlp}, and MaScQA~\citep{zaki2023mascqa} evaluate structured outputs against fixed schemas. Evidence-grounded factuality benchmarks such as SciFact~\citep{wadden2020scifact} and SciTab~\citep{lu2023scitab} assess whether claims are supported by evidence. None of these resources, however, target nanobubble and nanocarrier literature, and none jointly stress the three failure modes that govern reliable population of a structured resource in a sparse, unit-heavy, evidence-sensitive scientific domain.
 
@@ -83,17 +83,17 @@ We make four contributions:
 
 \begin{itemize}\itemsep0pt
 
-\item \textbf{First structured resource for nanobubble and nanocarrier literature.}
-A 51{,}566-record deduplicated warehouse (released in v1.0), a methodology and pipeline for distilling an 8{,}006-record high-precision domain core (scheduled for v1.1), an 18-field schema co-designed with the structure of the field, and a complete harvest-to-evaluation pipeline that takes raw scholarly-API queries to a scoring-ready release.
+\item \textbf{Seed benchmark for nanobubble and nanocarrier literature.}
+v1.0 establishes a reproducible seed evaluation tier and release pipeline: a 51{,}566-record deduplicated warehouse (released in v1.0) and a 40-record gold-hard seed evaluation tier, instantiating an 18-field schema. The 8{,}006-record high-precision core, the 500-record gold pool, the 460-record gold-lite extension tier, and the three task-view CSVs are scheduled for v1.1 and are regenerable from the released scripts; no headline v1.0 claim depends on them.
 
-\item \textbf{Domain-fitted evaluation framework.}
-Three task views (schema extraction, unit-normalised numerical grounding, verbatim evidence attribution) and three metrics (\emph{abstention-calibrated F1}, \emph{tolerance-bounded numerical match}, \emph{answer--evidence consistency}) that target the specific failure modes of sparse, unit-bearing, evidence-sensitive extraction in this literature.
+\item \textbf{Domain-fitted evaluation scaffold.}
+Three task views (schema extraction, unit-normalised numerical grounding, verbatim evidence attribution) and three metrics (\emph{abstention-calibrated F1}, \emph{tolerance-bounded numerical match}, \emph{answer--evidence consistency}) that target the specific failure modes of sparse, unit-bearing, evidence-sensitive extraction in this literature, packaged as an open-source Python evaluation harness.
 
-\item \textbf{Seed evaluation tier with reference baselines.}
-A 40-record gold-hard seed evaluation tier produced under a pre-specified blind dual-annotator protocol, three reference baselines spanning rule-based extraction, biomedical extractive QA, and instruction-tuned generation, demonstrating that the resource supports meaningful evaluation today.
+\item \textbf{Reference baselines on the seed tier.}
+Three reference baselines spanning rule-based extraction, biomedical extractive QA, and instruction-tuned generation, scored on the gold-hard seed tier under a blind, abstract-only protocol with single-annotator-validated labels. The baseline numbers are seed diagnostics, not a definitive ranking.
 
-\item \textbf{Empirical findings that surface domain-specific challenges.}
-The instruction-tuned baseline reaches macro abstention-calibrated F1 of $0.758$, more than 21 points above either rule-based or extractive-QA floors, but drops $33.7$ points on review abstracts versus original-research abstracts and is the only baseline whose answer--evidence consistency falls below $1.000$. Both findings point to concrete improvements for how the field could report properties to support reliable downstream extraction.
+\item \textbf{Diagnostic findings that motivate v1.1 work.}
+The instruction-tuned baseline reaches macro abstention-calibrated F1 of $0.758$ versus $0.545$ and $0.493$ for the extractive-QA and rule-based floors, but drops $33.7$ points on review abstracts versus original-research abstracts and is the only baseline whose answer--evidence consistency falls below $1.000$. We surface these as diagnostics that point to concrete improvements (better review-abstract handling, evidence-constrained decoding) and motivate the v1.1 scope rather than treat them as final claims.
 
 \end{itemize}
 
@@ -436,6 +436,34 @@ The released v1.0 dataset bundle ships the artifacts required to reproduce the h
 \item \textbf{Code:} \url{https://github.com/eliashossain001/nanobubbleeval}
 \item \textbf{Dataset:} \url{https://huggingface.co/datasets/EliasHossain/nanobubbleeval}
 \end{itemize}
+
+\begin{table}[h]
+\centering
+\caption{v1.0 release-status summary. The artifacts in the upper block are
+released on HuggingFace today and carry every headline claim in this paper.
+The lower block is regenerable end-to-end from the released pipeline scripts
+and is scheduled for v1.1; no v1.0 headline claim depends on it.}
+\label{tab:release_status}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}p{0.30\linewidth} c X p{0.20\linewidth}@{}}
+\toprule
+\textbf{Artifact} & \textbf{v1.0?} & \textbf{Role in current claims} & \textbf{Planned extension} \\
+\midrule
+51{,}566-record warehouse manifest    & Yes & Corpus construction, gold-hard containment & Live re-harvest (v1.2+) \\
+18-field schema (\texttt{configs/extraction\_schema.json}) & Yes & Drives all evaluation                       & Schema v2 (v1.1) \\
+40-record gold-hard seed tier         & Yes & All headline metrics                        & Dual annotation (v1.1) \\
+Baseline predictions (B1, B2, B3)     & Yes & Reproducibility of Table~\ref{tab:headline_results} & Larger ceiling + RAG variants (v1.1) \\
+Leakage and recovery audits (\texttt{verification/}, \texttt{splits/}) & Yes & Validity of provenance and split & Updated audits per release \\
+\midrule
+8{,}006-record high-precision core    & v1.1 & \emph{Not used for any v1.0 headline claim} & Ships in v1.1 \\
+500-record gold pool                  & v1.1 & \emph{Not used for any v1.0 headline claim} & Ships in v1.1 \\
+460-record gold-lite extension tier   & v1.1 & \emph{Not used for any v1.0 headline claim} & Ships in v1.1; future robustness analyses \\
+Three task-view CSVs                  & v1.1 & \emph{Not used for any v1.0 headline claim} & Convenience reuse (v1.1) \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 The code and dataset are released for research use under the terms described in \S\ref{sec:limitations}. The first-annotator gold-hard labels are included to support independent re-scoring, agreement analysis, and alternative match policies. Full multi-annotator adjudication is planned for v1.1.
 
@@ -888,7 +916,32 @@ or apply alternative match policies.
 \section{Limitations and Ethics}
 \label{sec:limitations}
 
-\textit{NanoBubbleEval} v1.0 is limited to nanobubble and nanocarrier abstracts. Although the schema, metrics, and pipeline are domain-portable, the lexical filters and unit-normalization rules are calibrated to this literature and should be re-validated before use in other domains. The benchmark is abstract-only: values appearing only in full text, tables, methods, or supplementary materials are out of scope, and \NR{} is correct when the abstract does not state the property. The gold-hard tier ($n=40$) uses single-annotator-validated labels under a pre-specified dual-annotator protocol; full dual annotation and IAA reporting are planned for v1.1. The gold-lite tier is single-annotator and used only for robustness analysis. The baseline set covers regex extraction, biomedical extractive QA, and one open-weights instruction model, but excludes proprietary and retrieval-augmented full-text systems. All records come from public scholarly APIs; the release redistributes derived structured annotations only, contains no human-subject or patient-level data, and is released for non-commercial research use.
+\textit{NanoBubbleEval} v1.0 is limited to nanobubble and nanocarrier abstracts. Although the schema, metrics, and pipeline are domain-portable, the lexical filters and unit-normalization rules are calibrated to this literature and should be re-validated before use in other domains. The benchmark is abstract-only: values appearing only in full text, tables, methods, or supplementary materials are out of scope, and \NR{} is correct when the abstract does not state the property. The baseline set covers regex extraction, biomedical extractive QA, and one open-weights instruction model, but excludes proprietary and retrieval-augmented full-text systems. All records come from public scholarly APIs; the release redistributes derived structured annotations only, contains no human-subject or patient-level data, and is released for non-commercial research use.
+
+\paragraph{Seed-tier limitations and what v1.1 will address.}
+We position v1.0 as a transparent seed benchmark, not a definitive
+ranking. Four limitations follow directly from this scope. First,
+$n=40$ on the gold-hard tier is sufficient for seed validation of the
+metric suite and to surface domain-specific failure modes, but it is
+\emph{not} sufficient for definitive model ranking; the
+non-overlapping bootstrap CIs reported in
+Table~\ref{tab:headline_results} should be read as evidence that the
+three baselines occupy distinguishable regimes on this seed, not as a
+final leaderboard. Second, the slice-stratified results
+(Table~\ref{tab:slice_nb}, Table~\ref{tab:slice_doc}) are diagnostic
+rather than conclusive: with $n{=}3$ for the smallest slices and
+$n{=}8$ on review abstracts, slice gaps highlight directions for
+further work but cannot be relied on for individual-baseline
+conclusions. Third, the released first-annotator labels are sufficient
+for reproducibility and for downstream users to apply alternative
+match policies, but final dual-annotator adjudication and Cohen's
+$\kappa$ / span-IoU agreement statistics remain future work for v1.1.
+Fourth, v1.0 is abstract-only by construction; full-text grounding for
+properties stated in tables, figures, and methods sections is a v1.1
+direction. The 8{,}006-record core, 500-record gold pool, gold-lite
+tier, and task-view CSVs are also scheduled for v1.1; we deliberately
+do not ship them in v1.0 so that every released artifact carries an
+audit trail and supports a v1.0 headline claim.
 
 
 % ============================================================================
@@ -1436,6 +1489,128 @@ $0.680$, $0.426$, $\mathbf{0.862}$, $0.025$, $0.697$, and $0.577$,
 exposing two cross-baseline inversions: B2 outperforms B3 by
 $23.1$ points on \texttt{stability}, while B3 outperforms B2 by
 $50.0$ points on \texttt{payload}.
+
+\paragraph{Analysis-only variant: B3+QuoteCheck.}
+We construct a post-hoc variant of B3 that requires the predicted
+value to appear (after Unicode-normalised case- and whitespace-aware
+substring match, with numeric values matched against their digit
+representation) inside the predicted evidence span; if the check
+fails, the field is reset to \NR{}. The variant is computed by
+post-processing the released B3 prediction file
+(\texttt{scripts/verification/build\_b3\_quotecheck.py}) and is reported
+as an analysis-only ablation, not a new main baseline.
+Table~\ref{tab:b3_quotecheck} compares the two on the gold-hard tier:
+the QuoteCheck variant drops $9$ B3 emissions to \NR{}, recovers
+perfect answer--evidence consistency ($1.000$ vs.\ $0.939$), keeps
+naive-F1 at $0.724$, and gives up $0.009$ macro Acal-F1 ($0.749$ vs.\
+$0.758$). The result indicates that B3's cite-hallucination is
+mostly attached to correct emissions that the model could already
+verify itself; an evidence-consistency post-filter is a cheap and
+local mitigation.
+
+\begin{table}[h]
+\centering
+\caption{B3 vs.\ B3+QuoteCheck on the 40-record gold-hard tier
+(macro across the six headline fields). The QuoteCheck variant is an
+analysis-only ablation produced by post-processing the released B3
+prediction file.}
+\label{tab:b3_quotecheck}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Variant}      & \textbf{Naive-F1} & \textbf{Acal-F1} & \textbf{Num.\ match} & \textbf{A--E} \\
+\midrule
+B3 (Qwen2.5-7B)       & 0.724 & 0.758 & 1.000 & 0.939 \\
+B3+QuoteCheck         & 0.724 & 0.749 & 1.000 & \textbf{1.000} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Emit / abstain analysis (gold-hard tier).}
+Table~\ref{tab:emit_abstain_b3} reports per-field emit/abstain counts
+for B3, the strongest of the three baselines. Across all six headline
+fields the gold-hard tier asks the model to abstain on $114$ of $240$
+field-record pairs, and B3 abstains on $115$. Of B3's $125$ emissions,
+$85$ exactly match the gold value and $14$ are emissions where the
+gold says \NR{} (schema-fill hallucination on free-text fields, e.g.\
+\texttt{stability} where B3 emits time-released numbers).
+Table~\ref{tab:emit_abstain_agg} aggregates the same counts across
+fields for B1, B2, and B3. The pattern is consistent with the
+abstention-calibrated F1 numbers in Table~\ref{tab:headline_results}:
+the rule-based and extractive-QA floors abstain too aggressively,
+losing emissions; B3 emits aggressively, gaining recall but introducing
+hallucinated emissions.
+
+\begin{table}[h]
+\centering
+\caption{Emit / abstain breakdown for B3 (Qwen2.5-7B-Instruct) on the
+40-record gold-hard tier, per headline field. Each cell counts
+field--record pairs.}
+\label{tab:emit_abstain_b3}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+\textbf{Field} & \textbf{Gold emit} & \textbf{Correct emit} & \textbf{False emit} & \textbf{Missed} & \textbf{Correct abst.} \\
+\midrule
+\texttt{size}                & 25 & 23 &  1 &  1 & 14 \\
+\texttt{zeta\_potential}     & 11 & 11 &  3 &  0 & 26 \\
+\texttt{stability}           &  8 &  5 &  9 &  2 & 23 \\
+\texttt{payload}             & 39 & 26 &  0 &  6 &  1 \\
+\texttt{loading\_efficiency} & 17 & 11 &  1 &  3 & 22 \\
+\texttt{release\_profile}    & 26 &  9 &  0 &  3 & 14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Aggregate emit / abstain counts across all six headline
+fields and 40 records ($240$ field--record pairs total) for the three
+baselines.}
+\label{tab:emit_abstain_agg}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+\textbf{Baseline} & \textbf{Gold emit} & \textbf{Correct emit} & \textbf{False emit} & \textbf{Missed} & \textbf{Correct abst.} \\
+\midrule
+B1 Regex                  & 126 & 26 &  2 & 90 & 112 \\
+B2 BioBERT QA-span        & 126 & 28 &  0 & 75 & 114 \\
+B3 Qwen2.5-7B (zero-shot) & 126 & 85 & 14 & 15 & 100 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Qualitative error examples (B3 on gold-hard tier).}
+Table~\ref{tab:error_examples} shows five concrete (record, field)
+cases drawn from the released gold-hard tier and the published B3
+prediction file, one per error category in
+Appendix~\ref{app:error_taxonomy}. Evidence quotes are short
+substrings of the abstract; abstract text is not redistributed in full.
+
+\begin{table}[h]
+\centering
+\caption{Worked B3 examples on the gold-hard tier covering five error
+categories. \texttt{record\_id} is abbreviated to its DOI tail.
+Reproduced verbatim from the released gold-hard and B3 prediction files.}
+\label{tab:error_examples}
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.20}
+\begin{tabularx}{\linewidth}{@{}p{0.16\linewidth} p{0.13\linewidth} p{0.10\linewidth} p{0.10\linewidth} X p{0.13\linewidth}@{}}
+\toprule
+\textbf{record\_id (tail)} & \textbf{Field} & \textbf{Gold} & \textbf{B3 pred} & \textbf{Predicted span / explanation} & \textbf{Error type} \\
+\midrule
+10.1155/2017/8234712 & \texttt{stability} & \NR{} & 96~h & ``slowly released up to 96 h'' --- B3 emits a release-time number when stability is not reported. & Schema-fill hallucination \\
+10.1021/acsami.5b07778 & \texttt{payload} & gas & gas (correct) & B3's evidence span ``formation mechanism of GU-Liposome were investigated'' does not contain ``gas''. & Cite-hallucination \\
+10.1007/s12032-025-03200-7 & \texttt{zeta\_potential} & \NR{} & \NR{} & B3 correctly abstains when the abstract does not state a zeta potential. & Correct abstention \\
+10.2166/wqrj.2025.052 & \texttt{payload} & ``hydrogen peroxide; ozone'' & \NR{} & Review abstract: ``hydrogen peroxide and ozone nanobubbles''. B3 misses the payload list. & Review-abstract miss \\
+10.1080/03639045.2025.2562181 & \texttt{size} & 332.1~nm & 332.1~nm & B3 evidence quotes ``particle size 332.1 nm'' --- value, unit, and span all consistent. & Numeric+unit-correct \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \paragraph{Gold-lite extension tier.}
 A 460-record gold-lite extension tier (dev=50, test=410) was

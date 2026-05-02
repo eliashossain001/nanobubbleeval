@@ -10,18 +10,19 @@
 \emph{Do the main claims made in the abstract and introduction
 accurately reflect the paper's contributions and scope?}\\
 \textbf{Answer:} [Yes] \\
-\textbf{Justification:} The abstract and introduction describe a
-multi-task benchmarking methodology (schema extraction, numerical
-grounding, evidence attribution) instantiated on a nanobubble case
-study, three metrics that operationalise three failure modes, a v1.0
-release shipping the deduplicated warehouse and the gold-hard seed
-evaluation tier (with the 460-record gold-lite extension tier and the
-500-record gold pool scheduled for v1.1), and three baselines (B1
-regex, B2 BioBERT-SQuAD-v2, B3 \texttt{Qwen2.5-7B-Instruct}). All
-numerical claims in the abstract are supported by the
-headline-results section (\S\ref{sec:headline}) and are scored
-against the gold-hard tier. We explicitly declare the abstract-only
-scope and the v1.0 versus v1.1 boundary in \S\ref{sec:limitations}.
+\textbf{Justification:} The abstract and introduction position v1.0 as
+a seed benchmark and reproducible evaluation scaffold (not a fully
+mature benchmark). The release ships a 51{,}566-record warehouse and a
+40-record gold-hard seed evaluation tier; the 460-record gold-lite
+tier, the 500-record gold pool, the 8{,}006-record high-precision
+core, the three task-view CSVs, and \texttt{splits.json} are scheduled
+for v1.1 and are explicitly not used for any v1.0 headline claim
+(see Table~\ref{tab:release_status}). Three baselines (B1 regex, B2
+BioBERT-SQuAD-v2, B3 \texttt{Qwen2.5-7B-Instruct}) are scored against
+the seed tier, and the resulting numbers are reported as seed-tier
+diagnostics with bootstrap CIs rather than a final ranking. The
+abstract-only scope and v1.0/v1.1 boundary are stated in
+\S\ref{sec:limitations}.
 
 \item \textbf{Limitations.}
 \emph{Does the paper discuss the limitations of the work performed
@@ -31,12 +32,17 @@ by the authors?}\\
 single-domain instantiation, abstract-only scope, the v1.0 release
 scope (warehouse + gold-hard tier; high-precision core, 500-record
 gold pool, gold-lite tier, task-view CSVs, and \texttt{splits.json}
-scheduled for v1.1), the gold-hard tier's single-annotator-validated
-labels under a pre-specified dual-annotator protocol with full dual
-annotation planned for v1.1, baseline scope (no proprietary frontier
-models), and the licensing posture. The
-annotation-status paragraph in \S\ref{sec:validity} states honestly
-that v1.0 ships single-annotator labels under the protocol.
+scheduled for v1.1), and the licensing posture. A dedicated
+seed-tier-limitations paragraph notes that $n=40$ is sufficient for
+seed validation but not for definitive model ranking; that
+slice-stratified results are diagnostic rather than conclusive; that
+v1.0 ships single-annotator-validated labels (final dual-annotator
+adjudication and Cohen's $\kappa$ / span-IoU agreement statistics
+remain future work for v1.1, and we do not claim that dual annotation
+is complete); and that v1.1 will expand gold labels and add full-text
+grounding. The same wording is mirrored in \S\ref{sec:validity} to
+keep the annotation-status framing consistent with the public release
+on HuggingFace.
 
 \item \textbf{Theory assumptions and proofs.}
 \emph{For each theoretical result, does the paper provide the full
