@@ -69,7 +69,7 @@ Nanobubble and nanocarrier research has grown into a flourishing, cross-discipli
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.85\columnwidth]{figures/publication_volume.pdf}
+\includegraphics[width=0.85\columnwidth]{figs/publication_volume.pdf}
 \caption{Annual publication volume in the \textit{NanoBubbleEval} warehouse, 2000--2025 ($n{=}49{,}340$). The post-2018 surge is driven primarily by environmental and water-treatment applications; the post-2020 acceleration adds biomedical drug delivery and ultrasound contrast imaging. The field is flourishing, but no structured resource exists to consolidate its quantitative findings.}
 \label{fig:publication_volume}
 \end{figure}
@@ -308,13 +308,13 @@ Correct abstention is essential in this benchmark because many abstracts do not 
 We collect abstracts and metadata from PubMed (NCBI Entrez), Europe PMC, OpenAlex, CrossRef, Semantic Scholar, and ClinicalTrials.gov v2. The search covers five query families: nanobubble core terms, ultrasound and contrast imaging, delivery and release, biomedical nanocarriers, and environmental and agricultural applications. Records are harvested using checkpointed crawl stages to preserve partial results under API rate limits. Deduplication is then applied in a fixed order: DOI, PMID/PMCID, normalized title, and URL. The released v1.0 warehouse contains \textbf{51{,}566 deduplicated records}, of which 81.7\% include abstracts (Table~\ref{tab:warehouse_stats}). The v1.0 release is dominated by OpenAlex ($n=50{,}022$) and PubMed ($n=1{,}544$); Europe PMC, CrossRef, Semantic Scholar, and ClinicalTrials.gov are wired into the harvest framework but their post-deduplication contribution to v1.0 is zero (overlapping records resolved to OpenAlex or PubMed copies under the deduplication order). Their independent expansion ships with v1.1.
 
 \paragraph{Provenance and gold-hard integrity.}
-The v1.0 warehouse is a 2026-05 harvest produced after a project-deletion incident that destroyed the original 2026-03 warehouse from which the gold-hard tier was sampled. Local recovery was exhausted (filesystem search, git history, and the public HuggingFace dataset history were all checked); no copy of the original warehouse was found. Rather than ship a warehouse from which the evaluation tier could not be derived, we re-anchored the warehouse to the gold-hard records by direct ID lookup. For each of the 40 gold-hard records, the canonical source-API identifier is encoded in its \texttt{record\_id} (12 PubMed DOIs, 27 OpenAlex DOIs, one Europe PMC DOI). For the 14 records that the 2026-05 query-based re-harvest did not return, the canonical metadata was re-fetched by direct DOI lookup against the source APIs and merged into the warehouse. For the 26 records that the re-harvest did return, the warehouse rows were rewritten to use the original gold-hard \texttt{record\_id} so that the gold-hard tier resolves directly into the warehouse. In both cases the abstract text in the warehouse is the abstract that the annotators read, captured at annotation time, so baseline predictions remain exactly reproducible from the released warehouse. The warehouse is therefore a strict superset of the gold-hard tier by \texttt{record\_id} ($40/40$ resolve directly), with all stable identifiers (DOI, PMID, OpenAlex ID) drawn from canonical API responses. Researchers who require a fixed corpus should use the released warehouse manifest; researchers who want to track the field as it grows can re-run the harvest at their date of interest using the included scripts.
+The v1.0 warehouse is a 2026-05 harvest produced after a project-deletion incident that destroyed the original 2026-03 warehouse from which the gold-hard tier was sampled. Local recovery was exhausted (filesystem search, git history, and the public HuggingFace dataset history were all checked); no copy of the original warehouse was found. Rather than ship a warehouse from which the evaluation tier could not be derived, we re-anchored the warehouse to the gold-hard records by direct ID lookup. For each of the 40 gold-hard records, the canonical source-API identifier is encoded in its \texttt{record\_id} (12 PubMed DOIs, 27 OpenAlex DOIs, one Europe PMC DOI). The 2026-05 query-based re-harvest already contained 26 of the 40 records; these resolve into the released warehouse by DOI (32 of the 40) or by normalized title (8 of the 40, after deduplication collapses the per-source duplicates). For the 14 records the re-harvest did not return, canonical metadata was re-fetched by direct DOI lookup against the source APIs and merged in under the original gold-hard \texttt{record\_id}. The annotation-time abstract is preserved verbatim in the warehouse for every re-fetched row, so baseline predictions remain exactly reproducible from the released warehouse. The warehouse is therefore a strict superset of the gold-hard tier ($40/40$ resolve directly under the deduplication order), with all stable identifiers (DOI, PMID, OpenAlex ID) drawn from canonical API responses. The full identifier-anchored recovery audit (\texttt{verification/}) ships in v1.0 alongside the warehouse: it contains the parsed identifiers, before/after-merge containment tables, the re-fetch log, the abstract cross-check (14 verbatim, 19 Unicode/whitespace-normalised, 7 source-side editorial revisions), and a machine-readable \texttt{summary.json}. Researchers who require a fixed corpus should use the released warehouse manifest; researchers who want to track the field as it grows can re-run the harvest at their date of interest using the included scripts.
 
 \paragraph{Tier curation and high-precision core.}
 Each warehouse record is assigned a tier label based on lexical proximity to nanobubble-related terms in the title and abstract. Tier A contains the most relevant records and is divided into A1 and A2. A1 includes records with explicit nanobubble terminology, while A2 includes records with adjacent ultrasound or gas-carrier vocabulary. The resulting \textbf{high-precision core} contains 8{,}006 records, consisting of 3{,}577 A1 records and 4{,}429 A2 records. This core is used as the candidate source for benchmark sampling because it retains cross-domain coverage while reducing noise from the broader nanoparticle literature.
 
 \paragraph{Gold pool and seed evaluation tier.}
-From the high-precision core, we sample a 500-record \textbf{gold pool} balanced by nanobubble-vs-nanoparticle label, document type, and field-coverage signals. The gold pool is divided into two annotation tiers. The \textbf{gold-hard seed evaluation tier} ($n=40$) is stratified by \texttt{nb\_label} $\times$ \texttt{document\_type} and serves as a starter evaluation set: it establishes the scoring protocol and provides the reference baselines reported in this paper. It follows a blind, abstract-only dual-annotator protocol (Appendix~\ref{app:guideline}); v1.0 reports single-annotator-validated labels under this protocol, and community contributions to expand the tier and finalise multi-annotator adjudication are planned for v1.1. The \textbf{gold-lite tier} ($n=460$) is single-annotator and is released for robustness analysis only. It is split into a 50-record development set for prompt and threshold tuning and a 410-record test set for extended results. All evaluation claims in v1.0 are scored only on the gold-hard seed tier.
+From the high-precision core, we sample a 500-record \textbf{gold pool} balanced by nanobubble-vs-nanoparticle label, document type, and field-coverage signals. The gold pool is divided into two annotation tiers. The \textbf{gold-hard seed evaluation tier} ($n=40$) is stratified by \texttt{nb\_label} $\times$ \texttt{document\_type} and serves as a starter evaluation set: it establishes the scoring protocol and provides the reference baselines reported in this paper. It follows a blind, abstract-only dual-annotator protocol (Appendix~\ref{app:guideline}); v1.0 reports single-annotator-validated labels under this protocol, and community contributions to expand the tier and finalise multi-annotator adjudication are planned for v1.1. The gold-hard tier is the only evaluation artifact shipped in v1.0. The complementary \textbf{gold-lite tier} ($n=460$) is single-annotator and was constructed for internal robustness analysis only; it is partitioned into a 50-record development set used for prompt and threshold tuning and a 410-record extended-results set. The gold-lite tier, the 500-record gold pool itself, and the high-precision core are scheduled for v1.1; v1.0 makes no headline claim that depends on them. All evaluation claims in v1.0 are scored only on the gold-hard seed tier.
 
 \begin{table}[t]
 \centering
@@ -483,7 +483,7 @@ The code and dataset are released for research use under the terms described in 
 \section{Validity Safeguards}
 \label{sec:validity}
 
-The v1.0 gold pool is smaller than large expert-curated single-task benchmarks. To support reliable evaluation, \textit{NanoBubbleEval} uses controlled schema validation, explicit annotation status, abstract-only scope, and reproducible splits.
+The v1.0 gold-hard evaluation tier ($n=40$) is smaller than large expert-curated single-task benchmarks. To support reliable evaluation, \textit{NanoBubbleEval} uses controlled schema validation, explicit annotation status, abstract-only scope, and reproducible splits.
 
 \paragraph{Schema and unit normalization.}
 All predictions are validated against the 18-field schema before scoring. Numeric fields are converted to canonical units: nm for size, mV for zeta potential, hours for stability, and percent for loading efficiency. Unrecognized unit strings are flagged rather than silently converted, allowing unit drift to remain visible as a separate error source.
@@ -492,7 +492,7 @@ All predictions are validated against the 18-field schema before scoring. Numeri
 The gold-hard tier ($n=40$) is intended as a seed evaluation set that establishes the scoring protocol and three reference baselines, not as a definitive headline benchmark. It is stratified by \texttt{nb\_label} $\times$ \texttt{document\_type} and annotated under a pre-specified blind, abstract-only protocol for the six headline fields. v1.0 reports single-annotator-validated labels from the first annotator, an external biomedical annotator. Full dual annotation, adjudication, and inter-annotator agreement statistics are planned for v1.1, alongside community contributions to expand the tier. The released first-annotator labels allow downstream users to recompute agreement statistics or apply alternative matching policies.
 
 \paragraph{Scope and reproducibility.}
-v1.0 evaluates abstract-derived extraction only. Values reported only in full-text sections, tables, methods, or supplementary material are outside the benchmark scope, and \NR{} is the correct label when the abstract does not state the property. The dev/test split is deterministic and released with slice-membership files and a leakage-audit report. Additional pipeline and validation details are provided in Appendix~\ref{app:pipeline}.
+v1.0 evaluates abstract-derived extraction only. Values reported only in full-text sections, tables, methods, or supplementary material are outside the benchmark scope, and \NR{} is the correct label when the abstract does not state the property. The dev/test split is constructed deterministically (seed=42); the slice-membership and leakage-audit reports for the gold-hard tier are released in v1.0, while the per-record \texttt{splits.json} file is regenerable from the included pipeline scripts and ships with v1.1. Additional pipeline and validation details are provided in Appendix~\ref{app:pipeline}.
 
 
 
@@ -592,10 +592,10 @@ We compare three baselines that represent increasing model capacity: rule-based 
 B1 uses hand-written regular expressions for the four numeric headline fields: \texttt{size}, \texttt{zeta\_potential}, \texttt{stability}, and \texttt{loading\_efficiency}. Each pattern searches for number-unit pairs near field-specific anchor terms and returns \NR{} when no valid match is found. For the free-text fields, \texttt{payload} and \texttt{release\_profile}, B1 returns \NR{} by design because these fields require semantic interpretation beyond local number-unit matching.
 
 \textbf{B2: BioBERT QA-span.}
-B2 uses a BioBERT-v1.1 encoder~\citep{lee2020biobert} fine-tuned on SQuAD-v2~\citep{rajpurkar2018know}. Each headline field is converted into a natural-language question, and the predicted answer span is mapped to the corresponding schema field. The model's unanswerable output is mapped to \NR{}, and spans with confidence below $0.20$ are also treated as \NR{}. The threshold is tuned on the development split and fixed during test evaluation. B2 evaluates whether an off-the-shelf biomedical extractive-QA model can support abstract-level property extraction without task-specific fine-tuning.
+B2 uses a BioBERT-v1.1 encoder~\citep{lee2020biobert} fine-tuned on SQuAD-v2~\citep{rajpurkar2018know}. Each headline field is converted into a natural-language question, and the predicted answer span is mapped to the corresponding schema field. The model's unanswerable output is mapped to \NR{}, and spans with confidence below $0.20$ are also treated as \NR{}. The threshold is tuned on the gold-lite development split (constructed internally, scheduled to ship with v1.1) and fixed during test evaluation on the gold-hard tier. B2 evaluates whether an off-the-shelf biomedical extractive-QA model can support abstract-level property extraction without task-specific fine-tuning.
 
 \textbf{B3: Qwen2.5-7B-Instruct.}
-B3 uses Qwen2.5-7B-Instruct~\citep{yang2025qwen3} in zero-shot schema-constrained mode. The prompt includes the 18-field schema, the \NR{} convention, and one worked example, and the model returns one JSON object per abstract. Predictions with invalid or out-of-schema fields are repaired when possible and otherwise set to null before scoring. Inference uses greedy decoding on a single 16\,GB GPU. Retrieval-augmented extraction and a larger same-family instruction model are reserved for v1.1.
+B3 uses Qwen2.5-7B-Instruct~\citep{qwen2024qwen25} in zero-shot schema-constrained mode. The prompt includes the 18-field schema, the \NR{} convention, and one worked example, and the model returns one JSON object per abstract. Predictions with invalid or out-of-schema fields are repaired when possible and otherwise set to null before scoring. Inference uses greedy decoding on a single 16\,GB GPU. Retrieval-augmented extraction and a larger same-family instruction model are reserved for v1.1.
 
 
 \paragraph{Metrics.}
@@ -824,9 +824,9 @@ will report three per-field agreement measures on the same 40
 records: Cohen's $\kappa$ on the \NR{}-versus-emit decision,
 character-set span IoU on evidence spans for emit-emit pairs, and
 unit-normalised exact match on numeric fields. The first-annotator
-labels are released alongside the gold pool so that downstream users
-can recompute agreement statistics against their own annotators or
-apply alternative match policies.
+labels for the gold-hard tier are released in v1.0 so that downstream
+users can recompute agreement statistics against their own annotators
+or apply alternative match policies.
 
 
 % % ============================================================================
@@ -1019,8 +1019,10 @@ polymer matrix) on a record that describes a gas-filled nanobubble.
 Cross-checked against the nanobubble-vs-nanoparticle slice gap.
 \end{itemize}
 
-Counts and worked examples per category are released alongside the
-gold pool (see Appendix~\ref{app:errors}).
+Worked examples per category are scheduled for v1.1 alongside the
+500-record gold-pool release; v1.0 reports the taxonomy itself
+together with per-baseline aggregate evidence in
+Appendix~\ref{app:errors}.
 
 \section{Pipeline details}
 \label{app:pipeline}
@@ -1245,12 +1247,15 @@ scripts and ships with v1.1.
 \paragraph{Uses.}
 The release is intended for benchmarking scientific information
 extraction systems on the three task views (schema extraction,
-numerical grounding, evidence attribution). It can also be used as
-a corpus for fine-tuning extractive-QA or schema-constrained
-generation models, with the caveat that v1.0 deliberately ships the
-B2 baseline as an off-the-shelf checkpoint to expose where pretrained
-biomedical extractive-QA architectures fail without task-specific
-fine-tuning.
+numerical grounding, evidence attribution); the warehouse manifest
+and gold-hard tier shipped in v1.0 are sufficient to reproduce the
+headline evaluation, while the v1.1 artifacts (high-precision core,
+500-record gold pool, gold-lite tier, task-view CSVs,
+\texttt{splits.json}) extend the resource for slice-stratified and
+robustness analyses. The release does not redistribute model
+weights; B2 is benchmarked as an off-the-shelf BioBERT-SQuAD-v2
+checkpoint to expose where pretrained biomedical extractive-QA
+architectures fail without task-specific fine-tuning.
 
 \paragraph{Distribution.}
 The dataset is released on HuggingFace at the public URL given in
