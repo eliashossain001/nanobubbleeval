@@ -997,6 +997,12 @@ We introduced \textit{NanoBubbleEval}, a benchmark that evaluates three failure 
 
 \textit{NanoBubbleEval} supports reliable scientific information extraction by exposing three failure modes: schema-fill hallucination, unit drift, and cite-hallucination. By treating \NR{} as a first-class output and requiring verbatim evidence spans, the benchmark discourages downstream systems from using unsupported values in literature review, database construction, and meta-analysis. Two risks remain. First, results on the 40-record gold-hard tier should not be extrapolated to other materials-science or biomedical domains without re-validation. Downstream pipelines should preserve the abstention and evidence-provenance signals measured by the benchmark. Second, the warehouse is dominated by English-language abstracts from a limited set of scholarly APIs, which may bias coverage toward English biomedical and environmental publications. We mitigate these risks by releasing the schema, unit-normalisation tables, and evaluation harness, documenting the curation and slice-tagging procedures, and versioning the benchmark so that v1.1 can add multi-rater adjudication and full-text grounding without invalidating v1.0 results.
 
+% ============================================================================
+\section*{AI Use Statement}
+\label{sec:ai_use_statement}
+
+We disclose the use of AI tools in this work along two distinct axes. First, \texttt{Qwen2.5-7B-Instruct} is evaluated as the B3 baseline (\S\ref{sec:experimental_setup}); it is a research subject of the paper and not a generation tool. \textit{NanoBubbleEval} itself is constructed without LLMs: warehouse harvesting, deduplication, tier curation, gold-pool sampling, slice tagging, and the metric suite are deterministic and rule-based, and the schema and annotation guideline were authored by human contributors. Second, AI-assisted writing tools were used by the authors during code drafting, LaTeX formatting, and editorial refinement of the manuscript. All scientific claims, experimental measurements, gold annotations, baseline implementations, and final wording were reviewed and approved by the authors, who take full responsibility for the content of the paper. No AI tool generated the gold-hard annotations, computed the reported metrics, or authored the empirical conclusions reported in the headline-results section.
+
 
 % ============================================================================
 \bibliographystyle{plainnat}
