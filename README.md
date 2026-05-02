@@ -9,7 +9,8 @@ NeurIPS 2026 Datasets & Benchmarks Track
 
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-53%20passing-brightgreen.svg)](#tests)
+[![Tests](https://img.shields.io/badge/tests-78%20passing-brightgreen.svg)](#tests)
+[![HuggingFace](https://img.shields.io/badge/dataset-EliasHossain/nanobubbleeval-blue.svg)](https://huggingface.co/datasets/EliasHossain/nanobubbleeval)
 
 </div>
 
@@ -34,16 +35,37 @@ consistency rate.
 
 ## Benchmark at a glance
 
-| Layer | Records | Notes |
-|---|---:|---|
-| Deduplicated warehouse | 52,519 | Six public scholarly APIs |
-| High-precision nanobubble core | 8,006 | A1 (3,577) + A2 (4,429) |
-| Gold pool | 500 | dev = 50, test = 450 |
-| IAA subset (dual-annotator) | 40 | Pinned to test split |
-| Headline schema fields | 6 | size, zeta_potential, stability, payload, loading_efficiency, release_profile |
+| Layer | Records | Release | Notes |
+|---|---:|:---:|---|
+| Deduplicated warehouse | 51,566 | **v1.0** | OpenAlex (50,022) + PubMed (1,544); harvest framework also wires Europe PMC, CrossRef, Semantic Scholar, ClinicalTrials.gov v2 |
+| High-precision nanobubble core | 8,006 | v1.1 | A1 (3,577) + A2 (4,429); regenerable from the released pipeline scripts |
+| Benchmark candidate pool | 1,000 | v1.1 | Balanced sample over the high-precision core |
+| Gold pool | 500 | v1.1 | Gold-hard tier ∪ 460-record gold-lite extension tier |
+| Gold-hard tier (headline evaluation) | 40 | **v1.0** | Stratified by `nb_label` × `document_type` |
+| Gold-lite extension tier | 460 | v1.1 | dev=50, test=410; single-annotator robustness check |
+| Headline schema fields | 6 | **v1.0** | size, zeta_potential, stability, payload, loading_efficiency, release_profile |
 
-The same 500-record gold pool is reprojected into three task views: structured
-extraction, numerical grounding, and evidence attribution.
+The evaluation protocol defines three task views over the gold-hard tier
+(structured extraction, numerical grounding, evidence attribution); standalone
+task-view CSV files are scheduled for v1.1.
+
+### v1.0 release on HuggingFace
+
+The public dataset at
+[`EliasHossain/nanobubbleeval`](https://huggingface.co/datasets/EliasHossain/nanobubbleeval)
+ships:
+
+- `warehouse/master_inventory.csv` — 51,566-record deduplicated warehouse manifest (post-recovery, 2026-05 snapshot)
+- `gold_hard/iaa_subset.csv` — 40-record gold-hard tier with first-annotator labels
+- `predictions/{regex-v1,biobert-squadv2,qwen25-7b-instruct}.csv` — three reference baselines
+- `splits/{slice_summary,leakage_report}.md` — slice membership and leakage audit
+- `metadata/{croissant.json,extraction_schema.json,data_quality_report.md}` — Croissant 1.1 metadata + 18-field schema
+- `verification/{gold_hard_*.csv,summary.json,abstract_mismatches.txt}` — Branch B recovery audit logs (X/Y/Z = 14 verbatim / 19 normalised / 7 source-side revisions; 40/40 contained)
+
+The 8,006-record high-precision core, the 500-record gold pool, the 460-record
+gold-lite tier, the three task-view CSVs, and the deterministic `splits.json`
+are scheduled for v1.1 and are regenerable end-to-end from the included
+pipeline scripts.
 
 ## Install
 
@@ -57,7 +79,21 @@ pip install -e .[dev]           # adds pytest, ruff, mypy
 
 ## Quickstart — CLI
 
-The package installs a single `nanoeval` console script with four subcommands:
+The package installs a single `nanoeval` console script with four subcommands.
+The fastest way to evaluate against the v1.0 release is to score baseline
+predictions against the gold-hard tier on HuggingFace:
+
+```bash
+# Score a (gold, prediction) pair on the headline metrics (v1.0)
+nanoeval evaluate \
+    --gold dataset_release/gold_hard/iaa_subset.csv \
+    --pred dataset_release/predictions/qwen25-7b-instruct.csv \
+    --out  results/metrics/qwen25_7b.csv
+```
+
+The remaining subcommands rely on the v1.1-scheduled gold pool
+(`data/gold/gold_annotation_set_v3.csv`) and are kept here for the v1.1
+workflow:
 
 ```bash
 # 1. Sample a stratified IAA subset (40 records, seed=42)
@@ -77,17 +113,11 @@ nanoeval reconcile \
     --a annotation/received/iaa_subset_elias.csv \
     --b annotation/received/iaa_subset_collab.csv \
     --out annotation/gold_hard
-
-# 4. Score a (gold, prediction) pair on the headline metrics
-nanoeval evaluate \
-    --gold annotation/gold_hard/gold_hard.csv \
-    --pred baselines/llm/qwen25_7b_predictions.csv \
-    --out  results/metrics/qwen25_7b.csv
 ```
 
 Numbered wrapper scripts under [`scripts/`](scripts/) carry the same calls
 with canonical paths pre-baked, so `python3 scripts/01_build_iaa_subset.py`
-works without any flags.
+works without any flags once the v1.1 gold pool ships.
 
 ## Quickstart — Python API
 
@@ -167,21 +197,29 @@ nanobubbleeval/
 │   ├── splits.py           # SplitBuilder, StratifiedSampler, SplitConfig
 │   ├── baselines/          # Strategy pattern: Baseline ABC + concretes
 │   │   ├── base.py         # Baseline (ABC), FieldPrediction
-│   │   └── regex_baseline.py
+│   │   ├── regex_baseline.py
+│   │   ├── encoder_baseline.py
+│   │   └── llm_baseline.py
+│   ├── harvest/            # Multi-source harvest + dedup framework
 │   ├── paths.py            # ProjectPaths singleton
 │   └── cli.py              # nanoeval CLI (argparse subcommands)
-├── tests/                  # 53 unit tests
-├── scripts/                # Numbered pipeline wrappers (01–04)
-├── data/                   # Lifecycle-staged datasets
-│   ├── raw/                #   warehouse manifest
-│   ├── curated/            #   high-precision core, candidate pools
-│   ├── gold/               #   gold pool
-│   ├── tasks/              #   three task views
-│   └── splits/             #   splits.json + slice & leakage reports
+├── tests/                  # 78 unit tests
+├── scripts/                # Numbered pipeline wrappers (01–05)
+│   ├── legacy_harvest/     # Stage A: multi-source harvest
+│   └── verification/       # Branch B recovery + HF push + figure build
+├── data/                   # Lifecycle-staged datasets (large files .gitignored)
+│   ├── raw/                #   warehouse manifest (HuggingFace mirror)
+│   ├── curated/            #   high-precision core (v1.1)
+│   ├── gold/               #   gold pool (v1.1)
+│   ├── tasks/              #   three task views (v1.1)
+│   └── splits/             #   splits.json (v1.1) + slice/leakage (v1.0)
 ├── annotation/             # Annotation packet, received, gold-hard
+├── verification/           # Gold-hard recovery audit logs (40/40 containment)
+├── dataset_release/        # HuggingFace mirror bundle (gold-hard, predictions,
+│                           # splits, metadata, README; warehouse 75 MB local)
 ├── baselines/              # Baseline run outputs (regex, encoder, llm)
 ├── results/                # Experiment outputs (metrics, slices, errors)
-├── paper/                  # LaTeX submission (main.tex, ref.bib)
+├── paper/                  # LaTeX submission (main.tex, checklist.tex, ref.bib)
 ├── docs/                   # Corpus statistics and characterisation
 ├── configs/                # Schema specification
 └── archive/                # Frozen artefacts (legacy reports)
@@ -197,8 +235,37 @@ IAA subset stratification quotas are fixed in
 # regenerate everything from a clean checkout:
 python3 scripts/01_build_iaa_subset.py
 python3 scripts/02_build_splits.py
-pytest -q                              # 53/53 tests pass
+python3 scripts/verification/run_recovery.py --write-warehouse   # rebuilds the v1.0 warehouse from the May 2026 re-harvest
+pytest -q                              # 78/78 tests pass
 ```
+
+## Provenance and gold-hard recovery (Branch B)
+
+The original 2026-03 warehouse from which the 40-record gold-hard tier was
+sampled was destroyed in a project-deletion incident. The released v1.0
+warehouse is a 2026-05 re-harvest re-anchored to the gold-hard records by
+direct identifier lookup against the source APIs. The full audit trail lives
+in [`verification/`](verification/) and ships on HuggingFace under the same
+path:
+
+- 26 of 40 gold-hard records were already present in the May 2026 re-harvest;
+  14 were missing and were re-fetched by canonical DOI (PubMed E-utilities +
+  OpenAlex `/works/doi:`) and merged in under the original gold-hard
+  `record_id`.
+- After deduplication (DOI → PMID/PMCID → normalised title → URL), all 40/40
+  gold-hard records resolve into the released warehouse.
+- Abstract cross-check between source-API text today and annotation-time
+  text: 14 verbatim / 19 Unicode-normalised / 7 source-side editorial
+  revisions (e.g., PubMed structured-abstract section labels added
+  post-annotation). See
+  [`verification/summary.json`](verification/summary.json) for the
+  machine-readable summary and
+  [`verification/abstract_mismatches.txt`](verification/abstract_mismatches.txt)
+  for the seven Z-bucket records.
+
+The recovery pipeline is fully scripted under
+[`scripts/verification/`](scripts/verification/) and rerunnable from a clean
+checkout.
 
 ## Tests
 
@@ -206,10 +273,9 @@ pytest -q                              # 53/53 tests pass
 pytest tests/ -v
 ```
 
-Covers the unit normaliser (28 cases), evaluator (5 cases), reconciler (4
-cases), `ProjectPaths` (6 cases), and the `Baseline` abstract class (10
-cases) with shared fixtures defining a six-record gold set, a near-perfect
-extractor, and a never-abstain hallucinator.
+Covers the unit normaliser, evaluator, reconciler, `ProjectPaths`, the
+`Baseline` abstract class, the regex / encoder / LLM baselines, the harvest
+framework, and the annotation pipeline (78 tests total).
 
 ## Environment variables
 
