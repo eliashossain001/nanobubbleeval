@@ -55,8 +55,10 @@ checkpoints, decoding parameters, and confidence thresholds for B1,
 B2, and B3. Appendix~\ref{app:pipeline} documents the harvest query
 families, deduplication order, tier rules, and benchmark candidate
 sampling parameters. The dev/test split is constructed
-deterministically (seed=42); the split file, slice-membership map,
-and leakage-audit report ship with the release.
+deterministically (seed=42); the slice-membership map and
+leakage-audit report for the gold-hard tier ship in v1.0, while the
+per-record \texttt{splits.json} file is deterministically regenerable
+from the released pipeline scripts and ships with v1.1.
 
 \item \textbf{Open access to data and code.}
 \emph{Does the paper provide open access to the data and code, with
