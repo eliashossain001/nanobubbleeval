@@ -1,0 +1,27 @@
+== API_PubMed_10_1080_03639045_2025_2562181 ==
+GOLD: This study aimed to develop, characterize, and evaluate resveratrol-loaded pegylated PLGA [poly (lactic-co-glycolic acid
+FETCH: OBJECTIVE: This study aimed to develop, characterize, and evaluate resveratrol-loaded pegylated PLGA [poly (lactic-co-gl
+
+== API_OpenAlex_10_1002_ange_201505817 ==
+GOLD: Abstract The dispersion into water of nanocapsules bearing a highly hydrophobic fluorinated internal lining yielded enca
+FETCH: The dispersion into water of nanocapsules bearing a highly hydrophobic fluorinated internal lining yielded encapsulated 
+
+== API_PubMed_10_2147_DDDT_S296880 ==
+GOLD: Sonodynamic therapy (SDT) is considered a promising therapeutic strategy for the effective elimination of cancer cells. 
+FETCH: PURPOSE: Sonodynamic therapy (SDT) is considered a promising therapeutic strategy for the effective elimination of cance
+
+== API_PubMed_10_1021_acs_molpharmaceut_5c01256 ==
+GOLD: Doxorubicin (DOX) faces significant challenges in oral chemotherapy due to low intestinal permeability and extensive fir
+FETCH: Doxorubicin (DOX) faces significant challenges in oral chemotherapy due to low intestinal permeability and extensive fir
+
+== API_PubMed_10_3389_fmed_2023_1136304 ==
+GOLD: Stem cell transplantation is one of the treatment methods for acute myocardial infarction (AMI). MicroRNA-1 contributes 
+FETCH: Background: Stem cell transplantation is one of the treatment methods for acute myocardial infarction (AMI). MicroRNA-1 
+
+== API_OpenAlex_10_7150_thno_43402 ==
+GOLD: Development of versatile nanoplatforms that simultaneously integrate therapeutic and diagnostic features for stimuli-res
+FETCH: -weighted MR imaging-guided tumor chemotherapy.
+
+== API_PubMed_10_2174_0115680096414252251125053406 ==
+GOLD: Oxaliplatin is a third-generation platinum-based chemotherapeutic agent widely used for colorectal cancer treatment. How
+FETCH: INTRODUCTION: Oxaliplatin is a third-generation platinum-based chemotherapeutic agent widely used for colorectal cancer 

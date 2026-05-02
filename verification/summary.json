@@ -1,0 +1,29 @@
+{
+  "original_claimed_warehouse_count": 52519,
+  "current_reharvest_count_before_merge": 51610,
+  "final_warehouse_count_after_merge": 51566,
+  "gold_hard_total": 40,
+  "found_before_merge": 26,
+  "missing_before_merge": 14,
+  "refetch_success_count": 14,
+  "refetch_failed_count": 0,
+  "contained_after_merge_count": 40,
+  "verbatim_match_count": 14,
+  "normalized_match_count": 19,
+  "mismatch_or_revision_count": 7,
+  "abstract_refetch_empty_count": 0,
+  "failed_ids": [],
+  "mismatch_ids": [
+    "API_PubMed_10_1080_03639045_2025_2562181",
+    "API_OpenAlex_10_1002_ange_201505817",
+    "API_PubMed_10_2147_DDDT_S296880",
+    "API_PubMed_10_1021_acs_molpharmaceut_5c01256",
+    "API_PubMed_10_3389_fmed_2023_1136304",
+    "API_OpenAlex_10_7150_thno_43402",
+    "API_PubMed_10_2174_0115680096414252251125053406"
+  ],
+  "warehouse_path_in": "data/raw/master_inventory.pre-merge.csv",
+  "warehouse_path_out": "data/raw/master_inventory.csv",
+  "gold_hard_path": "dataset_release/gold_hard/iaa_subset.csv",
+  "network_used": true
+}

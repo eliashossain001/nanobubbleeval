@@ -55,8 +55,11 @@ paper_for_overleaf.zip
 # HF token cache (never commit credentials)
 .cache/huggingface/
 
-# Large warehouse data (regenerable from scripts/legacy_harvest/)
+# Large warehouse data (regenerable from scripts/legacy_harvest/ and
+# scripts/verification/run_recovery.py). Ships to HuggingFace only.
 data/raw/master_inventory.csv
+data/raw/master_inventory.pre-merge.csv
+dataset_release/warehouse/master_inventory.csv
 
 # Notebooks
 .ipynb_checkpoints/
