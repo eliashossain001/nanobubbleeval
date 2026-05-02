@@ -73,7 +73,7 @@
   },
   "rai:dataCollection": "Records were harvested from public scholarly APIs (PubMed/NCBI Entrez, Europe PMC, OpenAlex, CrossRef, Semantic Scholar, ClinicalTrials.gov v2) under five query families covering nanobubble core terminology, ultrasound and contrast imaging, delivery and release, biomedical nanocarriers, and environmental/agricultural applications. Deduplication is strictly ordered: DOI, then PMID/PMCID, then normalised title, then URL.",
   "rai:dataCollectionType": "Public scholarly metadata APIs",
-  "rai:dataCollectionMissingData": "Some records lack abstracts (29.2% of the warehouse). The high-precision core and the gold pool are filtered to require an abstract; this constraint is documented in Appendix A of the paper.",
+  "rai:dataCollectionMissingData": "Some records lack abstracts (18.3% of the v1.0 warehouse). The high-precision core and the gold pool (scheduled for v1.1) are filtered to require an abstract; this constraint is documented in Appendix A of the paper.",
   "rai:dataCollectionRawData": "The raw API responses are not redistributed; the release ships the deduplicated warehouse manifest containing only fields permitted under the source-API terms of use.",
   "rai:dataPreprocessingProtocol": "Records are normalised to UTF-8, deduplicated in the order specified above, assigned tier labels A/B/C by lexical proximity to nanobubble-core vocabulary (Tier A is split A1/A2), and sampled into a 1,000-record balanced candidate pool. The 500-record gold pool is the top-ranked half of the candidate pool by an extraction-priority score; the gold-hard tier (n=40) is sampled with stratification on (nb_label, document_type) and pinned to the test split.",
   "rai:dataAnnotationProtocol": "Annotations on the gold-hard tier are produced by a professional biomedical annotator under a blind, abstract-only protocol (Appendix C of the paper). Each annotation records the value, the canonical unit (for numeric fields), and a verbatim evidence quote substring of the abstract. The NOT_REPORTED sentinel is used when the abstract does not state a property. The second-annotator pass is finalised in the camera-ready version.",
@@ -107,8 +107,8 @@
       "@type": "cr:FileObject",
       "@id": "warehouse-manifest",
       "name": "master_inventory.csv",
-      "description": "52,519-record deduplicated warehouse manifest.",
-      "contentUrl": "data/raw/master_inventory.csv",
+      "description": "51,566-record deduplicated warehouse manifest (2026-05 snapshot, post-recovery; ships in v1.0).",
+      "contentUrl": "warehouse/master_inventory.csv",
       "encodingFormat": "text/csv"
     },
     {
