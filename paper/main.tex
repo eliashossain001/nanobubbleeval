@@ -948,7 +948,7 @@ audit trail and supports a v1.0 headline claim.
 \section{Conclusion}
 \label{sec:conclusion}
 
-\textit{NanoBubbleEval} is, to our knowledge, the first structured resource for nanobubble and nanocarrier literature. It converts a previously inaccessible body of cross-disciplinary primary research -- 51{,}566 abstracts spanning biomedical drug delivery, ultrasound imaging, environmental remediation, agriculture, and colloidal physics -- into a machine-readable form anchored by an 18-field schema co-designed with the structure of the field, and ships the evaluation infrastructure needed to validate automated extraction into it. The v1.0 release ships the 51{,}566-record deduplicated warehouse manifest, the 40-record gold-hard seed evaluation tier, three reference-baseline prediction files, the metric suite together with five evaluation slices, the gold-hard recovery audit logs, and an open-source Python evaluation pipeline; the 8{,}006-record high-precision domain core, the 500-record gold pool, the 460-record gold-lite tier, and the three task-view CSV files are scheduled for v1.1 and are regenerable from the included pipeline scripts. Three reference baselines establish that the resource supports meaningful evaluation today, and they surface the failure modes the metric suite is designed to detect: schema-fill hallucination on free-text fields, a $33.7$-point drop on review abstracts versus original-research abstracts, and the first observed cite-hallucination once an extractor moves beyond span-based prediction. By making this literature machine-readable and providing the harness to use it responsibly, \textit{NanoBubbleEval} establishes foundational data infrastructure for a field that has lacked it, and invites the community to extend the resource in the directions outlined in our v1.1 roadmap (\S\ref{sec:roadmap}).
+\textit{NanoBubbleEval} is, to our knowledge, the first abstract-level structured benchmark and reproducible evaluation scaffold for nanobubble and nanocarrier literature. It instantiates an 18-field schema on a 51{,}566-abstract deduplicated warehouse spanning biomedical drug delivery, ultrasound imaging, environmental remediation, agriculture, and colloidal physics, paired with the harvest-to-evaluation pipeline that produced it. The v1.0 release ships the 51{,}566-record deduplicated warehouse manifest, the 40-record gold-hard seed evaluation tier, three reference-baseline prediction files, the metric suite together with five evaluation slices, the gold-hard recovery audit logs, and an open-source Python evaluation pipeline; the 8{,}006-record high-precision domain core, the 500-record gold pool, the 460-record gold-lite tier, and the three task-view CSV files are scheduled for v1.1 and are regenerable from the included pipeline scripts. Three reference baselines establish that the seed tier supports meaningful evaluation today, and they surface the failure modes the metric suite is designed to detect: schema-fill hallucination on free-text fields, a $33.7$-point drop on review abstracts versus original-research abstracts, and the first observed cite-hallucination once an extractor moves beyond span-based prediction. By making this literature machine-readable and providing the harness to use it responsibly, \textit{NanoBubbleEval} provides reproducible infrastructure for seed-scale evaluation and extension, and invites the community to build on the directions outlined in our v1.1 roadmap (\S\ref{sec:roadmap}).
 
 % ============================================================================
 \section{v1.1 Roadmap}
@@ -1078,10 +1078,9 @@ polymer matrix) on a record that describes a gas-filled nanobubble.
 Cross-checked against the nanobubble-vs-nanoparticle slice gap.
 \end{itemize}
 
-Worked examples per category are scheduled for v1.1 alongside the
-500-record gold-pool release; v1.0 reports the taxonomy itself
-together with per-baseline aggregate evidence in
-Appendix~\ref{app:errors}.
+Representative worked examples for B3 are included in
+Appendix~\ref{app:errors}. Additional examples across the full gold
+pool will be released with v1.1.
 
 \section{Pipeline details}
 \label{app:pipeline}
