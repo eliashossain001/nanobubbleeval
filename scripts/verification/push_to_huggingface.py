@@ -1,4 +1,7 @@
-"""Push the v1.0 dataset bundle to HuggingFace EliasHossain/nanobubbleeval.
+"""Push the v1.0 dataset bundle to a HuggingFace dataset repository.
+
+The destination repository ID is set via the ``HF_REPO_ID`` environment
+variable; reviewers will not need this script.
 
 Uploads:
     warehouse/master_inventory.csv  (post-recovery 51,566-record manifest)
@@ -12,6 +15,7 @@ Reads HF_TOKEN from .env. The dataset repo is public.
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -20,7 +24,7 @@ from huggingface_hub import HfApi
 ROOT = Path(__file__).resolve().parents[2]
 LOG = logging.getLogger("hf-push")
 
-REPO_ID = "EliasHossain/nanobubbleeval"
+REPO_ID = os.environ.get("HF_REPO_ID", "")
 REPO_TYPE = "dataset"
 
 
@@ -36,6 +40,10 @@ def _load_token() -> str:
 def main() -> int:
     logging.basicConfig(level=logging.INFO,
                         format="%(levelname)s %(name)s: %(message)s")
+
+    if not REPO_ID:
+        LOG.error("HF_REPO_ID environment variable not set; refusing to push.")
+        return 1
 
     token = _load_token()
     api = HfApi(token=token)

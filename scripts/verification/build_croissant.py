@@ -1,7 +1,7 @@
 """Build a valid Croissant 1.1 metadata file for the NanoBubbleEval v1.0 release.
 
 Produces ``dataset_release/metadata/croissant.json`` that:
-  * describes only artifacts actually shipped on HuggingFace v1.0,
+  * describes only artifacts shipped in the v1.0 dataset bundle,
   * carries SHA-256 + content size for every FileObject,
   * defines a GoldHardRecord RecordSet whose Field entries cite the
     gold-hard CSV via cr:source (required by the validator), and
@@ -22,8 +22,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "dataset_release" / "metadata" / "croissant.json"
 
-HF_BASE = "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main"
-GH_BASE = "https://github.com/eliashossain001/nanobubbleeval"
+HF_BASE = "[anonymised release URL]"
+GH_BASE = "[anonymised release URL]"
 
 
 def _sha256(path: Path) -> tuple[int, str]:
@@ -260,13 +260,12 @@ def main() -> int:
         "version": "1.0.0",
         "datePublished": "2026-05-02",
         "license": "https://creativecommons.org/licenses/by-nc/4.0/",
-        "url": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval",
+        "url": "[anonymised release URL]",
         "sameAs": GH_BASE,
         "citeAs": (
-            "Hossain, E. (2026). NanoBubbleEval: An Evidence-Grounded Benchmark for Schema "
-            "Extraction, Numerical Grounding, and Evidence Attribution in the Nanobubble and "
-            "Nanocarrier Literature. NeurIPS 2026 Datasets and Benchmarks Track (under review). "
-            "https://huggingface.co/datasets/EliasHossain/nanobubbleeval"
+            "Anonymous Authors (2026). NanoBubbleEval: An Evidence-Grounded Benchmark for "
+            "Schema Extraction, Numerical Grounding, and Evidence Attribution in the Nanobubble "
+            "and Nanocarrier Literature. NeurIPS 2026 Datasets and Benchmarks Track (under review)."
         ),
         "keywords": [
             "scientific information extraction",
@@ -280,13 +279,12 @@ def main() -> int:
             "benchmark",
         ],
         "creator": {
-            "@type": "Person",
-            "name": "Elias Hossain",
-            "sameAs": "https://github.com/eliashossain001",
+            "@type": "Organization",
+            "name": "Anonymous Authors (NeurIPS 2026 Datasets and Benchmarks submission)",
         },
         "publisher": {
-            "@type": "Person",
-            "name": "Elias Hossain",
+            "@type": "Organization",
+            "name": "Anonymous Authors (NeurIPS 2026 Datasets and Benchmarks submission)",
         },
         # ---- RAI fields (NeurIPS ED hosting guidelines) ----
         "rai:dataCollection": (

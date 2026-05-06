@@ -22,13 +22,13 @@ Run
 ---
     python3 scripts/05_annotate.py <your-initials>
 
-Example: ``python3 scripts/05_annotate.py elias`` opens
+Example: ``python3 scripts/05_annotate.py A`` opens
 ``annotation/packet/iaa_subset.csv`` and writes
-``annotation/received/iaa_subset_elias.csv``.
+``annotation/received/iaa_subset_A.csv``.
 
 After both annotators are done, run::
     python3 scripts/03_reconcile.py \\
-        annotation/received/iaa_subset_elias.csv \\
+        annotation/received/iaa_subset_A.csv \\
         annotation/received/iaa_subset_<other>.csv
 """
 

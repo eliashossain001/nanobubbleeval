@@ -10,7 +10,6 @@ NeurIPS 2026 Datasets & Benchmarks Track
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-78%20passing-brightgreen.svg)](#tests)
-[![HuggingFace](https://img.shields.io/badge/dataset-EliasHossain/nanobubbleeval-blue.svg)](https://huggingface.co/datasets/EliasHossain/nanobubbleeval)
 
 </div>
 
@@ -49,11 +48,9 @@ The evaluation protocol defines three task views over the gold-hard tier
 (structured extraction, numerical grounding, evidence attribution); standalone
 task-view CSV files are scheduled for v1.1.
 
-### v1.0 release on HuggingFace
+### v1.0 release contents
 
-The public dataset at
-[`EliasHossain/nanobubbleeval`](https://huggingface.co/datasets/EliasHossain/nanobubbleeval)
-ships:
+The dataset bundle (under [`dataset_release/`](dataset_release/)) ships:
 
 - `warehouse/master_inventory.csv` — 51,566-record deduplicated warehouse manifest (post-recovery, 2026-05 snapshot)
 - `gold_hard/iaa_subset.csv` — 40-record gold-hard tier with first-annotator labels
@@ -67,10 +64,13 @@ gold-lite tier, the three task-view CSVs, and the deterministic `splits.json`
 are scheduled for v1.1 and are regenerable end-to-end from the included
 pipeline scripts.
 
+The dataset will be released publicly at the camera-ready stage; an
+anonymised mirror is provided to reviewers.
+
 ## Install
 
 ```bash
-git clone https://github.com/eliashossain001/nanobubbleeval.git
+# clone from the anonymised release URL provided to reviewers
 cd nanobubbleeval
 pip install -e .                # core: pandas, numpy, scikit-learn
 pip install -e .[baselines]     # adds transformers, torch (B2/B3)
@@ -81,7 +81,7 @@ pip install -e .[dev]           # adds pytest, ruff, mypy
 
 The package installs a single `nanoeval` console script with four subcommands.
 The fastest way to evaluate against the v1.0 release is to score baseline
-predictions against the gold-hard tier on HuggingFace:
+predictions against the bundled gold-hard tier:
 
 ```bash
 # Score a (gold, prediction) pair on the headline metrics (v1.0)
@@ -110,8 +110,8 @@ nanoeval build-splits \
 
 # 3. Compute IAA between two annotators
 nanoeval reconcile \
-    --a annotation/received/iaa_subset_elias.csv \
-    --b annotation/received/iaa_subset_collab.csv \
+    --a annotation/received/iaa_subset_A.csv \
+    --b annotation/received/iaa_subset_B.csv \
     --out annotation/gold_hard
 ```
 
@@ -141,7 +141,7 @@ table = Evaluator().evaluate(gold, pred, fields=HEADLINE_FIELDS)
 print(table[table["field"] == "MACRO"][["naive_f1", "acal_f1", "num_match"]])
 
 # 3. Compute IAA between two annotators
-report = Reconciler().run(annotator_a, annotator_b, label_a="elias", label_b="collab")
+report = Reconciler().run(annotator_a, annotator_b, label_a="A", label_b="B")
 report.write(paths.iaa_gold_hard)
 
 # 4. Add a new baseline (subclass the ABC, get predict_frame for free)
@@ -208,14 +208,14 @@ nanobubbleeval/
 │   ├── legacy_harvest/     # Stage A: multi-source harvest
 │   └── verification/       # Branch B recovery + HF push + figure build
 ├── data/                   # Lifecycle-staged datasets (large files .gitignored)
-│   ├── raw/                #   warehouse manifest (HuggingFace mirror)
+│   ├── raw/                #   warehouse manifest
 │   ├── curated/            #   high-precision core (v1.1)
 │   ├── gold/               #   gold pool (v1.1)
 │   ├── tasks/              #   three task views (v1.1)
 │   └── splits/             #   splits.json (v1.1) + slice/leakage (v1.0)
 ├── annotation/             # Annotation packet, received, gold-hard
 ├── verification/           # Gold-hard recovery audit logs (40/40 containment)
-├── dataset_release/        # HuggingFace mirror bundle (gold-hard, predictions,
+├── dataset_release/        # Release bundle (gold-hard, predictions,
 │                           # splits, metadata, README; warehouse 75 MB local)
 ├── baselines/              # Baseline run outputs (regex, encoder, llm)
 ├── results/                # Experiment outputs (metrics, slices, errors)
@@ -245,8 +245,8 @@ The original 2026-03 warehouse from which the 40-record gold-hard tier was
 sampled was destroyed in a project-deletion incident. The released v1.0
 warehouse is a 2026-05 re-harvest re-anchored to the gold-hard records by
 direct identifier lookup against the source APIs. The full audit trail lives
-in [`verification/`](verification/) and ships on HuggingFace under the same
-path:
+in [`verification/`](verification/) and ships in the release bundle under
+the same path:
 
 - 26 of 40 gold-hard records were already present in the May 2026 re-harvest;
   14 were missing and were re-fetched by canonical DOI (PubMed E-utilities +

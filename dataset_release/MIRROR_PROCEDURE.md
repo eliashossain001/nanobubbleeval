@@ -28,7 +28,7 @@ addresses from view.
 
 1. Open https://anonymous.4open.science/ in a browser.
 2. Click **Submit**.
-3. Paste the GitHub URL: `https://github.com/eliashossain001/nanobubbleeval`
+3. Paste the GitHub URL of the source repository.
 4. Choose **branch: main**.
 5. Set the **anonymisation level** to *strict* (default).
 6. Submit. The service generates an anonymous URL of the form:
@@ -61,12 +61,11 @@ Replace the same placeholder in `metadata/croissant.json` and
   camera-ready version.
 - **Do NOT push the dataset_release/ directory to a public GitHub
   account that uses your real name in any commit before the abstract
-  deadline.** The current repository is at `eliashossain001/...` —
-  for double-blind review, the *anonymous mirror* is what reviewers see;
-  the GitHub URL is not in the paper.
-- The HuggingFace dataset at `EliasHossain/nanobubbleeval` is
-  **private** and is the second-tier release path. Reviewers do not
-  need it; they can use anonymous.4open.science for everything.
+  deadline.** For double-blind review, the *anonymous mirror* is what
+  reviewers see; the GitHub URL is not in the paper.
+- Any HuggingFace dataset mirror is the second-tier release path.
+  Reviewers do not need it; they can use anonymous.4open.science for
+  everything.
 
 ## Camera-ready transition
 

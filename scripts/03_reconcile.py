@@ -12,8 +12,8 @@ I/O:
 
 Run:
     python3 scripts/03_reconcile.py \\
-        annotation/received/iaa_subset_elias.csv \\
-        annotation/received/iaa_subset_collab.csv
+        annotation/received/iaa_subset_A.csv \\
+        annotation/received/iaa_subset_B.csv
 """
 
 from __future__ import annotations

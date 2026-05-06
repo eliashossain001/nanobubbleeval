@@ -51,9 +51,9 @@
   "version": "1.0.0",
   "datePublished": "2026-05-02",
   "license": "https://creativecommons.org/licenses/by-nc/4.0/",
-  "url": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval",
-  "sameAs": "https://github.com/eliashossain001/nanobubbleeval",
-  "citeAs": "Hossain, E. (2026). NanoBubbleEval: An Evidence-Grounded Benchmark for Schema Extraction, Numerical Grounding, and Evidence Attribution in the Nanobubble and Nanocarrier Literature. NeurIPS 2026 Datasets and Benchmarks Track (under review). https://huggingface.co/datasets/EliasHossain/nanobubbleeval",
+  "url": "[anonymised release URL]",
+  "sameAs": "[anonymised release URL]",
+  "citeAs": "Anonymous Authors (2026). NanoBubbleEval: An Evidence-Grounded Benchmark for Schema Extraction, Numerical Grounding, and Evidence Attribution in the Nanobubble and Nanocarrier Literature. NeurIPS 2026 Datasets and Benchmarks Track (under review).",
   "keywords": [
     "scientific information extraction",
     "schema-constrained extraction",
@@ -66,13 +66,12 @@
     "benchmark"
   ],
   "creator": {
-    "@type": "Person",
-    "name": "Elias Hossain",
-    "sameAs": "https://github.com/eliashossain001"
+    "@type": "Organization",
+    "name": "Anonymous Authors (NeurIPS 2026 Datasets and Benchmarks submission)"
   },
   "publisher": {
-    "@type": "Person",
-    "name": "Elias Hossain"
+    "@type": "Organization",
+    "name": "Anonymous Authors (NeurIPS 2026 Datasets and Benchmarks submission)"
   },
   "rai:dataCollection": "Records were harvested from public scholarly APIs (PubMed/NCBI Entrez, Europe PMC, OpenAlex, CrossRef, Semantic Scholar, ClinicalTrials.gov v2) under five query families covering nanobubble core terminology, ultrasound and contrast imaging, delivery and release, biomedical nanocarriers, and environmental/agricultural applications. Deduplication is strictly ordered: DOI, then PMID/PMCID, then normalised title, then URL.",
   "rai:dataCollectionType": "Public scholarly metadata APIs",
@@ -94,7 +93,7 @@
       "@id": "warehouse-manifest",
       "name": "master_inventory.csv",
       "description": "51,566-record deduplicated warehouse manifest (2026-05 snapshot, post-recovery).",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/warehouse/master_inventory.csv",
+      "contentUrl": "[anonymised release URL]/warehouse/master_inventory.csv",
       "encodingFormat": "text/csv",
       "sha256": "73bc48569c640d2de4747463623ae01f609d9067783e70cb47660d145edc4e62",
       "contentSize": "78868644"
@@ -104,7 +103,7 @@
       "@id": "gold-hard-tier",
       "name": "iaa_subset.csv",
       "description": "40-record gold-hard seed evaluation tier with first-annotator labels under the 18-field schema.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/gold_hard/iaa_subset.csv",
+      "contentUrl": "[anonymised release URL]/gold_hard/iaa_subset.csv",
       "encodingFormat": "text/csv",
       "sha256": "ee3c913f1d6dfafdd41d32902e49ad1296ead3134cf641502714f85620c12db8",
       "contentSize": "109461"
@@ -114,7 +113,7 @@
       "@id": "predictions-b1",
       "name": "regex-v1.csv",
       "description": "B1 regex baseline predictions on the gold-hard tier.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/predictions/regex-v1.csv",
+      "contentUrl": "[anonymised release URL]/predictions/regex-v1.csv",
       "encodingFormat": "text/csv",
       "sha256": "65b5b54e1b07641feefb1eec8d6eabb0f538211a8450c539d6c29263dcb05429",
       "contentSize": "105943"
@@ -124,7 +123,7 @@
       "@id": "predictions-b2",
       "name": "biobert-squadv2.csv",
       "description": "B2 BioBERT-SQuAD-v2 baseline predictions on the gold-hard tier.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/predictions/biobert-squadv2.csv",
+      "contentUrl": "[anonymised release URL]/predictions/biobert-squadv2.csv",
       "encodingFormat": "text/csv",
       "sha256": "4532be3bd750a02273c878e3ed3394a6c43f67cf4accfa2409fbc8d58a5cabc5",
       "contentSize": "106178"
@@ -134,7 +133,7 @@
       "@id": "predictions-b3",
       "name": "qwen25-7b-instruct.csv",
       "description": "B3 Qwen2.5-7B-Instruct baseline predictions on the gold-hard tier.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/predictions/qwen25-7b-instruct.csv",
+      "contentUrl": "[anonymised release URL]/predictions/qwen25-7b-instruct.csv",
       "encodingFormat": "text/csv",
       "sha256": "766086c4249d1ba209835251607e3c7d0146397cd1df6c2cb06f94cb10e4473b",
       "contentSize": "110584"
@@ -144,7 +143,7 @@
       "@id": "leakage-report",
       "name": "leakage_report.md",
       "description": "Disjointness audit confirming no record_id overlap across splits.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/splits/leakage_report.md",
+      "contentUrl": "[anonymised release URL]/splits/leakage_report.md",
       "encodingFormat": "text/markdown",
       "sha256": "321acc1ef3b223efa5cd5a633d2d7130b1e643a46447e4ecda9a510f535ad485",
       "contentSize": "512"
@@ -154,7 +153,7 @@
       "@id": "slice-summary",
       "name": "slice_summary.md",
       "description": "Per-slice membership counts on the gold-hard tier.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/splits/slice_summary.md",
+      "contentUrl": "[anonymised release URL]/splits/slice_summary.md",
       "encodingFormat": "text/markdown",
       "sha256": "e97e95c08bd27a1d6d2c538a22be4466c2f5429367d5a05831ae0814bd3975be",
       "contentSize": "1129"
@@ -164,7 +163,7 @@
       "@id": "schema-spec",
       "name": "extraction_schema.json",
       "description": "18-field schema specification with normalisation rules and the NOT_REPORTED missing-value sentinel.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/metadata/extraction_schema.json",
+      "contentUrl": "[anonymised release URL]/metadata/extraction_schema.json",
       "encodingFormat": "application/json",
       "sha256": "e9e87c473a5474ed198febb40675ed3c1c24b186c47c4c2054e8af058405b5eb",
       "contentSize": "5648"
@@ -174,7 +173,7 @@
       "@id": "data-quality-report",
       "name": "data_quality_report.md",
       "description": "Warehouse-level QC summary (deduplication order, missing-field rates).",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/metadata/data_quality_report.md",
+      "contentUrl": "[anonymised release URL]/metadata/data_quality_report.md",
       "encodingFormat": "text/markdown",
       "sha256": "84b33a2f7032d5f470dfd1b1361908cc447af7cf99bcaa3625d952a602430252",
       "contentSize": "456"
@@ -184,7 +183,7 @@
       "@id": "verif-id-parse",
       "name": "gold_hard_identifier_parse.csv",
       "description": "DOI candidates parsed from each gold-hard record_id.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/verification/gold_hard_identifier_parse.csv",
+      "contentUrl": "[anonymised release URL]/verification/gold_hard_identifier_parse.csv",
       "encodingFormat": "text/csv",
       "sha256": "4b9a367fb80d176545ee98a9e3dcabbdacb218cd6da0a1d8deb988749b2eb818",
       "contentSize": "6134"
@@ -194,7 +193,7 @@
       "@id": "verif-containment-before",
       "name": "gold_hard_containment_before_merge.csv",
       "description": "Per-record match status against the 2026-05 re-harvest before merge.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/verification/gold_hard_containment_before_merge.csv",
+      "contentUrl": "[anonymised release URL]/verification/gold_hard_containment_before_merge.csv",
       "encodingFormat": "text/csv",
       "sha256": "10097b8ef80f0b9a3c132f5a77e2ee4e490085ffcf1b65ff606a80f2750589b6",
       "contentSize": "8327"
@@ -204,7 +203,7 @@
       "@id": "verif-refetch-log",
       "name": "gold_hard_refetch_log.csv",
       "description": "Source API + DOI candidate that resolved each of the 14 missing records.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/verification/gold_hard_refetch_log.csv",
+      "contentUrl": "[anonymised release URL]/verification/gold_hard_refetch_log.csv",
       "encodingFormat": "text/csv",
       "sha256": "e3c058d7bad9aeb4877034380c96a915fa2d698a3009c832604b99b879bca7c6",
       "contentSize": "3277"
@@ -214,7 +213,7 @@
       "@id": "verif-abstract-crosscheck",
       "name": "gold_hard_abstract_crosscheck.csv",
       "description": "Per-record abstract cross-check classified as verbatim, normalised, or source-side revision.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/verification/gold_hard_abstract_crosscheck.csv",
+      "contentUrl": "[anonymised release URL]/verification/gold_hard_abstract_crosscheck.csv",
       "encodingFormat": "text/csv",
       "sha256": "66ba21b710408514733fe7e29cc66d6b5460b2f8660169a031d454010c5503ff",
       "contentSize": "13104"
@@ -224,7 +223,7 @@
       "@id": "verif-containment-after",
       "name": "gold_hard_containment_after_merge.csv",
       "description": "Post-merge containment confirming all 40 gold-hard records resolve into the released warehouse.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/verification/gold_hard_containment_after_merge.csv",
+      "contentUrl": "[anonymised release URL]/verification/gold_hard_containment_after_merge.csv",
       "encodingFormat": "text/csv",
       "sha256": "f62a87138b849d0ab64866f3eedf9df438479f110b0f35ce333d91dac35e2400",
       "contentSize": "9314"
@@ -234,7 +233,7 @@
       "@id": "verif-summary",
       "name": "summary.json",
       "description": "Machine-readable summary of all recovery counts (Branch B).",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/verification/summary.json",
+      "contentUrl": "[anonymised release URL]/verification/summary.json",
       "encodingFormat": "application/json",
       "sha256": "e50c12f276f55fcb774dbd13f8ac15b1dad5de7ce5bcbd2e2bb7dd77acb338b6",
       "contentSize": "1031"
@@ -244,7 +243,7 @@
       "@id": "verif-abstract-mismatches",
       "name": "abstract_mismatches.txt",
       "description": "First 120 chars of each abstract mismatch flagged as a source-side editorial revision.",
-      "contentUrl": "https://huggingface.co/datasets/EliasHossain/nanobubbleeval/resolve/main/verification/abstract_mismatches.txt",
+      "contentUrl": "[anonymised release URL]/verification/abstract_mismatches.txt",
       "encodingFormat": "text/plain",
       "sha256": "303135fd55f2524cebd68ac20d0a9d304c99d8adf7260320813b174f6f4ae2e0",
       "contentSize": "2030"

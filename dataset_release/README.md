@@ -156,9 +156,9 @@ identifier lookup against the source APIs:
   in the warehouse for the 14 re-fetched rows; baseline predictions remain
   exactly reproducible from the released warehouse.
 
-The full identifier-anchored recovery pipeline lives in the GitHub repo at
-[`scripts/verification/`](https://github.com/eliashossain001/nanobubbleeval/tree/main/scripts/verification)
-and is rerunnable end-to-end from a clean checkout.
+The full identifier-anchored recovery pipeline lives under
+`scripts/verification/` in the released code bundle and is rerunnable
+end-to-end from a clean checkout.
 
 ## Baselines
 
@@ -203,7 +203,7 @@ and validated.
 The accompanying Python package, pipeline scripts, and unit-test suite are
 released at:
 
-`https://github.com/eliashossain001/nanobubbleeval`
+`[anonymised release URL]`
 
 ## License
 
